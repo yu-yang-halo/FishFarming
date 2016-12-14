@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/header_gradient"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <Button
+            android:id="@+id/leftBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:textSize="@dimen/font_size_medium"
+            android:textColor="@color/button_color_selector"
+            android:text="返回"/>
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:text=""
+            android:lines="1"
+            android:ellipsize="end"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/font_size_medium"
+            android:gravity="center"
+          />
+
+        <Button
+            android:id="@+id/rightBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/font_size_medium"
+            android:background="@null"
+            android:textColor="@color/button_color_selector"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:id="@+id/fullScreenBtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="10dp"
+            android:textSize="@dimen/font_size_medium"
+            android:background="@drawable/button_fullscreen_selector"
+            android:textColor="@color/button_color_selector"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

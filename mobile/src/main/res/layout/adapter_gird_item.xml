@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/grid_item_bg"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@mipmap/main_history"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:id="@+id/imageView8" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:gravity="left|center"
+            android:textColor="@color/colorWhite"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
+            android:id="@+id/textView7"
+            android:textSize="@dimen/font_size_medium"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imageView8"
+            android:layout_toEndOf="@+id/imageView8" />
+
+        <TextView
+            android:text=""
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="-8dp"
+            android:background="@drawable/point_shape_bg"
+            android:id="@+id/dotView"
+            android:visibility="gone"
+            android:layout_above="@+id/imageView8"
+            android:layout_alignLeft="@+id/imageView8"
+            android:layout_alignStart="@+id/imageView8" />
+    </RelativeLayout>
+</LinearLayout>
