@@ -1,5 +1,7 @@
 package cn.netty.farmingsocket;
 
+import android.util.Log;
+
 import java.util.concurrent.TimeUnit;
 
 import cn.netty.farmingsocket.data.ICmdPackageProtocol;
@@ -44,11 +46,15 @@ public class SocketClientManager{
 	public void closeConnect(){
 		if(handler!=null){
 			handler.closeContext();
+			handler=null;
 		}
 
 	}
 	
 	public void beginConnect(String deviceId,final IDataCompleteCallback completeCallback){
+
+		closeConnect();
+
 		handler=new SocketClientHandler();
 		handler.setDeviceId(deviceId);
 		handler.registerDataCompleteCallback(completeCallback,false);
@@ -76,6 +82,7 @@ public class SocketClientManager{
 					// Wait until the connection is closed.
 					f.channel().closeFuture().sync();
 				}catch (InterruptedException e) {
+					Log.e("InterruptedException",e.getMessage());
 					e.printStackTrace();
 				}
 				finally {

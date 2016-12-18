@@ -42,6 +42,7 @@ public class RemoteControlFragment extends Fragment {
     MyApplication myApp;
     RemoteControlExpandAdapter adapter;
     KProgressHUD hud;
+    int parentSelectId=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -68,6 +69,10 @@ public class RemoteControlFragment extends Fragment {
         expandRealDataListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int i) {
+                if(parentSelectId!=-1){
+                    expandRealDataListView.collapseGroup(parentSelectId);
+                }
+                parentSelectId=i;
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Map<String,String> cacheData= JsonObjectManager.getMapObject(getActivity(),deviceId);
                 if(cacheData==null||cacheData.size()<=0){
@@ -120,6 +125,9 @@ public class RemoteControlFragment extends Fragment {
             @Override
             public void onGroupCollapse(int i) {
                 Log.v("onGroupCollapse","onGroupCollapse"+i);
+                if(parentSelectId==i){
+                    parentSelectId=-1;
+                }
                 SocketClientManager.getInstance().closeConnect();
 
                 nettyHandler.post(new Runnable() {

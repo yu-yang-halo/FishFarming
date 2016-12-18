@@ -152,12 +152,17 @@ public class MyApplication extends Application {
     }
 
     public List<CollectorInfo> getCollectorInfos() {
+
+
         return collectorInfos;
     }
 
     public void setCollectorInfos(List<CollectorInfo> collectorInfos) {
         this.collectorInfos = collectorInfos;
+
+
     }
+
 
 
 
