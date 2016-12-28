@@ -39,6 +39,7 @@ import cn.farmFish.service.webserviceApi.bean.VideoInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.GridItemAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
+import cn.fuck.fishfarming.utils.NetworkHelper;
 
 import static cn.fuck.fishfarming.activity.TabActivity.KEY_POSITION;
 
@@ -64,8 +65,10 @@ public class MainActivity extends StatusBarActivity {
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
-                startActivity(intent);
+                showToast("正在开发中...");
+                return;
+//                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
+//                startActivity(intent);
             }
         });
 
@@ -93,6 +96,13 @@ public class MainActivity extends StatusBarActivity {
                             showToast("视频数据加载未完成,请重试");
                             onStart();
                         }else {
+
+                            if(position==1){
+                                if(!NetworkHelper.isWifi(MainActivity.this)){
+                                    showToast("建议在wifi网络下观看视频");
+                                }
+                            }
+
                             Intent intent=new Intent(MainActivity.this,TabActivity.class);
                             intent.putExtra(KEY_POSITION,position);
                             startActivity(intent);

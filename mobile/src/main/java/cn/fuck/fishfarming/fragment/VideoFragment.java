@@ -57,6 +57,7 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
     GridView videoItemGridView;
     @BindView(R.id.ptzControlGridView)
     GridView ptzControlGridView;
+    Handler  okHttpHandler = new Handler(Looper.getMainLooper());
 
 
     String[] ptzControls=new String[]{"左上","上仰","右上","左转","自动","右转","左下","下俯","右下"};
@@ -90,14 +91,65 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
         ButterKnife.bind(this,view);
 
 
-        MyApplication myApp= (MyApplication) getActivity().getApplicationContext();
+        final MyApplication myApp= (MyApplication) getActivity().getApplicationContext();
         results=myApp.getVideoInfos();
-        ptzControlGridViewInit();
-        videoItemViewInit(results);
-        mode= caculateColumns(results.size());
+
+
+
+        if(results==null){
+            WebServiceApi.getInstance().GetUserVideoInfo(myApp.getUserAccount(), new WebServiceCallback() {
+                @Override
+                public void onSuccess(String jsonData) {
+                    Log.v("GetUserVideoInfo",jsonData);
+                    Log.v("jsonData","jsonData : "+jsonData);
+                    Gson gson=new Gson();
+                    Map<String,String> dict=gson.fromJson(jsonData,Map.class);
+
+                    Type type=new TypeToken<List<VideoInfo>>(){}.getType();
+                    List<VideoInfo> results=gson.fromJson(dict.get("GetUserVideoInfoResult"),type);
+
+
+                    if(results!=null&&results.size()>0){
+
+                        Collections.sort(results, new Comparator<VideoInfo>() {
+                            @Override
+                            public int compare(VideoInfo o1, VideoInfo o2) {
+
+                                return o1.getF_IndexCode() - o2.getF_IndexCode();
+                            }
+                        });
+
+                        myApp.setVideoInfos(results);
+
+                        initView();
+
+                    }
+
+                }
+
+                @Override
+                public void onFail(String errorData) {
+
+                }
+            });
+        }else{
+            initView();
+        }
+
 
 
         return view;
+    }
+
+    private void initView(){
+        okHttpHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ptzControlGridViewInit();
+                videoItemViewInit(results);
+                mode= caculateColumns(results.size());
+            }
+        });
     }
 
 
@@ -114,8 +166,6 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
         }
 
     }
-
-
 
     private void showVideo(int pos){
 

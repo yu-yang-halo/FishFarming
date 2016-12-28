@@ -10,6 +10,7 @@ import java.util.Map;
 public class ConstantUtils {
     public static Map<String,String> CONTENTS=new HashMap<>();
     public static Map<String,String> UNITS   =new HashMap<>();
+    public static Map<String,Integer> ORDERS  =new HashMap<>();//排序使用
 
     static {
 
@@ -17,7 +18,7 @@ public class ConstantUtils {
         CONTENTS.put("2","溶氧饱和度");
         CONTENTS.put("3","PH");
         CONTENTS.put("4","氨氮");
-        CONTENTS.put("5","温度");
+        CONTENTS.put("5","水温");
         CONTENTS.put("6","亚硝酸盐");
         CONTENTS.put("7","液位");
         CONTENTS.put("8","硫化氢");
@@ -41,6 +42,19 @@ public class ConstantUtils {
         UNITS.put("11"," ");
         UNITS.put("12"," ");
 
+
+        ORDERS.put("1",1);
+        ORDERS.put("2",7);
+        ORDERS.put("3",3);
+        ORDERS.put("4",4);
+        ORDERS.put("5",2);
+        ORDERS.put("6",5);
+        ORDERS.put("7",8);
+        ORDERS.put("8",9);
+        ORDERS.put("9",6);
+        ORDERS.put("10",10);
+        ORDERS.put("11",11);
+        ORDERS.put("12",12);
 
 
     }

@@ -1,5 +1,6 @@
 package cn.farmFish.service.webserviceApi.bean;
 
+
 /**
  * Created by Administrator on 2016/12/9.
  */
@@ -8,6 +9,15 @@ public class CollWantData {
     private int    reviceTime;
     private float  value;
     private int    type;
+    private int    order;
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     public int getType() {
         return type;
@@ -15,6 +25,7 @@ public class CollWantData {
 
     public void setType(int type) {
         this.type = type;
+
     }
 
     public int getReviceTime() {

@@ -69,14 +69,22 @@ public class GridItemAdapter extends BaseAdapter{
             convertView= LayoutInflater.from(ctx).inflate(R.layout.adapter_gird_item,null);
             ImageView imageView=ButterKnife.findById(convertView,R.id.imageView8);
             TextView  titleView=ButterKnife.findById(convertView,R.id.textView7);
+            TextView   dotView=ButterKnife.findById(convertView,R.id.dotView);
             viewHolder.imageView=imageView;
             viewHolder.titleView=titleView;
+            viewHolder.dotView=dotView;
             convertView.setTag(viewHolder);
         }
 
         viewHolder= (ViewHolder) convertView.getTag();
         viewHolder.titleView.setText(titles[position]);
         viewHolder.imageView.setImageResource(images[position]);
+
+        if(position==3){
+            viewHolder.dotView.setVisibility(View.VISIBLE);
+        }else {
+            viewHolder.dotView.setVisibility(View.GONE);
+        }
 
 //获取GridView的高度
         int height=gridView.getHeight();
@@ -90,6 +98,7 @@ public class GridItemAdapter extends BaseAdapter{
     class  ViewHolder{
         ImageView imageView;
         TextView  titleView;
+        TextView  dotView;
 
     }
 

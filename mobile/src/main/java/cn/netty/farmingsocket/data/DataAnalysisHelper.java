@@ -79,12 +79,14 @@ public class DataAnalysisHelper {
 						 if(value<=0){
 							 continue;
 						 }
-						 dict.put(contents[i]+"",
-								 String.format("%s|%.2f|%.1f|%s",
-								 ConstantUtils.CONTENTS.get(contents[i]+""),
+						 String key=String.valueOf(contents[i]);
+
+						 dict.put(key,
+								 String.format("%s|%.2f|%.1f|%s|%d",
+								 ConstantUtils.CONTENTS.get(key),
 								 value,
 								 20.0,
-								 ConstantUtils.UNITS.get(contents[i]+"")));
+								 ConstantUtils.UNITS.get(key),ConstantUtils.ORDERS.get(key)));
 					 }
 				}
 			}

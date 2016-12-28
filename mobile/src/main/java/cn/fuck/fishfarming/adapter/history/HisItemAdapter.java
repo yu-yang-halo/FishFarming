@@ -17,13 +17,17 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +44,6 @@ import cn.fuck.fishfarming.utils.ConstantUtils;
 public class HisItemAdapter extends BaseAdapter {
     private Context ctx;
     private Map<String,List<CollWantData>> dicts;
-    private List<String> keys;
     private List<List<CollWantData>> values;
 
 
@@ -53,7 +56,15 @@ public class HisItemAdapter extends BaseAdapter {
 
         if(dicts!=null){
             this.values=new ArrayList<>(dicts.values());
-            this.keys=new ArrayList<>(dicts.keySet());
+            Collections.sort(values, new Comparator<List<CollWantData>>() {
+                @Override
+                public int compare(List<CollWantData> o1, List<CollWantData> o2) {
+                    if(o1!=null&&o1.size()>0&&o2!=null&&o2.size()>0){
+                        return  o1.get(0).getOrder()-o2.get(0).getOrder();
+                    }
+                    return 0;
+                }
+            });
         }
 
 
@@ -172,13 +183,27 @@ public class HisItemAdapter extends BaseAdapter {
     }
 
 
+    private float averageVal(List<CollWantData> items){
+        if(items==null||items.size()==0){
+            return 0.0f;
+        }
+        int size=items.size();
+        float sum=0.0f;
+        for (CollWantData data:items){
+            sum+=data.getValue();
+        }
+        return sum/size;
+    }
 
     private void setData(int position,LineChart mChart) {
 
         List<CollWantData> items=values.get(position);
-        String title= ConstantUtils.CONTENTS.get(keys.get(position));
-        if(title==null){
-            title="";
+        float average=averageVal(items);
+        String title="";
+        if(items!=null&&items.size()>0){
+            String name= ConstantUtils.CONTENTS.get(String.valueOf(items.get(0).getType()));
+            String unit= ConstantUtils.UNITS.get(String.valueOf(items.get(0).getType()));
+            title=String.format("平均%s(%.2f%s)",name,average,unit);
         }
 
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
@@ -186,8 +211,6 @@ public class HisItemAdapter extends BaseAdapter {
         for(CollWantData data:items){
             yVals1.add(new Entry(data.getReviceTime(), data.getValue()));
         }
-
-
 
         LineDataSet set1;
 
@@ -218,6 +241,12 @@ public class HisItemAdapter extends BaseAdapter {
             LineData data = new LineData(set1);
             data.setValueTextColor(ColorTemplate.getHoloBlue());
             data.setValueTextSize(9f);
+            data.setValueFormatter(new IValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    return String.format("%.2f",value);
+                }
+            });
 
 
             // set data

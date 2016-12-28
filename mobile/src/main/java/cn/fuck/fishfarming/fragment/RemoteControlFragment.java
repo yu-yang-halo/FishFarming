@@ -33,10 +33,10 @@ import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 public class RemoteControlFragment extends Fragment {
 
+    private static final  String TAG="RemoteControlFragment";
+
     @BindView(R.id.expandControlListView)
-    ExpandableListView expandRealDataListView;
-
-
+    ExpandableListView expandRemoteControlListView;
     Handler nettyHandler = new Handler(Looper.getMainLooper());
 
     MyApplication myApp;
@@ -46,13 +46,14 @@ public class RemoteControlFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.e(TAG,"onAttach..............");
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.e(TAG,"onCreateView..............");
         View view=inflater.inflate(R.layout.fr_control, null);
         ButterKnife.bind(this,view);
 
@@ -65,12 +66,12 @@ public class RemoteControlFragment extends Fragment {
 
 
 
-        expandRealDataListView.setAdapter(adapter);
-        expandRealDataListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        expandRemoteControlListView.setAdapter(adapter);
+        expandRemoteControlListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int i) {
                 if(parentSelectId!=-1){
-                    expandRealDataListView.collapseGroup(parentSelectId);
+                    expandRemoteControlListView.collapseGroup(parentSelectId);
                 }
                 parentSelectId=i;
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
@@ -121,7 +122,7 @@ public class RemoteControlFragment extends Fragment {
             }
         });
 
-        expandRealDataListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+        expandRemoteControlListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int i) {
                 Log.v("onGroupCollapse","onGroupCollapse"+i);
@@ -153,7 +154,7 @@ public class RemoteControlFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Log.v("onStart","onStart..............");
+        Log.e(TAG,"onStart..............");
 
     }
 
@@ -161,7 +162,20 @@ public class RemoteControlFragment extends Fragment {
     public void onStop() {
         super.onStop();
         SocketClientManager.getInstance().closeConnect();
-        Log.v("onStop","onStop..............");
+        Log.e(TAG,"onStop..............");
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden){
+            if(adapter!=null&&expandRemoteControlListView!=null){
+                for (int i=0;i< adapter.getGroupCount();i++){
+                    expandRemoteControlListView.collapseGroup(i);
+                }
+            }
+        }
+        Log.e(TAG,"onHiddenChanged.............."+hidden);
+
+    }
 }
