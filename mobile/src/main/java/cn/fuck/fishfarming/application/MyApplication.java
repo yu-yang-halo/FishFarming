@@ -20,6 +20,7 @@ import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.farmFish.service.webserviceApi.bean.VideoInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.cache.ContentBox;
+import im.fir.sdk.FIR;
 
 /**
  * Created by Administrator on 2016/3/20.
@@ -114,6 +115,9 @@ public class MyApplication extends Application {
     }
 
     private void enableFIR(){
+
+
+        FIR.init(this);
 
         Log.v("weather", ContentBox.getValueString(getApplicationContext(),ContentBox.KEY_WEATHER,""));
 

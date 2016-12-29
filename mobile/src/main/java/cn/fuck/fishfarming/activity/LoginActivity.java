@@ -31,6 +31,7 @@ import cn.farmFish.service.webserviceApi.WebServiceCallback;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.cache.ContentBox;
+import cn.fuck.fishfarming.fir.FirManagerService;
 import cn.fuck.fishfarming.weather.WeatherHelper;
 
 /**
@@ -76,7 +77,7 @@ public class LoginActivity extends FragmentActivity {
 
 
 
-
+        FirManagerService.checkUpdate(this);
 
 
     }
