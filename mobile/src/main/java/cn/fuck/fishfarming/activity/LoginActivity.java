@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -43,6 +44,9 @@ public class LoginActivity extends FragmentActivity {
 
     @BindView(R.id.button) Button checkBtn;
     @BindView(R.id.button2) Button loginBtn;
+
+    @BindView(R.id.textView3)
+    TextView versionLabel;
 
     Handler  okHttpHandler = new Handler(Looper.getMainLooper());
 
@@ -74,6 +78,8 @@ public class LoginActivity extends FragmentActivity {
 
         usernamEdit.setText(username);
         passwordEdit.setText(password);
+
+        versionLabel.setText("当前版本 v"+FirManagerService.getVersionInfo(this).versionName);
 
 
 
