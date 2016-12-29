@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "cn.fuck.fishfarming"
         minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0.5"
+        targetSdkVersion 22
+        versionCode 11
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -24,7 +24,6 @@ android {
     }
 
 }
-
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
@@ -47,5 +46,4 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     compile files('libs/HCNetSDK.jar')
     compile files('libs/PlayerSDK.jar')
-    compile 'im.fir:fir-sdk:latest.integration@aar'
 }

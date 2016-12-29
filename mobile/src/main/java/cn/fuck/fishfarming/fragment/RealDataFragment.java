@@ -41,7 +41,7 @@ import static cn.fuck.fishfarming.cache.JsonObjectManager.getMapObject;
  */
 public class RealDataFragment extends Fragment {
 
-
+    private static final  String TAG="RealDataFragment";
 
     @BindView(R.id.expandRealDataListView)
     ExpandableListView expandRealDataListView;
@@ -53,16 +53,17 @@ public class RealDataFragment extends Fragment {
     MyApplication myApp;
     RealDataExpandAdapter adapter;
     KProgressHUD hud;
+    int parentSelectId=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        Log.e(TAG,"onAttach..... ");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.e(TAG,"onCreateView..... ");
         View view=inflater.inflate(R.layout.fr_realdata, null);
         ButterKnife.bind(this,view);
 
@@ -81,6 +82,12 @@ public class RealDataFragment extends Fragment {
         expandRealDataListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int i) {
+
+                if(parentSelectId!=-1){
+                    expandRealDataListView.collapseGroup(parentSelectId);
+                }
+                parentSelectId=i;
+
 
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
@@ -127,6 +134,9 @@ public class RealDataFragment extends Fragment {
             @Override
             public void onGroupCollapse(int i) {
                 Log.v("onGroupCollapse","onGroupCollapse"+i);
+                if(parentSelectId==i){
+                    parentSelectId=-1;
+                }
                 SocketClientManager.getInstance().closeConnect();
 
                 nettyHandler.post(new Runnable() {
@@ -149,14 +159,27 @@ public class RealDataFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-
+        Log.e(TAG,"onStart..... ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        Log.e(TAG,"onStop..... ");
         SocketClientManager.getInstance().closeConnect();
+    }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e(TAG,"onHiddenChanged "+hidden);
+        if(hidden){
+            if(adapter!=null&&expandRealDataListView!=null){
+                for (int i=0;i< adapter.getGroupCount();i++){
+                    expandRealDataListView.collapseGroup(i);
+                }
+            }
+
+        }
     }
 }

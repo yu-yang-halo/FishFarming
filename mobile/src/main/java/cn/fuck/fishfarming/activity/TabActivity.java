@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.fragment.AlertFragment;
 import cn.fuck.fishfarming.fragment.FragmentProtocol;
 import cn.fuck.fishfarming.fragment.MoreFragment;
 import cn.fuck.fishfarming.fragment.RealDataFragment;
@@ -71,7 +72,7 @@ public class TabActivity extends StatusBarActivity {
         mFragments.add(new RealDataFragment());
         mFragments.add((Fragment) protocol);
         mFragments.add(new RemoteControlFragment());
-        mFragments.add(new RealDataFragment());
+        mFragments.add(new AlertFragment());
         mFragments.add(new MoreFragment());
 
         for (int i = 0; i < mTitles.length; i++) {

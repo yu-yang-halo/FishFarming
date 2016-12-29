@@ -202,7 +202,7 @@ public class SPackage {
 		    System.out.format("序号[20]操作标志%02x\n",bytes[20]);
 		    int len=(bytes[21]<<8)+bytes[22];
 		    System.out.format("序号[21-22]数据包长度%02x%02x  len:%d\n",bytes[21],bytes[22],len);
-		    System.out.println("服务器返回的数据内容:::::::::::");
+		    System.out.println("数据内容:::::::::::");
 		    for(int i=0;i<len;i++){
 		    	System.out.format("%02x\n",bytes[23+i]);
 		    }

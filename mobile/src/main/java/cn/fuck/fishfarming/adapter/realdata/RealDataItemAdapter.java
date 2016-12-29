@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,18 @@ public class RealDataItemAdapter extends BaseAdapter {
         dict.remove("30");
         this.dict=dict;
         this.datas=new ArrayList<String>(dict.values());
+
+        Collections.sort(datas, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                String[]  arr1=o1.split("\\|");
+                String[]  arr2=o2.split("\\|");
+                if(arr1.length==5&&arr2.length==5){
+                    return  Integer.parseInt(arr1[4])-Integer.parseInt(arr2[4]);
+                }
+                return 0;
+            }
+        });
 
 
 
@@ -88,8 +101,8 @@ public class RealDataItemAdapter extends BaseAdapter {
         float maxValue=20;
 
 
-        //%s|%f|%f|%s
-        if(dataArr.length==4){
+        //%s|%f|%f|%s|%d
+        if(dataArr.length==5){
 
             currnetValue=Float.parseFloat(dataArr[1]);
             maxValue=Float.parseFloat(dataArr[2]);

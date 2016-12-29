@@ -40,6 +40,7 @@ import cn.fuck.fishfarming.cache.JsonObjectManager;
 import cn.fuck.fishfarming.fragment.MoreFragment;
 import cn.fuck.fishfarming.fragment.RealDataFragment;
 import cn.fuck.fishfarming.fragment.RemoteControlFragment;
+import cn.fuck.fishfarming.utils.ConstantUtils;
 import cn.fuck.fishfarming.utils.DateUtils;
 import cn.fuck.fishfarming.weather.WeatherViewManager;
 import cn.netty.farmingsocket.SocketClientManager;
@@ -239,6 +240,8 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
 
                                                 CollWantData data=new CollWantData(Integer.parseInt(time),Float.parseFloat(val));
                                                 data.setType(Integer.parseInt(key));
+                                                data.setOrder(ConstantUtils.ORDERS.get(key));
+
 
                                                 values.add(data);
                                             } catch (IllegalAccessException e) {
