@@ -21,6 +21,11 @@ public class WebServiceApi {
 	private static String REQUEST_URL="http://183.78.182.98:9110/service.svc/";
 
 
+	private static String REQUEST_ALERT_URL="http://183.78.182.98:9005/AppService/AppHandler.ashx";
+
+
+
+
 	private WebServiceApi() {
 
 	}
@@ -133,6 +138,8 @@ public class WebServiceApi {
 		String postBody = "{\"userAccount\":\""+userAccount+"\"}";
 		okHttpRequest(urlString,postBody,block);
 	}
+
+
 	/**
 	 * categoryId  类型---->  1:新闻    2:知识库
 	 * num
@@ -143,20 +150,72 @@ public class WebServiceApi {
 		okHttpRequest(urlString,postBody,block);
 	}
 
-	public static void main(String[] args) {
-		WebServiceApi.getInstance().Login("cjlsc", "cjlsc",new WebServiceCallback() {
-			@Override
-			public void onSuccess(String jsonData) {
-				// TODO Auto-generated method stub
-				System.err.println("onSuccess result::::::"+jsonData);
-			}
-			@Override
-			public void onFail(String errorData) {
-				// TODO Auto-generated method stub
-				System.err.println("onFail result::::::"+errorData);
-			}
-		});
+	/**
+	 *
+	 *  CmdID 固定值：GetWarningList
+	 *  CompanyID      公司ID
+	 *  CollectorID    采集器ID
+	 *  BeginDateTime  起始时间
+	 *  EndDateTime    结束时间
+     */
+	public void GetWarningList(String companyId,String collectorId,String startTime,String endTime,WebServiceCallback block){
 
+		String urlString=REQUEST_ALERT_URL;
+		String postBody = "{\"CmdID\":\"GetWarningList\",\"CompanyID\":"+companyId+",\"CollectorID\":"+collectorId+",\"BeginDateTime\":"+startTime+",\"EndDateTime\":"+endTime+"}";
+
+		okHttpRequest(urlString,postBody,block);
+
+	}
+
+	/**
+	 *
+	 *  CmdID          GetCollecotSensorList
+	 *  CollectorID    采集器ID
+	 *  SensorID       传感器ID
+	 *  CollectType    采集类别
+     */
+
+	public  void GetCollecotSensorList(String collectionId,String sensorId,int collectType,WebServiceCallback block){
+		String urlString=REQUEST_ALERT_URL;
+		String postBody = "{\"CmdID\":\"GetCollecotSensorList\",\"CollectorID\":\""+collectionId+"\",\"SensorID\":\""+sensorId+"\",\"CollectType\":\""
+				+collectType+"\"}";
+
+		okHttpRequest(urlString,postBody,block);
+	}
+
+
+	/**
+	 *   CmdID            SetCollectorSensor
+	 *   CollectorID      采集器ID
+	 *   SensorID         传感器ID
+	 *   ParamID          参数id，对应“获取采集器下传感器的参数列表”接口中，数据合计某行的F_ID字段
+	 *   LowerValue       区间最小值
+	 *   UpperValue       区间最大值
+	 *   IsWarning        是否告警，1为是，0为否
+	 *
+     */
+	public  void SetCollectorSensor(String collectionId,String sensorId,int paramId,float LowerValue,
+									float UpperValue,short IsWarning,WebServiceCallback block){
+		String urlString=REQUEST_ALERT_URL;
+		String postBody = "{\"CmdID\":\"SetCollectorSensor\",\"CollectorID\":"+collectionId+",\"SensorID\":"+sensorId
+				+",\"ParamID\":"+paramId+",\"LowerValue\":"+LowerValue+",\"UpperValue\":"+UpperValue+",\"IsWarning\":"+IsWarning+"}";
+		okHttpRequest(urlString,postBody,block);
+	}
+
+	public static void main(String[] args) {
+//		WebServiceApi.getInstance().Login("cjlsc", "cjlsc",new WebServiceCallback() {
+//			@Override
+//			public void onSuccess(String jsonData) {
+//				// TODO Auto-generated method stub
+//				System.err.println("onSuccess result::::::"+jsonData);
+//			}
+//			@Override
+//			public void onFail(String errorData) {
+//				// TODO Auto-generated method stub
+//				System.err.println("onFail result::::::"+errorData);
+//			}
+//		});
+//
 //		WebServiceApi.getInstance().GetCollectorInfo("cjlsc", "00-00-04-01",new WebServiceCallback() {
 //			@Override
 //			public void onSuccess(String jsonData) {
@@ -169,6 +228,17 @@ public class WebServiceApi {
 //				System.err.println("onFail result::::::"+errorData);
 //			}
 //		});
+		WebServiceApi.getInstance().GetCollecotSensorList("68eeffe7-9561-4a0f-9a7d-751c4cca98fe", "1", 1, new WebServiceCallback() {
+			@Override
+			public void onSuccess(String jsonData) {
+				System.err.println("onSuccess result::::::"+jsonData);
+			}
+
+			@Override
+			public void onFail(String errorData) {
+
+			}
+		});
 //		WebServiceApi.getInstance().GetCollectorData("00-00-04-01", "2016-10-08",new WebServiceCallback() {
 //			@Override
 //			public void onSuccess(String jsonData) {
@@ -194,18 +264,18 @@ public class WebServiceApi {
 //				System.err.println("onFail result::::::"+errorData);
 //			}
 //		});
-		WebServiceApi.getInstance().GetNewsList(2,20,new WebServiceCallback() {
-			@Override
-			public void onSuccess(String jsonData) {
-				// TODO Auto-generated method stub
-				System.err.println("onSuccess result::::::"+jsonData);
-			}
-			@Override
-			public void onFail(String errorData) {
-				// TODO Auto-generated method stub
-				System.err.println("onFail result::::::"+errorData);
-			}
-		});
+//		WebServiceApi.getInstance().GetNewsList(2,20,new WebServiceCallback() {
+//			@Override
+//			public void onSuccess(String jsonData) {
+//				// TODO Auto-generated method stub
+//				System.err.println("onSuccess result::::::"+jsonData);
+//			}
+//			@Override
+//			public void onFail(String errorData) {
+//				// TODO Auto-generated method stub
+//				System.err.println("onFail result::::::"+errorData);
+//			}
+//		});
 
 
 	}

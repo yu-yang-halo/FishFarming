@@ -38,7 +38,7 @@
         <activity android:name=".activity.LoginActivity" android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activity.MainActivity" android:screenOrientation="portrait">
-    </activity>
+        </activity>
         <activity android:name=".activity.TabActivity" android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activity.NewsActivity" android:screenOrientation="portrait">
