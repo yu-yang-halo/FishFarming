@@ -15,8 +15,15 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ *  网络请求采用okhttp的异步请求
+ *  备注：post请求注意服务端采用的是解析JSON的数据格式还是key-value的数据格式
+ */
 public class WebServiceApi {
 	private static WebServiceApi instance = null;
+
+	public static final MediaType JSON
+			= MediaType.parse("application/json; charset=utf-8");
 
 	private static String REQUEST_URL="http://183.78.182.98:9110/service.svc/";
 
@@ -39,16 +46,52 @@ public class WebServiceApi {
 		return instance;
 	}
 
-	private void okHttpRequest(String urlString, String postBody, final WebServiceCallback block) {
+
+	private void okHttpRequestKeyValue(String urlString, RequestBody formBody, final WebServiceCallback block) {
 		OkHttpClient mOkHttpClient = new OkHttpClient();
 
 		final Request request = new Request.Builder()
 				.url(urlString)
-				.addHeader("content-type", "application/json;charset:utf-8")
-				.post(RequestBody.create(
-						MediaType.parse("application/json; charset=utf-8"),
-						postBody))
+				.addHeader("Content-Type","application/x-www-form-urlencoded;")
+				.post(formBody)
 				.build();
+
+
+		Call call = mOkHttpClient.newCall(request);
+		call.enqueue(new Callback() {
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				System.err.println("exception : " + arg1);
+				block.onFail(arg1.toString());
+			}
+
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+
+				String retJSON=fetechNetWorkData(arg1.body().byteStream());
+
+				block.onSuccess(retJSON);
+			}
+		});
+	}
+
+	private void okHttpRequest(String urlString, String postBody, final WebServiceCallback block) {
+		OkHttpClient mOkHttpClient = new OkHttpClient();
+
+		RequestBody body=RequestBody.create(
+				JSON,
+				postBody);
+
+
+
+		final Request request = new Request.Builder()
+				.url(urlString)
+				.addHeader("Content-Type","application/x-www-form-urlencoded;")
+				.post(body)
+				.build();
+
+
 		Call call = mOkHttpClient.newCall(request);
 		call.enqueue(new Callback() {
 
@@ -160,10 +203,14 @@ public class WebServiceApi {
      */
 	public void GetWarningList(String companyId,String collectorId,String startTime,String endTime,WebServiceCallback block){
 
-		String urlString=REQUEST_ALERT_URL;
-		String postBody = "{\"CmdID\":\"GetWarningList\",\"CompanyID\":"+companyId+",\"CollectorID\":"+collectorId+",\"BeginDateTime\":"+startTime+",\"EndDateTime\":"+endTime+"}";
-
-		okHttpRequest(urlString,postBody,block);
+		RequestBody formBody = new FormBody.Builder()
+				.add("CmdID", "GetWarningList")
+				.add("CompanyID", companyId)
+				.add("CollectorID", collectorId)
+				.add("BeginDateTime",startTime)
+				.add("EndDateTime",endTime)
+				.build();
+		okHttpRequestKeyValue(REQUEST_ALERT_URL,formBody,block);
 
 	}
 
@@ -175,12 +222,14 @@ public class WebServiceApi {
 	 *  CollectType    采集类别
      */
 
-	public  void GetCollecotSensorList(String collectionId,String sensorId,int collectType,WebServiceCallback block){
-		String urlString=REQUEST_ALERT_URL;
-		String postBody = "{\"CmdID\":\"GetCollecotSensorList\",\"CollectorID\":\""+collectionId+"\",\"SensorID\":\""+sensorId+"\",\"CollectType\":\""
-				+collectType+"\"}";
-
-		okHttpRequest(urlString,postBody,block);
+	public  void GetCollecotSensorList(String collectionId,String sensorId,String collectType,WebServiceCallback block){
+		RequestBody formBody = new FormBody.Builder()
+				.add("CmdID", "GetCollecotSensorList")
+				.add("CollectorID", collectionId)
+				.add("SensorID", sensorId)
+				.add("CollectType",collectType)
+				.build();
+		okHttpRequestKeyValue(REQUEST_ALERT_URL,formBody,block);
 	}
 
 
@@ -196,10 +245,19 @@ public class WebServiceApi {
      */
 	public  void SetCollectorSensor(String collectionId,String sensorId,int paramId,float LowerValue,
 									float UpperValue,short IsWarning,WebServiceCallback block){
-		String urlString=REQUEST_ALERT_URL;
-		String postBody = "{\"CmdID\":\"SetCollectorSensor\",\"CollectorID\":"+collectionId+",\"SensorID\":"+sensorId
-				+",\"ParamID\":"+paramId+",\"LowerValue\":"+LowerValue+",\"UpperValue\":"+UpperValue+",\"IsWarning\":"+IsWarning+"}";
-		okHttpRequest(urlString,postBody,block);
+
+		RequestBody formBody = new FormBody.Builder()
+				.add("CmdID", "SetCollectorSensor")
+				.add("CollectorID", collectionId)
+				.add("SensorID", sensorId)
+				.add("ParamID",String.valueOf(paramId))
+				.add("LowerValue",String.valueOf(LowerValue))
+				.add("UpperValue",String.valueOf(UpperValue))
+				.add("IsWarning",String.valueOf(IsWarning))
+				.build();
+		okHttpRequestKeyValue(REQUEST_ALERT_URL,formBody,block);
+
+
 	}
 
 	public static void main(String[] args) {
@@ -228,7 +286,7 @@ public class WebServiceApi {
 //				System.err.println("onFail result::::::"+errorData);
 //			}
 //		});
-		WebServiceApi.getInstance().GetCollecotSensorList("68eeffe7-9561-4a0f-9a7d-751c4cca98fe", "1", 1, new WebServiceCallback() {
+		WebServiceApi.getInstance().GetCollecotSensorList("68eeffe7-9561-4a0f-9a7d-751c4cca98fe", "1", "1", new WebServiceCallback() {
 			@Override
 			public void onSuccess(String jsonData) {
 				System.err.println("onSuccess result::::::"+jsonData);
@@ -236,7 +294,7 @@ public class WebServiceApi {
 
 			@Override
 			public void onFail(String errorData) {
-
+				System.err.println("onFail result::::::"+errorData);
 			}
 		});
 //		WebServiceApi.getInstance().GetCollectorData("00-00-04-01", "2016-10-08",new WebServiceCallback() {
