@@ -19,9 +19,12 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -29,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.farmFish.service.webserviceApi.WebServiceApi;
 import cn.farmFish.service.webserviceApi.WebServiceCallback;
+import cn.farmFish.service.webserviceApi.bean.UserInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.cache.ContentBox;
@@ -128,7 +132,7 @@ public class LoginActivity extends FragmentActivity {
                     .show();
 
 
-            WebServiceApi.getInstance().Login(username, password, new WebServiceCallback() {
+            WebServiceApi.getInstance().LoginN(username, password, new WebServiceCallback() {
                 @Override
                 public void onSuccess(final String jsonData) {
 
@@ -141,19 +145,24 @@ public class LoginActivity extends FragmentActivity {
                             Gson gson=new Gson();
                             Map<String,String> dict=gson.fromJson(jsonData,Map.class);
 
-                            String customNo=dict.get("LoginResult");
+                            String result=dict.get("LoginNResult");
 
-                            if(customNo.equals("ERROR")){
+                            Type type=new TypeToken<List<UserInfo>>(){}.getType();
+
+                            List<UserInfo> userInfos=gson.fromJson(result,type);
+
+
+
+
+                            if(userInfos==null||userInfos.size()<=0){
                                 Toast.makeText(LoginActivity.this,"登录名或密码错误",Toast.LENGTH_SHORT).show();
 
                             }else{
 
-
-
-
+                                UserInfo userInfo=userInfos.get(0);
 
                                 MyApplication myApp= (MyApplication) getApplicationContext();
-                                myApp.setCustomerNo(customNo);
+                                myApp.setCustomerNo(userInfo.getCustomerNo());
                                 myApp.setUserAccount(username);
 
                                 Intent intent=new Intent(LoginActivity.this,MainActivity.class);

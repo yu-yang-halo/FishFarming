@@ -148,6 +148,16 @@ public class WebServiceApi {
 		String postBody = "{\"userAccount\":\""+username+"\",\"userPwd\":\""+password+"\"}";
 		okHttpRequest(urlString,postBody,block);
 	}
+
+	/**
+	 * 用户登录 LoginN
+	 */
+	public void LoginN(String username,String password,WebServiceCallback block) {
+		String urlString=REQUEST_URL+"LoginN";
+		String postBody = "{\"userAccount\":\""+username+"\",\"userPwd\":\""+password+"\"}";
+		okHttpRequest(urlString,postBody,block);
+	}
+
 	/**
 	 * 获取采集设备信息
 	 */
@@ -261,6 +271,32 @@ public class WebServiceApi {
 	}
 
 	public static void main(String[] args) {
+
+//		WebServiceApi.getInstance().LoginN("cjlsc", "cjlsc", new WebServiceCallback() {
+//			@Override
+//			public void onSuccess(String jsonData) {
+//				System.out.println(jsonData);
+//			}
+//
+//			@Override
+//			public void onFail(String errorData) {
+//				System.out.println(errorData);
+//			}
+//		});
+		WebServiceApi.getInstance().GetWarningList("15570c37-167b-44aa-8d51-39a0ae11764b",
+				"68eeffe7-9561-4a0f-9a7d-751c4cca98fe",
+				"2017-01-22", "2017-01-23", new WebServiceCallback() {
+					@Override
+					public void onSuccess(String jsonData) {
+						System.out.println(jsonData);
+					}
+
+					@Override
+					public void onFail(String errorData) {
+						System.out.println(errorData);
+					}
+				});
+
 //		WebServiceApi.getInstance().Login("cjlsc", "cjlsc",new WebServiceCallback() {
 //			@Override
 //			public void onSuccess(String jsonData) {
@@ -286,17 +322,17 @@ public class WebServiceApi {
 //				System.err.println("onFail result::::::"+errorData);
 //			}
 //		});
-		WebServiceApi.getInstance().GetCollecotSensorList("68eeffe7-9561-4a0f-9a7d-751c4cca98fe", "1", "1", new WebServiceCallback() {
-			@Override
-			public void onSuccess(String jsonData) {
-				System.err.println("onSuccess result::::::"+jsonData);
-			}
-
-			@Override
-			public void onFail(String errorData) {
-				System.err.println("onFail result::::::"+errorData);
-			}
-		});
+//		WebServiceApi.getInstance().GetCollecotSensorList("68eeffe7-9561-4a0f-9a7d-751c4cca98fe", "1", "1", new WebServiceCallback() {
+//			@Override
+//			public void onSuccess(String jsonData) {
+//				System.err.println("onSuccess result::::::"+jsonData);
+//			}
+//
+//			@Override
+//			public void onFail(String errorData) {
+//				System.err.println("onFail result::::::"+errorData);
+//			}
+//		});
 //		WebServiceApi.getInstance().GetCollectorData("00-00-04-01", "2016-10-08",new WebServiceCallback() {
 //			@Override
 //			public void onSuccess(String jsonData) {
