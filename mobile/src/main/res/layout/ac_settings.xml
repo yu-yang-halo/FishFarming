@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <Button
-        android:text="POST"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button3" />
 
-    <Button
-        android:text="GET"
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/tl_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button4" />
-</LinearLayout>
+        android:layout_height="60dp"
+        android:background="#d0ffffff"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        tl:tl_indicator_color="#393E46"
+        tl:tl_divider_color="#30000000"
+        tl:tl_divider_padding="13dp"
+        tl:tl_divider_width="1dp"
+        tl:tl_indicator_height="1.5dp"
+        tl:tl_tab_padding="22dp"
+        tl:tl_tab_space_equal="true"
+        tl:tl_textSelectColor="#a0000000"
+        tl:tl_textUnselectColor="#50000000"
+        tl:tl_underline_color="#30000000"
+        tl:tl_underline_height="0dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tl_1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

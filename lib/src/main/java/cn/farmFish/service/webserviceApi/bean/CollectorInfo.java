@@ -20,6 +20,26 @@ public class CollectorInfo {
 
     private String[] deviceElectricsArr;
 
+    public byte getMode() {
+        return mode;
+    }
+
+    public void setMode(byte mode) {
+        this.mode = mode;
+    }
+
+    public int[] getRange() {
+        return range;
+    }
+
+    public void setRange(int[] range) {
+        this.range = range;
+    }
+
+    private byte mode;
+    private int[] range;
+
+
     public String getCustomerNo() {
         return CustomerNo;
     }
@@ -132,5 +152,5 @@ public class CollectorInfo {
  \"DeviceID\":\"00-00-04-01\",
  \"ProvinceName\":\"\",\"CityName\":\"\",\"OrgName\":\"\",
  \"FiledID\":\"4f2ca14a-5a15-47f0-95e2-52746c4abeb7\",
- \"PondName\":\"·Ê¶«ÏØ³Ì¼ÌÀ´¼ÒÍ¥Å©³¡³¡µØ\",\"Electrics\":\"1-ÔöÑõ»ú,2-ÔöÑõ»ú\"}]"}
+ \"PondName\":\"ï¿½Ê¶ï¿½ï¿½Ø³Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½Í¥Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\",\"Electrics\":\"1-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,2-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\"}]"}
  */

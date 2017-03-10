@@ -285,7 +285,7 @@ public class WebServiceApi {
 //		});
 		WebServiceApi.getInstance().GetWarningList("15570c37-167b-44aa-8d51-39a0ae11764b",
 				"68eeffe7-9561-4a0f-9a7d-751c4cca98fe",
-				"2017-01-22", "2017-01-23", new WebServiceCallback() {
+				"2016-12-05 00:00:00", "2016-12-06 00:00:00", new WebServiceCallback() {
 					@Override
 					public void onSuccess(String jsonData) {
 						System.out.println(jsonData);

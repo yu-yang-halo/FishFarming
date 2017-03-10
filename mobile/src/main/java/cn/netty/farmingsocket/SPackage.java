@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import io.netty.buffer.ByteBuf;
 
+import static cn.netty.farmingsocket.data.ICmdPackageProtocol.AUTO_MODE;
+
 public class SPackage {
 	public byte[] getContents() {
 		return contents;
@@ -51,6 +53,15 @@ public class SPackage {
 	
 	private short checkCode;//校验和                          2bytes        前所有字节的和 
 	private short frameFooter;//帧尾                         1byte
+
+
+	private short mode;//AUTO MAnual
+
+
+	private int[] rang;//int[2] {min,max}
+
+
+
 	
 	public SPackage(DeviceType type,String serialNo,
 			byte[] cmdSerialNumber, short cmdword, byte flag, short length) {
@@ -91,10 +102,6 @@ public class SPackage {
 				
 				
 			}
-			
-			
-			
-			
 			
 		}
 		logBytes("****************************接收数据*****:::",bytes);
@@ -294,6 +301,8 @@ public class SPackage {
 	public void setFrameFooter(short frameFooter) {
 		this.frameFooter = frameFooter;
 	}
+
+
 	
 	
 	
@@ -310,6 +319,26 @@ public class SPackage {
 
 	public static enum DeviceType{
 		Android,Water;
+	}
+
+	public int[] getRang() {
+		if(contents.length==4){
+			if(contents[0]==(byte)0xaa&&contents[1]==(byte)0x55){
+				return new int[]{contents[3],contents[2]};
+			}
+		}
+		return new int[]{-1,-1};
+	}
+
+	public byte getMode() {
+
+		if(contents.length==2){
+			if(contents[0]==0x05){
+				return (byte) contents[1];
+			}
+		}
+
+		return -1;
 	}
 }
 

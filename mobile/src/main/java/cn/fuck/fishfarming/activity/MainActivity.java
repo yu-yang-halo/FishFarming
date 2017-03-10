@@ -65,10 +65,11 @@ public class MainActivity extends StatusBarActivity {
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("正在开发中...");
-                return;
-//                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
-//                startActivity(intent);
+                if(checkDataLoadCompleted()){
+                    Intent intent=new Intent(MainActivity.this,SettingActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -127,6 +128,14 @@ public class MainActivity extends StatusBarActivity {
 
 
 
+    }
+    private boolean checkDataLoadCompleted(){
+        if(myApp.getCollectorInfos()==null){
+            showToast("数据加载未完成,请重试");
+            onStart();
+            return false;
+        }
+        return true;
     }
 
     @Override

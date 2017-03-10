@@ -13,13 +13,19 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
+import cn.farmFish.service.webserviceApi.bean.UserInfo;
 import cn.farmFish.service.webserviceApi.bean.VideoInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.cache.ContentBox;
+import cn.netty.farmingsocket.SPackage;
+import cn.netty.farmingsocket.SocketClientManager;
+import cn.netty.farmingsocket.data.ICmdPackageProtocol;
+import cn.netty.farmingsocket.data.IDataCompleteCallback;
 import im.fir.sdk.FIR;
 
 /**
@@ -33,6 +39,9 @@ public class MyApplication extends Application {
     private List<CollectorInfo> collectorInfos;
     private Map<String,String>  realDataDict;
     private List<VideoInfo>     videoInfos;
+
+
+    private UserInfo loginUserInfo;
 
 
     public void onLowMemory() {
@@ -112,6 +121,8 @@ public class MyApplication extends Application {
             }
         });
 
+
+
     }
 
     private void enableFIR(){
@@ -156,7 +167,20 @@ public class MyApplication extends Application {
     }
 
     public List<CollectorInfo> getCollectorInfos() {
-
+//
+//        List<CollectorInfo> collectorInfos2=new ArrayList<>();
+//        for (CollectorInfo info : collectorInfos){
+//            collectorInfos2.add(info);
+//
+//            CollectorInfo info2=new CollectorInfo();
+//            info2.setUserType(info.getUserType());
+//            info2.setPondName(info.getPondName()+"2");
+//            info2.setCustomerNo(info.getCustomerNo());
+//            info2.setCollectorID(info.getCollectorID());
+//            info2.setDeviceID(info.getDeviceID()+"-XX");
+//
+//            collectorInfos2.add(info2);
+//        }
 
         return collectorInfos;
     }
@@ -168,6 +192,11 @@ public class MyApplication extends Application {
     }
 
 
+    public UserInfo getLoginUserInfo() {
+        return loginUserInfo;
+    }
 
-
+    public void setLoginUserInfo(UserInfo loginUserInfo) {
+        this.loginUserInfo = loginUserInfo;
+    }
 }

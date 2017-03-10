@@ -6,7 +6,8 @@ public interface ICmdPackageProtocol {
 	 */
 	public void sendFuckHeart();
 	public void sendFuckControlCmd(int num,int cmdStatus,String deviceId,IDataCompleteCallback completeCallback);
-	public void rangSetOrGet(MethodType type ,int max,int min);
+	public void rangSetOrGet(MethodType type ,int max,int min,IDataCompleteCallback completeCallback);
+	public void modeStatusSetOrGet(MethodType type,short mode,IDataCompleteCallback completeCallback);
 
 
 
@@ -23,6 +24,9 @@ public interface ICmdPackageProtocol {
 	public static enum  MethodType{
 		GET,POST
 	}
+
+	public static final  byte AUTO_MODE= (byte) 0xAC;
+	public static final  byte MANUAL_MODE= (byte) 0xDC;
 
 
 }

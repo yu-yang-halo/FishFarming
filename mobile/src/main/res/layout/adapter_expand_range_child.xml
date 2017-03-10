@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="110dp">
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="2dp">
+
+        <TextView
+            android:text="溶氧阈值"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="13dp"
+            android:id="@+id/textView14" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:inputType="number|numberDecimal"
+            android:ems="10"
+            android:id="@+id/min_edit"
+            android:layout_marginLeft="-120dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:inputType="number|numberDecimal"
+            android:ems="10"
+            android:id="@+id/max_edit"
+            android:layout_marginLeft="41dp"
+            android:layout_marginStart="41dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/min_edit"
+            android:layout_toEndOf="@+id/min_edit" />
+
+        <TextView
+            android:text="至"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView15"
+            android:layout_alignBaseline="@+id/min_edit"
+            android:layout_alignBottom="@+id/min_edit"
+            android:layout_toRightOf="@+id/min_edit"
+            android:layout_toEndOf="@+id/min_edit"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/relativeLayout">
+
+        <TextView
+            android:text="手动"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/textView16"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/switchButton"
+            android:layout_toEndOf="@+id/switchButton" />
+
+        <com.kyleduo.switchbutton.SwitchButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchButton"
+            app:kswTintColor="#16A560"
+            style="@style/SwitchButtonStyle"
+            android:gravity="center"
+            android:layout_marginLeft="21dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="21dp" />
+    </RelativeLayout>
+</RelativeLayout>
+</RelativeLayout>

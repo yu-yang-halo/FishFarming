@@ -164,6 +164,8 @@ public class LoginActivity extends FragmentActivity {
                                 MyApplication myApp= (MyApplication) getApplicationContext();
                                 myApp.setCustomerNo(userInfo.getCustomerNo());
                                 myApp.setUserAccount(username);
+                                myApp.setLoginUserInfo(userInfo);
+
 
                                 Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                 startActivity(intent);

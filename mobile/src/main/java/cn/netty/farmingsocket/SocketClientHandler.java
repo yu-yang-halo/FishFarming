@@ -125,10 +125,16 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 			if(tempCallbacks==null){
 				tempCallbacks=new ArrayList<IDataCompleteCallback>();
 			}
+			if(callback==null){
+				return;
+			}
 			tempCallbacks.add(callback);
 		}else{
 			if(completeCallbacks==null){
 				completeCallbacks=new ArrayList<IDataCompleteCallback>();
+			}
+			if(callback==null){
+				return;
 			}
 			completeCallbacks.add(callback);
 		}
@@ -180,12 +186,46 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 		currentContext.writeAndFlush(controlCmdData).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 	}
 
+	/**
+	 * mode 0xAC表示自动模式，0xDC表示手动模式
+	 * @param type
+	 * @param mode
+     */
 	@Override
-	public void rangSetOrGet(MethodType type , int max, int min){
+	public void modeStatusSetOrGet(MethodType type,short mode,IDataCompleteCallback completeCallback){
 		if(currentContext==null||currentContext.isRemoved()){
 			return;
 		}
+		registerDataCompleteCallback(completeCallback,true);
+		if(type==MethodType.GET){
+			SPackage controlCmdData = new SPackage(DeviceType.Android, deviceID,
+					new byte[] { (byte)0xFF,(byte)0xFF,(byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF },
+					(short) 21,
+					(byte) 0x01, (short) 0);
 
+
+			currentContext.writeAndFlush(controlCmdData).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+		}else{
+			SPackage controlCmdData = new SPackage(DeviceType.Android, deviceID,
+					new byte[] { (byte)0xFF,(byte)0xFF,(byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF },
+					(short) 21,
+					(byte) 0x02, (short) 2);
+
+			controlCmdData.setContents(new byte[]{(byte)0x05, (byte) mode});
+
+
+			currentContext.writeAndFlush(controlCmdData).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+		}
+
+
+
+	}
+	@Override
+	public void rangSetOrGet(MethodType type , int max, int min,IDataCompleteCallback completeCallback){
+		if(currentContext==null||currentContext.isRemoved()){
+			return;
+		}
+		registerDataCompleteCallback(completeCallback,true);
 		if(type==MethodType.GET){
 			SPackage controlCmdData = new SPackage(DeviceType.Android, deviceID,
 					new byte[] { (byte)0xFF,(byte)0xFF,(byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF },

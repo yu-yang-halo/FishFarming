@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="1dp">
+
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="13dp"
+            android:id="@+id/textView14" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:inputType="number|numberDecimal"
+            android:ems="10"
+            android:id="@+id/min_edit"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:inputType="number|numberDecimal"
+            android:ems="10"
+            android:id="@+id/max_edit"
+            android:layout_marginLeft="41dp"
+            android:layout_marginStart="41dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/min_edit"
+            android:layout_toEndOf="@+id/min_edit" />
+
+        <TextView
+            android:text="至"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView15"
+            android:layout_alignBaseline="@+id/min_edit"
+            android:layout_alignBottom="@+id/min_edit"
+            android:layout_toRightOf="@+id/min_edit"
+            android:layout_toEndOf="@+id/min_edit"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
