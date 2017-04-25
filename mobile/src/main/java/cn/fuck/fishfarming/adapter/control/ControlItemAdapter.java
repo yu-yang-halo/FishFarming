@@ -21,10 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
+import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.view.ClipView;
 import cn.netty.farmingsocket.SPackage;
 import cn.netty.farmingsocket.SocketClientManager;
+import cn.netty.farmingsocket.data.ICmdPackageProtocol;
 import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 /**
@@ -37,20 +39,38 @@ public class ControlItemAdapter extends BaseAdapter {
     private List<String> datas;
     private String[] electrics;
     private String deviceId;
-    Handler nettyHandler=new Handler(Looper.myLooper());
-
+    static Handler nettyHandler=new Handler(Looper.myLooper());
+    SetCallback setCallback;
     KProgressHUD hud;
-    public ControlItemAdapter(Map<String,String> dict, Context ctx,String[] electrics,String deviceId){
+    CollectorInfo collectorInfo;
+    public ControlItemAdapter(Context ctx){
         this.ctx=ctx;
-        this.dict=dict;
-        this.datas=new ArrayList<String>(dict.values());
 
-        this.electrics=electrics;
-        this.deviceId=deviceId;
-
+        this.setCallback=new SetCallback(ctx);
 
 
     }
+
+    public void setDict(Map<String, String> dict) {
+        this.dict = dict;
+        if(dict!=null){
+            this.datas=new ArrayList<String>(dict.values());
+        }
+
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public void setCollectorInfo(CollectorInfo collectorInfo) {
+        this.collectorInfo = collectorInfo;
+        if(collectorInfo!=null){
+            this.electrics=collectorInfo.getDeviceElectricsArr();
+        }
+
+    }
+
     @Override
     public int getCount() {
         if(electrics==null){
@@ -79,6 +99,8 @@ public class ControlItemAdapter extends BaseAdapter {
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_control_item,null);
         }
 
+
+
         //00000000
         String value=dict.get("30");
         char status=value.charAt(i);
@@ -90,7 +112,10 @@ public class ControlItemAdapter extends BaseAdapter {
 
         SwitchButton switch1=ButterKnife.findById(view,R.id.switch1);
         nameLabel.setText(electrics[i]);
-        switch1.setCheckedImmediately(status=='0'?false:true);
+        switch1.setCheckedImmediatelyNoEvent(status=='0'?false:true);
+
+
+
 
 
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -98,26 +123,14 @@ public class ControlItemAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.v("switch","change..."+isChecked+" "+i);
 
-                hud= KProgressHUD
-                        .create(ctx).setLabel("设置中...")
-                        .show();
 
-                SocketClientManager.getInstance().getHandler().sendFuckControlCmd(i + 1, isChecked ? 1 : 0, deviceId, new IDataCompleteCallback() {
-                    @Override
-                    public void onDataComplete(SPackage spackage) {
+                if(collectorInfo.getMode()== ICmdPackageProtocol.AUTO_MODE&&i<5){
+                    Toast.makeText(ctx,"处于自动模式,无法手动控制",Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                    return;
+                }
 
-                        nettyHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(hud!=null){
-                                    hud.dismiss();
-                                }
-                                Toast.makeText(ctx,"设置成功",Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    }
-                });
+                SocketClientManager.getInstance().getHandler().sendFuckControlCmd(i + 1, isChecked ? 1 : 0, deviceId, setCallback);
             }
         });
 
@@ -126,6 +139,33 @@ public class ControlItemAdapter extends BaseAdapter {
 
 
         return view;
+    }
+
+    private static class SetCallback implements IDataCompleteCallback{
+        Context ctx;
+        SetCallback(Context ctx){
+            this.ctx=ctx;
+        }
+
+        @Override
+        public void onDataComplete(final SPackage spackage) {
+            nettyHandler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(spackage==null){
+                        Toast.makeText(ctx,"连接已断开",Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(spackage.getCmdword()==15&&spackage.getLength()==16){
+                            Toast.makeText(ctx,"设置成功",Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+
+                }
+            });
+        }
     }
 
 

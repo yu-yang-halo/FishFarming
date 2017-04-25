@@ -18,6 +18,8 @@ import im.fir.sdk.VersionCheckCallback;
  * Created by Administrator on 2016/4/18.
  */
 public class FirManagerService {
+    private static final String API_TOKEN="11044c8cac8c136a31cb0b8ab5bd5162";
+
     public static PackageInfo getVersionInfo(Context ctx) {
         try {
             PackageManager manager = ctx.getPackageManager();
@@ -29,7 +31,7 @@ public class FirManagerService {
     }
     public static void checkUpdate(final Context ctx){
 
-        FIR.checkForUpdateInFIR("11044c8cac8c136a31cb0b8ab5bd5162", new VersionCheckCallback() {
+        FIR.checkForUpdateInFIR(API_TOKEN, new VersionCheckCallback() {
                 @Override
                 public void onSuccess(String versionJson) {
                     Gson gson = new Gson();

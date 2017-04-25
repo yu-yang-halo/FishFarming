@@ -59,9 +59,15 @@ public class DataAnalysisHelper {
 	
 	public static Map analysisData(SPackage spackage){
 
+
+
 		Map<String,String> dict=new HashMap<String, String>();
 
-		if(spackage.getCmdword()==3){
+		if(spackage==null){
+			return dict;
+		}
+
+		if(spackage.getCmdword()==3||spackage.getCmdword()==15){
 			if(spackage.getLength()==45){
 				//5*8==40  5 1e
 				byte[] contents=spackage.getContents();
@@ -89,17 +95,14 @@ public class DataAnalysisHelper {
 								 ConstantUtils.UNITS.get(key),ConstantUtils.ORDERS.get(key)));
 					 }
 				}
-			}
-
-		}else if(spackage.getCmdword()==15){
-			if(spackage.getLength()==16){
-                //0100 0200 0300 0400 0500 0600 0700 0800
+			}else if(spackage.getLength()==16){
+				//0100 0200 0300 0400 0500 0600 0700 0800
 				byte[] contents=spackage.getContents();
 
 				StringBuffer sb=new StringBuffer();
 
 				for(int i=0;i<spackage.getLength();i=i+2){
-					 sb.append(contents[i+1]+"");
+					sb.append(contents[i+1]+"");
 				}
 				Log.v("status",sb.toString());
 
@@ -107,6 +110,7 @@ public class DataAnalysisHelper {
 
 
 			}
+
 		}
 
 

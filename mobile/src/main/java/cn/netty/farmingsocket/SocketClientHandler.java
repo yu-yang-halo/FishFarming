@@ -3,8 +3,10 @@ package cn.netty.farmingsocket;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import cn.netty.farmingsocket.SPackage.DeviceType;
 import cn.netty.farmingsocket.data.ICmdPackageProtocol;
@@ -22,8 +24,8 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 	private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled
 			.unreleasableBuffer(Unpooled.copiedBuffer("Heartbeat", CharsetUtil.UTF_8)); // 1
 	private ChannelHandlerContext currentContext;
-	private List<IDataCompleteCallback> completeCallbacks;
-	private List<IDataCompleteCallback> tempCallbacks;
+	private Set<IDataCompleteCallback> completeCallbacks;
+
 
 	private String deviceID;
 	@Override
@@ -62,12 +64,9 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 		super.channelUnregistered(ctx);
 		System.out.println("channel 已被注销");
 		if(completeCallbacks!=null){
+			completeCallbacks.clear();
 			completeCallbacks=null;
 		}
-		if(tempCallbacks!=null){
-			tempCallbacks=null;
-		}
-
 
 	}
 
@@ -75,6 +74,12 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		Log.e("channelInactive","连接已断开");
+		if(this.completeCallbacks!=null&&this.completeCallbacks.size()>0){
+			for (IDataCompleteCallback callback:completeCallbacks){
+				callback.onDataComplete(null);
+			}
+		}
+
 	}
 
 	public void sendFuckHeart(ChannelHandlerContext ctx) {
@@ -104,13 +109,6 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 				callback.onDataComplete(m);
 			}
 		}
-		if(this.tempCallbacks!=null&&this.tempCallbacks.size()>0){
-			for (IDataCompleteCallback callback:tempCallbacks){
-				callback.onDataComplete(m);
-			}
-
-			tempCallbacks.clear();
-		}
 	}
 
 	@Override
@@ -121,23 +119,13 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 
 	@Override
 	public void registerDataCompleteCallback(IDataCompleteCallback callback,boolean tempYN){
-		if(tempYN){
-			if(tempCallbacks==null){
-				tempCallbacks=new ArrayList<IDataCompleteCallback>();
-			}
-			if(callback==null){
-				return;
-			}
-			tempCallbacks.add(callback);
-		}else{
-			if(completeCallbacks==null){
-				completeCallbacks=new ArrayList<IDataCompleteCallback>();
-			}
-			if(callback==null){
-				return;
-			}
-			completeCallbacks.add(callback);
+		if(completeCallbacks==null){
+			completeCallbacks=new HashSet<>();
 		}
+		if(callback==null){
+			return;
+		}
+		completeCallbacks.add(callback);
 
 	}
 
@@ -172,16 +160,17 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 	@Override
 	public void sendFuckControlCmd(int num, int cmdStatus, String deviceId,IDataCompleteCallback complete) {
 		if(currentContext==null||currentContext.isRemoved()){
+
 			return;
 		}
 		registerDataCompleteCallback(complete,true);
 
 		SPackage controlCmdData = new SPackage(DeviceType.Android, deviceID,
 				new byte[] { 0x12, 0x78,(byte)0xA0, (byte)0x9C, 0x00, 0x00, 0x00, 0x00 },
-				(short) 0x0010,
+				(short) 0x10,
 				(byte) 0x02, (short) 0x0002);
 
-		controlCmdData.setContents(new byte[]{(byte) (num&0xFF), (byte) (cmdStatus&0xFF)});
+		controlCmdData.setContents(new byte[]{(byte)num, (byte) cmdStatus});
 
 		currentContext.writeAndFlush(controlCmdData).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 	}

@@ -99,7 +99,7 @@ public class TabActivity extends StatusBarActivity {
         setSelectPos(currentPos);
 
         //设置未读消息红点
-        mTabLayout_1.showDot(3);
+       // mTabLayout_1.showDot(3);
 
     }
 

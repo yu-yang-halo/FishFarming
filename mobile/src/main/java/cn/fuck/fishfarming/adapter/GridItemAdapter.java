@@ -80,11 +80,7 @@ public class GridItemAdapter extends BaseAdapter{
         viewHolder.titleView.setText(titles[position]);
         viewHolder.imageView.setImageResource(images[position]);
 
-        if(position==3){
-            viewHolder.dotView.setVisibility(View.VISIBLE);
-        }else {
-            viewHolder.dotView.setVisibility(View.GONE);
-        }
+        viewHolder.dotView.setVisibility(View.GONE);
 
 //获取GridView的高度
         int height=gridView.getHeight();

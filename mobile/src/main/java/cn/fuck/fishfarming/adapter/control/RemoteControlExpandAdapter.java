@@ -26,10 +26,11 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
     private Context ctx;
 
     private  Map<String,String> dicts;
-
+    ControlItemAdapter adapter;
     public RemoteControlExpandAdapter(List<CollectorInfo> collectorInfos, Context ctx){
         this.collectorInfos=collectorInfos;
         this.ctx=ctx;
+        this.adapter=new ControlItemAdapter(ctx);
     }
 
     @Override
@@ -104,7 +105,9 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
 
         String deviceID=getGroup(i).getDeviceID();
         ListView listView=ButterKnife.findById(view,R.id.listView);
-        ControlItemAdapter adapter=new ControlItemAdapter(dicts,ctx,collectorInfos.get(i).getDeviceElectricsArr(),deviceID);
+        adapter.setCollectorInfo(collectorInfos.get(i));
+        adapter.setDeviceId(deviceID);
+        adapter.setDict(dicts);
         listView.setAdapter(adapter);
 
         int totalHeight=0;

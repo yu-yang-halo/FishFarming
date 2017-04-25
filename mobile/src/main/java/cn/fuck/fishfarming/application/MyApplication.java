@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
+import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.farmFish.service.webserviceApi.bean.UserInfo;
 import cn.farmFish.service.webserviceApi.bean.VideoInfo;
 import cn.fuck.fishfarming.R;
@@ -43,6 +44,15 @@ public class MyApplication extends Application {
 
     private UserInfo loginUserInfo;
 
+    private List<SensorInfo> sensorInfos;
+
+    public List<SensorInfo> getSensorInfos() {
+        return sensorInfos;
+    }
+
+    public void setSensorInfos(List<SensorInfo> sensorInfos) {
+        this.sensorInfos = sensorInfos;
+    }
 
     public void onLowMemory() {
         super.onLowMemory();

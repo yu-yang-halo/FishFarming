@@ -114,6 +114,9 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
                     SocketClientManager.getInstance().getHandler().rangSetOrGet(ICmdPackageProtocol.MethodType.POST, ranges[1], ranges[0], new IDataCompleteCallback() {
                         @Override
                         public void onDataComplete(SPackage spackage) {
+                            if(spackage==null){
+                                return;
+                            }
                             if (spackage.getCmdword()==19&&spackage.getRang().length==2){
                                if(spackage.getRang()[0]>=0&&spackage.getRang()[1]>=0){
                                    mainUIHandeler.post(new Runnable() {
@@ -148,16 +151,19 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
         if(convertView==null){
             convertView=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_range_child,null);
         }
-        TextView modeLabel=ButterKnife.findById(convertView,R.id.textView16);
+        final TextView modeLabel=ButterKnife.findById(convertView,R.id.textView16);
         EditText min_edit=ButterKnife.findById(convertView,R.id.min_edit);
         EditText max_edit=ButterKnife.findById(convertView,R.id.max_edit);
-        SwitchButton switchButton=ButterKnife.findById(convertView,R.id.switchButton);
-        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final SwitchButton switchButton=ButterKnife.findById(convertView,R.id.switchButton);
+        switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 int modeVal= ICmdPackageProtocol.MANUAL_MODE;
-                if(isChecked){
+                if(switchButton.isChecked()){
                     modeVal= ICmdPackageProtocol.AUTO_MODE;
+                    modeLabel.setText("自动");
+                }else{
+                    modeLabel.setText("手动");
                 }
 
                 hud= KProgressHUD
@@ -167,6 +173,9 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
                         (short) modeVal, new IDataCompleteCallback() {
                             @Override
                             public void onDataComplete(SPackage spackage) {
+                                if(spackage==null){
+                                    return;
+                                }
                                 if (spackage.getCmdword()==21){
                                     Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
                                     collectorInfos.get(groupPosition).setMode(spackage.getMode());
@@ -181,9 +190,10 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
 
                                 }
                             }
-                 });
+                        });
             }
         });
+
         max_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,true));
         min_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,false));
 
@@ -198,10 +208,10 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
         }
 
         if(collectorInfo.getMode()== ICmdPackageProtocol.AUTO_MODE){
-            switchButton.setSelected(true);
+            switchButton.setChecked(true);
             modeLabel.setText("自动");
         }else{
-            switchButton.setSelected(false);
+            switchButton.setChecked(false);
             modeLabel.setText("手动");
         }
 

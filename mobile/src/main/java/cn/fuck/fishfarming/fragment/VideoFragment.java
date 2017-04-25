@@ -147,7 +147,7 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
             public void run() {
                 ptzControlGridViewInit();
                 videoItemViewInit(results);
-                mode= caculateColumns(results.size());
+
             }
         });
     }
@@ -249,6 +249,11 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
         protected String doInBackground(String... params) {
             helper.stopMultiPreview(playView);
             if(hasLoginYN){
+                try {
+                    Thread.sleep(800);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return null;
             }
             if(results!=null&&results.size()>0){
@@ -322,6 +327,9 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
     private void videoItemViewInit(final List<VideoInfo> results){
 
         if(results!=null){
+
+               mode= caculateColumns(results.size());
+
                 VideoItemAdapter videoItemAdapter=new VideoItemAdapter(getActivity(),results);
                 videoItemGridView.setNumColumns(4);
                 videoItemGridView.setAdapter(videoItemAdapter);
@@ -392,6 +400,7 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
         Log.e("VideoF","onActivityCreated");
     }
 
+    Object lockObj=new Object();
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -401,9 +410,14 @@ public class VideoFragment extends Fragment implements FragmentProtocol {
 
         if(onStartYN){
             if(!hidden){
-                new VideoShowTask(selectPos).execute();
+                synchronized (lockObj){
+                    new VideoShowTask(selectPos).execute();
+                }
             }else{
-                closeVideo();
+                synchronized (lockObj){
+                    closeVideo();
+                }
+
             }
         }
 

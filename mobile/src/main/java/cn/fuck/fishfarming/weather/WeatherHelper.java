@@ -62,9 +62,21 @@ public class WeatherHelper {
                     WeatherJSONBean bean=gson.fromJson(list.get(i),WeatherJSONBean.class);
                     String today=DateUtils.createNowDate("yyyy-MM-dd");
 
-                    if(bean.getResult().getData().getRealtime().getDate().equals(today)){
-                        existPos=i;
-                    }
+
+                     if (bean!=null){
+                         if(bean.getResult()!=null){
+                             if(bean.getResult().getData()!=null){
+                                 if(bean.getResult().getData().getRealtime()!=null){
+                                     if(bean.getResult().getData().getRealtime().getDate()!=null){
+                                         if(bean.getResult().getData().getRealtime().getDate().equals(today)){
+                                             existPos=i;
+                                         }
+                                     }
+                                 }
+                             }
+                         }
+                     }
+
 
                 }
 

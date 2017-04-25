@@ -65,7 +65,7 @@ public class CollectorInfo {
     }
 
     public String getDeviceID() {
-        return DeviceID;
+        return DeviceID.toLowerCase();
     }
 
     public void setDeviceID(String deviceID) {

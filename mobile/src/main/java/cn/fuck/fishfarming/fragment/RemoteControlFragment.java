@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -25,6 +26,7 @@ import cn.fuck.fishfarming.cache.JsonObjectManager;
 import cn.netty.farmingsocket.SPackage;
 import cn.netty.farmingsocket.SocketClientManager;
 import cn.netty.farmingsocket.data.DataAnalysisHelper;
+import cn.netty.farmingsocket.data.ICmdPackageProtocol;
 import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 /**
@@ -69,13 +71,13 @@ public class RemoteControlFragment extends Fragment {
         expandRemoteControlListView.setAdapter(adapter);
         expandRemoteControlListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public void onGroupExpand(int i) {
+            public void onGroupExpand(final int i) {
                 if(parentSelectId!=-1){
                     expandRemoteControlListView.collapseGroup(parentSelectId);
                 }
                 parentSelectId=i;
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
-                Map<String,String> cacheData= JsonObjectManager.getMapObject(getActivity(),deviceId);
+                Map<String,String> cacheData= JsonObjectManager.getMapObject(getContext(),deviceId);
                 if(cacheData==null||cacheData.size()<=0){
                     hud= KProgressHUD
                             .create(getActivity()).setLabel("数据加载中...")
@@ -87,10 +89,26 @@ public class RemoteControlFragment extends Fragment {
                     @Override
                     public void onDataComplete(final SPackage spackage) {
 
+                        SocketClientManager.getInstance().getHandler().modeStatusSetOrGet(ICmdPackageProtocol.MethodType.GET, ICmdPackageProtocol.MANUAL_MODE, null);
+
+                        if(spackage!=null){
+                            if (spackage.getCmdword()==21){
+                                Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
+                                myApp.getCollectorInfos().get(i).setMode(spackage.getMode());
+                            }
+                        }
+
 
                         nettyHandler.post(new Runnable() {
                             @Override
                             public void run() {
+
+                                if (spackage==null){
+                                    if(parentSelectId!=-1){
+                                        expandRemoteControlListView.collapseGroup(parentSelectId);
+                                    }
+                                    return;
+                                }
 
                                 Log.v("analysisData","analysisData : "+spackage);
                                 Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
@@ -105,13 +123,13 @@ public class RemoteControlFragment extends Fragment {
                                         String statusValue=dict.get("30");
 
                                         Log.v("control","30 : "+statusValue);
-                                        dict= JsonObjectManager.getMapObject(getActivity(),deviceId);
+                                        dict= JsonObjectManager.getMapObject(myApp,deviceId);
                                         if(dict!=null){
                                             dict.put("30",statusValue);
                                         }
                                         Log.v("control","dict : "+dict);
                                     }
-                                    JsonObjectManager.cacheMapObjectToLocal(getActivity(),spackage.getDeviceID(),dict);
+                                    JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
                                     adapter.notifyDataSetChanged();
                                 }
                             }
@@ -155,7 +173,9 @@ public class RemoteControlFragment extends Fragment {
         super.onStart();
 
         Log.e(TAG,"onStart..............");
-
+        if(parentSelectId!=-1){
+            expandRemoteControlListView.collapseGroup(parentSelectId);
+        }
     }
 
     @Override

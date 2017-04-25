@@ -90,9 +90,9 @@ public class SPackage {
 			this.cmdSerialNumber=new byte[8];
 			System.arraycopy(bytes, 10, cmdSerialNumber, 0, 8);
 			
-			this.cmdword=(short) ((bytes[18]<<8)+bytes[19]);
+			this.cmdword=(short) ((bytes[18]<<8)|(bytes[19]&0xFF));
 			this.flag=bytes[20];
-			this.length=(short) ((bytes[21]<<8)+bytes[22]);
+			this.length=(short) ((bytes[21]<<8)|(bytes[22]&0xFF));
 			
 			if(length>0){
 				
@@ -226,7 +226,7 @@ public class SPackage {
 	
 	
 	public String getDeviceID() {
-		return deviceID;
+		return deviceID.toLowerCase();
 	}
 
 

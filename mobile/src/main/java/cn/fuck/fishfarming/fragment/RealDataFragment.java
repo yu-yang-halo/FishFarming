@@ -92,7 +92,7 @@ public class RealDataFragment extends Fragment {
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
 
-                Map<String,String> cacheData=JsonObjectManager.getMapObject(getActivity(),deviceId);
+                Map<String,String> cacheData=JsonObjectManager.getMapObject(myApp,deviceId);
 
                 if(cacheData==null||cacheData.size()<=0){
 
@@ -108,6 +108,15 @@ public class RealDataFragment extends Fragment {
                         nettyHandler.post(new Runnable() {
                             @Override
                             public void run() {
+
+                                if (spackage==null){
+                                    if(parentSelectId!=-1){
+                                        Toast.makeText(myApp,"连接已断开",Toast.LENGTH_SHORT).show();
+                                        expandRealDataListView.collapseGroup(parentSelectId);
+                                    }
+                                    return;
+                                }
+
                                 Log.v("analysisData","analysisData : "+spackage);
                                 Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
                                 if(dict.size()>0){
@@ -117,10 +126,10 @@ public class RealDataFragment extends Fragment {
                                     }
                                     Log.v("dict","dict : "+dict);
 
-                                    JsonObjectManager.cacheMapObjectToLocal(getActivity(),spackage.getDeviceID(),dict);
+                                    JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
 
                                     adapter.notifyDataSetChanged();
-                                    Toast.makeText(getActivity(),"实时数据更新成功",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(myApp,"实时数据更新成功",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -160,6 +169,9 @@ public class RealDataFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.e(TAG,"onStart..... ");
+        if(parentSelectId!=-1){
+            expandRealDataListView.collapseGroup(parentSelectId);
+        }
     }
 
     @Override

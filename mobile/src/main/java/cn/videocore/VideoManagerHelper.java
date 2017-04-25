@@ -146,6 +146,7 @@ public class VideoManagerHelper {
         String m_oPort  =ipAndPortArr[1];
 
 
+
         // get instance
         NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = new NET_DVR_DEVICEINFO_V30();
         if (null == m_oNetDvrDeviceInfoV30)

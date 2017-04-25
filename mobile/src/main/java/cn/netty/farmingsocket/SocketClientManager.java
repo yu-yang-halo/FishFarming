@@ -17,9 +17,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 
 public class SocketClientManager{
-	private static final int READ_IDEL_TIME_OUT = 4;
-	private static final int WRITE_IDEL_TIME_OUT = 5;
-	private static final int ALL_IDEL_TIME_OUT = 7;
+	private static final int READ_IDEL_TIME_OUT = 12;
+	private static final int WRITE_IDEL_TIME_OUT = 12;
+	private static final int ALL_IDEL_TIME_OUT = 12;
 	private static final String HOST_IP="183.78.182.98";
 	private static final int HOST_PORT =9101;
 	
@@ -46,14 +46,13 @@ public class SocketClientManager{
 	public void closeConnect(){
 		if(handler!=null){
 			handler.closeContext();
-			handler=null;
 		}
 
 	}
 	
 	public void beginConnect(String deviceId,final IDataCompleteCallback completeCallback){
 
-		closeConnect();
+		//closeConnect();
 
 		handler=new SocketClientHandler();
 		handler.setDeviceId(deviceId);
@@ -72,8 +71,11 @@ public class SocketClientManager{
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {
 							ch.pipeline().addLast(new SocketEncoder(),new SocketDecoder(),(SocketClientHandler)handler
-									,new IdleStateHandler(READ_IDEL_TIME_OUT,
-											WRITE_IDEL_TIME_OUT, ALL_IDEL_TIME_OUT, TimeUnit.SECONDS));
+									);
+							/**
+                             * new IdleStateHandler(READ_IDEL_TIME_OUT,
+							 WRITE_IDEL_TIME_OUT, ALL_IDEL_TIME_OUT, TimeUnit.SECONDS)
+							 */
 						}
 					});
 

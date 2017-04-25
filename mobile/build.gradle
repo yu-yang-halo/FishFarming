@@ -5,11 +5,11 @@ android {
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "cn.fuck.fishfarming"
+        applicationId "cn.fuck.fishfarming.cicle"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 11
-        versionName "1.0.6"
+        versionName "0.0.7"
         multiDexEnabled true
     }
     buildTypes {
