@@ -57,7 +57,13 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 
 		System.out.println("TimeClientHandler active");
 		sendFuckHeart(ctx);
+        modeStatusSetOrGet(ICmdPackageProtocol.MethodType.GET, ICmdPackageProtocol.MANUAL_MODE, null);
+		rangSetOrGet(ICmdPackageProtocol.MethodType.GET, 0, 0, null);
+		timeSetOrGet(MethodType.GET,(short) 0,null);
+
 	}
+
+
 
 	@Override
 	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
@@ -86,10 +92,13 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 		if(ctx==null){
 			ctx=currentContext;
 		}
-//		SPackage data0 = new SPackage(DeviceType.Water, "00-00-04-01",
-//				new byte[] { 0x12, 0x78, (byte) 0xA0, (byte) 0x9C, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0002,
-//				(byte) 0x00, (short) 1);
-//		data0.setContents(new byte[] { (byte) 0xFF });
+		SPackage data0 = new SPackage(DeviceType.Water, deviceID,
+				new byte[] { 0x12, 0x78, (byte) 0xA0, (byte) 0x9C, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0002,
+				(byte) 0x00, (short) 1);
+
+		data0.setContents(new byte[] { (byte) 0xFF });
+		ctx.writeAndFlush(data0).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+
 
 		SPackage data1 = new SPackage(DeviceType.Android, deviceID,
 				new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0001, (byte) 0x00, (short) 0);
@@ -209,6 +218,35 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 
 
 	}
+
+	@Override
+	public void timeSetOrGet(MethodType type, short time, IDataCompleteCallback completeCallback) {
+		if(currentContext==null||currentContext.isRemoved()){
+			return;
+		}
+		registerDataCompleteCallback(completeCallback,true);
+		if(type==MethodType.GET){
+			SPackage controlCmdData = new SPackage(DeviceType.Android, deviceID,
+					new byte[] { (byte)0xFF,(byte)0xFF,(byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF },
+					(short) 24,
+					(byte) 0x01, (short) 0);
+
+
+			currentContext.writeAndFlush(controlCmdData).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+		}else{
+			SPackage controlCmdData = new SPackage(DeviceType.Android, deviceID,
+					new byte[] { (byte)0xFF,(byte)0xFF,(byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF },
+					(short) 24,
+					(byte) 0x02, (short) 3);
+
+			controlCmdData.setContents(new byte[]{(byte)0xA5,(byte)0x5A, (byte) time});
+
+
+			currentContext.writeAndFlush(controlCmdData).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+		}
+
+	}
+
 	@Override
 	public void rangSetOrGet(MethodType type , int max, int min,IDataCompleteCallback completeCallback){
 		if(currentContext==null||currentContext.isRemoved()){
@@ -237,6 +275,7 @@ public class SocketClientHandler extends ChannelInboundHandlerAdapter implements
 
 
 	}
+
 
 
 	@Override

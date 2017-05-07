@@ -6,16 +6,20 @@ import android.app.Application;
 import android.app.Notification;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.farmFish.service.webserviceApi.bean.SensorInfo;
@@ -41,6 +45,7 @@ public class MyApplication extends Application {
     private Map<String,String>  realDataDict;
     private List<VideoInfo>     videoInfos;
 
+    private Activity currentActivity;
 
     private UserInfo loginUserInfo;
 
@@ -102,7 +107,7 @@ public class MyApplication extends Application {
 
             @Override
             public void onActivityStarted(Activity activity) {
-
+                currentActivity=activity;
             }
 
             @Override
@@ -208,5 +213,28 @@ public class MyApplication extends Application {
 
     public void setLoginUserInfo(UserInfo loginUserInfo) {
         this.loginUserInfo = loginUserInfo;
+    }
+    KProgressHUD hud;
+    Timer timer;
+    public void showDialog(String message){
+        hud= KProgressHUD
+                .create(currentActivity).setLabel(message).show();
+
+        timer=new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(hud!=null){
+                    hud.dismiss();
+                    Toast.makeText(getApplicationContext(),"发送超时,已取消",Toast.LENGTH_SHORT).show();
+                }
+            }
+        },5000);
+    }
+    public void hideDialog(){
+        if(hud!=null){
+            hud.dismiss();
+            hud=null;
+        }
     }
 }

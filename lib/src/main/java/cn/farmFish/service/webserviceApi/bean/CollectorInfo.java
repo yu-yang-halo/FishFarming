@@ -38,7 +38,15 @@ public class CollectorInfo {
 
     private byte mode;
     private int[] range;
+    private int time=-1;
 
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 
     public String getCustomerNo() {
         return CustomerNo;

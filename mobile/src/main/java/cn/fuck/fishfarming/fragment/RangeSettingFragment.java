@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -44,9 +45,7 @@ public class RangeSettingFragment extends Fragment {
     Handler nettyHandler = new Handler(Looper.getMainLooper());
 
     int selectParentPos=-1;
-    KProgressHUD hud;
-    boolean loadOnceMode=false;
-    boolean loadOnceRange=false;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -57,11 +56,13 @@ public class RangeSettingFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    MyApplication myApplication;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View convertView=inflater.inflate(R.layout.fr_alertsetting,null);
+        myApplication= (MyApplication) getActivity().getApplication();
         expandSettingListView=ButterKnife.findById(convertView,R.id.expandSettingListView);
 
         myApp= (MyApplication)getActivity().getApplicationContext();
@@ -73,8 +74,6 @@ public class RangeSettingFragment extends Fragment {
         expandSettingListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                loadOnceMode=false;
-                loadOnceRange=false;
                 SocketClientManager.getInstance().closeConnect();
             }
         });
@@ -84,8 +83,6 @@ public class RangeSettingFragment extends Fragment {
             public void onGroupExpand(final int groupPosition) {
 
                 if(groupPosition!=selectParentPos&&selectParentPos>=0){
-                    loadOnceMode=false;
-                    loadOnceRange=false;
                     expandSettingListView.collapseGroup(selectParentPos);
                     SocketClientManager.getInstance().closeConnect();
                 }
@@ -94,44 +91,50 @@ public class RangeSettingFragment extends Fragment {
                     @Override
                     public void onDataComplete(SPackage spackage) {
 
+                        if(spackage.getFlag()==0x82){
+                            myApplication.hideDialog();
+                        }
+                        if (spackage.getCmdword()==19){
+                            Log.v("max", Arrays.toString( spackage.getRang()));
+                            collectorInfos.get(groupPosition).setRange(spackage.getRang());
+                            nettyHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
 
-                        if(!loadOnceRange){
-
-                            if (spackage.getCmdword()==19){
-                                Log.v("max", Arrays.toString( spackage.getRang()));
-                                collectorInfos.get(groupPosition).setRange(spackage.getRang());
-                                nettyHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
-                                loadOnceRange=true;
+                            if(spackage.getFlag()==0x82){
+                                Toast.makeText(getContext(),"阈值设置成功",Toast.LENGTH_SHORT).show();
                             }
 
-                        }
-                        if(!loadOnceMode){
 
-                            if (spackage.getCmdword()==21){
-                                Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
-                                collectorInfos.get(groupPosition).setMode(spackage.getMode());
-                                nettyHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
 
-                                loadOnceMode=true;
+                        }else if (spackage.getCmdword()==21){
+                            Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
+                            collectorInfos.get(groupPosition).setMode(spackage.getMode());
+                            nettyHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                            if(spackage.getFlag()==0x82){
+                                Toast.makeText(getContext(),"模式设置成功",Toast.LENGTH_SHORT).show();
                             }
-                        }
 
-                        if(!loadOnceMode){
-                            SocketClientManager.getInstance().getHandler().modeStatusSetOrGet(ICmdPackageProtocol.MethodType.GET, ICmdPackageProtocol.MANUAL_MODE, null);
-                        }
 
-                        if(!loadOnceRange){
-                            SocketClientManager.getInstance().getHandler().rangSetOrGet(ICmdPackageProtocol.MethodType.GET, 0, 0, null);
+                        }else if(spackage.getCmdword()==24){
+                            collectorInfos.get(groupPosition).setTime(spackage.getTime());
+                            nettyHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                            if(spackage.getFlag()==0x82){
+                                Toast.makeText(getContext(),"时间设置成功",Toast.LENGTH_SHORT).show();
+                            }
                         }
 
 

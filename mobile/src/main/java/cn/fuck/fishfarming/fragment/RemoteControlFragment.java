@@ -89,8 +89,6 @@ public class RemoteControlFragment extends Fragment {
                     @Override
                     public void onDataComplete(final SPackage spackage) {
 
-                        SocketClientManager.getInstance().getHandler().modeStatusSetOrGet(ICmdPackageProtocol.MethodType.GET, ICmdPackageProtocol.MANUAL_MODE, null);
-
                         if(spackage!=null){
                             if (spackage.getCmdword()==21){
                                 Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");

@@ -42,7 +42,10 @@ public class WeatherViewManager {
 
 
         WeatherJSONBean bean=getTodayWeather(ctx,mixDay);
-        if(bean!=null){
+        if(bean!=null&&bean.getResult()!=null&&
+                bean.getResult().getData()!=null
+                &&bean.getResult().getData().getRealtime()!=null
+                &&bean.getResult().getData().getRealtime().getWeather()!=null){
 
             holder.cityText.setText(bean.getResult().getData().getRealtime().getCity_name());
             String temp=bean.getResult().getData().getRealtime().getWeather().getTemperature();

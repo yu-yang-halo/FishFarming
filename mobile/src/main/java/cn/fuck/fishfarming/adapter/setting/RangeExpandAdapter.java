@@ -30,6 +30,7 @@ import cn.farmFish.service.webserviceApi.WebServiceCallback;
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.application.MyApplication;
 import cn.netty.farmingsocket.SPackage;
 import cn.netty.farmingsocket.SocketClientManager;
 import cn.netty.farmingsocket.data.ICmdPackageProtocol;
@@ -108,31 +109,19 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 int[] ranges=collectorInfos.get(groupPosition).getRange();
+                int time=collectorInfos.get(groupPosition).getTime();
                 if(ranges!=null&&ranges.length==2){
-                    hud= KProgressHUD
-                            .create(ctx).setLabel("阈值数据保存中...").show();
-                    SocketClientManager.getInstance().getHandler().rangSetOrGet(ICmdPackageProtocol.MethodType.POST, ranges[1], ranges[0], new IDataCompleteCallback() {
-                        @Override
-                        public void onDataComplete(SPackage spackage) {
-                            if(spackage==null){
-                                return;
-                            }
-                            if (spackage.getCmdword()==19&&spackage.getRang().length==2){
-                               if(spackage.getRang()[0]>=0&&spackage.getRang()[1]>=0){
-                                   mainUIHandeler.post(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           hud.dismiss();
-                                           showToastMessage("阈值保存成功");
-                                       }
-                                   });
-                               }
-                            }
+                    MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
+                    myApplication.showDialog("阈值数据保存中...");
 
+                    SocketClientManager.getInstance().getHandler().rangSetOrGet(ICmdPackageProtocol.MethodType.POST, ranges[1], ranges[0],null);
 
-                        }
-                    });
                 }
+
+                if(time>0){
+                    SocketClientManager.getInstance().getHandler().timeSetOrGet(ICmdPackageProtocol.MethodType.POST, (short) time,null);
+                }
+
 
 
             }
@@ -154,6 +143,7 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
         final TextView modeLabel=ButterKnife.findById(convertView,R.id.textView16);
         EditText min_edit=ButterKnife.findById(convertView,R.id.min_edit);
         EditText max_edit=ButterKnife.findById(convertView,R.id.max_edit);
+        EditText timeEdit=ButterKnife.findById(convertView,R.id.timeEdit);
         final SwitchButton switchButton=ButterKnife.findById(convertView,R.id.switchButton);
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,37 +156,16 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
                     modeLabel.setText("手动");
                 }
 
-                hud= KProgressHUD
-                        .create(ctx).setLabel("模式设置中...").show();
-
+                MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
+                myApplication.showDialog("模式设置中...");
                 SocketClientManager.getInstance().getHandler().modeStatusSetOrGet(ICmdPackageProtocol.MethodType.POST,
-                        (short) modeVal, new IDataCompleteCallback() {
-                            @Override
-                            public void onDataComplete(SPackage spackage) {
-                                if(spackage==null){
-                                    return;
-                                }
-                                if (spackage.getCmdword()==21){
-                                    Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
-                                    collectorInfos.get(groupPosition).setMode(spackage.getMode());
-                                    mainUIHandeler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            hud.dismiss();
-                                            notifyDataSetChanged();
-                                            showToastMessage("设置成功");
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        (short) modeVal, null);
             }
         });
 
-        max_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,true));
-        min_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,false));
-
+        max_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,1));
+        min_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,0));
+        timeEdit.addTextChangedListener(new TextWatcherImpl(groupPosition,2));
         CollectorInfo collectorInfo=collectorInfos.get(groupPosition);
 
         if(collectorInfo.getRange()!=null&&collectorInfo.getRange().length==2){
@@ -207,6 +176,11 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
             max_edit.setText(String.valueOf(-1));
         }
 
+        timeEdit.setText(String.valueOf(collectorInfo.getTime()));
+
+
+
+
         if(collectorInfo.getMode()== ICmdPackageProtocol.AUTO_MODE){
             switchButton.setChecked(true);
             modeLabel.setText("自动");
@@ -214,6 +188,8 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
             switchButton.setChecked(false);
             modeLabel.setText("手动");
         }
+
+
 
 
         return convertView;
@@ -226,10 +202,10 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
 
     public  class TextWatcherImpl implements TextWatcher {
         private int pos;
-        private boolean isMax;
-        public TextWatcherImpl(int pos,boolean isMax){
+        private int type;
+        public TextWatcherImpl(int pos,int  type){
             this.pos=pos;
-            this.isMax=isMax;
+            this.type=type;
         }
 
         @Override
@@ -248,9 +224,9 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
             if(s.toString().isEmpty()){
                 return;
             }
-            float val= Float.parseFloat(s.toString());
+            int val= Integer.parseInt(s.toString());
 
-            if(isMax){
+            if(type==1){
                 int[] range=collectorInfos.get(pos).getRange();
 
                 if(range!=null&&range.length==2){
@@ -258,11 +234,13 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
                 }
 
 
-            }else{
+            }else if(type==0){
                 int[] range=collectorInfos.get(pos).getRange();
                 if(range!=null&&range.length==2){
                     collectorInfos.get(pos).setRange(new int[]{(int)val,range[1]});
                 }
+            }else if(type==2){
+                collectorInfos.get(pos).setTime( val);
             }
 
 

@@ -150,12 +150,12 @@ public class SPackage {
 		}
 		
 		for(int i=0;i<2;i++){
-			all[18+i]=(byte) (cmdword<<8*(1-i)&0xFF);
+			all[18+i]=(byte) (cmdword>>8*(1-i)&0xFF);
 		}
 		all[20]=flag;
 	
 		for(int i=0;i<2;i++){
-			all[21+i]=(byte) (length<<8*(1-i)&0xFF);
+			all[21+i]=(byte) (length>>8*(1-i)&0xFF);
 		}
 		
 		
@@ -340,5 +340,16 @@ public class SPackage {
 
 		return -1;
 	}
+	public byte getTime() {
+
+		if(contents.length==3){
+			if(contents[0]==0xA5&&contents[1]==0x5A){
+				return (byte) contents[2];
+			}
+		}
+
+		return -1;
+	}
+
 }
 

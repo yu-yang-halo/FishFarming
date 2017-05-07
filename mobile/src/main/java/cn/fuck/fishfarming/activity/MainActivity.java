@@ -47,7 +47,7 @@ public class MainActivity extends StatusBarActivity {
 
     @BindView(R.id.gridView) GridView gridView;
     @OnClick(R.id.textView4) void callPhone(){
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "15156098260"));
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "0551-63651196"));
 
         startActivity(intent);
     }

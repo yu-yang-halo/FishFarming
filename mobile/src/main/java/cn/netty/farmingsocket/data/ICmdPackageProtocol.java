@@ -9,7 +9,7 @@ public interface ICmdPackageProtocol {
 	public void rangSetOrGet(MethodType type ,int max,int min,IDataCompleteCallback completeCallback);
 	public void modeStatusSetOrGet(MethodType type,short mode,IDataCompleteCallback completeCallback);
 
-
+	public void timeSetOrGet(MethodType type,short time,IDataCompleteCallback completeCallback);
 
 
 
