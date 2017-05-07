@@ -45,7 +45,6 @@ dependencies {
     compile 'com.kyleduo.switchbutton:library:1.4.4'
     compile project(path: ':lib')
     compile files('libs/gson-2.2.4.jar')
-    compile files('libs/netty-all-4.1.6.Final.jar')
     compile 'com.android.support:design:24.2.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     compile files('libs/HCNetSDK.jar')

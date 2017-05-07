@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,12 +27,8 @@ import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.farmFish.service.webserviceApi.bean.UserInfo;
 import cn.farmFish.service.webserviceApi.bean.VideoInfo;
-import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.cache.ContentBox;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.ICmdPackageProtocol;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
+
 import im.fir.sdk.FIR;
 
 /**
@@ -38,7 +36,7 @@ import im.fir.sdk.FIR;
  */
 public class MyApplication extends Application {
     LocationClient mLocationClient;
-
+    Handler mainHandler=new Handler(Looper.getMainLooper());
     private String customerNo;
     private String userAccount;
     private List<CollectorInfo> collectorInfos;
@@ -224,14 +222,28 @@ public class MyApplication extends Application {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(hud!=null){
-                    hud.dismiss();
-                    Toast.makeText(getApplicationContext(),"发送超时,已取消",Toast.LENGTH_SHORT).show();
-                }
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(hud!=null){
+                            hud.dismiss();
+                            hud=null;
+                            Toast.makeText(getApplicationContext(),"发送超时,已取消",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
             }
-        },5000);
+        },8000);
     }
     public void hideDialog(){
+        if(hud!=null){
+            hud.dismiss();
+            hud=null;
+            Toast.makeText(this,"设置成功",Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void hideDialogNoMessage(){
         if(hud!=null){
             hud.dismiss();
             hud=null;

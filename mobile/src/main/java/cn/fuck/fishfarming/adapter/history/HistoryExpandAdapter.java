@@ -43,7 +43,6 @@ import cn.fuck.fishfarming.fragment.RemoteControlFragment;
 import cn.fuck.fishfarming.utils.ConstantUtils;
 import cn.fuck.fishfarming.utils.DateUtils;
 import cn.fuck.fishfarming.weather.WeatherViewManager;
-import cn.netty.farmingsocket.SocketClientManager;
 
 /**
  * Created by Administrator on 2016/12/7.

@@ -1,7 +1,7 @@
-package cn.netty.farmingsocket;
+package com.farmingsocket;
 
-import cn.netty.farmingsocket.SPackage.DeviceType;
-import cn.netty.farmingsocket.data.ICmdPackageProtocol.MethodType;
+import com.farmingsocket.SPackage.DeviceType;
+import com.farmingsocket.manager.ConstantsPool.MethodType;
 
 public class TcpSocketService {
 	private static TcpSocketService instance = null;
@@ -22,6 +22,23 @@ public class TcpSocketService {
 	}
 
 
+
+	/**
+	 * 检测数据上报
+	 */
+	public void checkData() {
+	
+		SPackage data1 = new SPackage(DeviceType.Android, deviceID,
+				new byte[] { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF }
+		         , (short) 0x0003, (byte) 0x01, (short) 0);
+
+		tcpCoreManager.sendData(data1.getNeedSendDataPackages());
+
+	}
+
+	/**
+	 * 发送心跳 信息数据
+	 */
 	public void sendFuckHeart() {
 
 		SPackage data0 = new SPackage(DeviceType.Water, deviceID,
@@ -31,11 +48,20 @@ public class TcpSocketService {
 
 		tcpCoreManager.sendData(data0.getNeedSendDataPackages());
 		
+	
+	}
+
+	/**
+	 * 发送注册 
+	 */
+	public void sendRegisterDevice() {
 		SPackage data1 = new SPackage(DeviceType.Android, deviceID,
 				new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0001, (byte) 0x00, (short) 0);
 
 		tcpCoreManager.sendData(data1.getNeedSendDataPackages());
+	
 	}
+	
 
 	public void sendFuckControlCmd(int num, int cmdStatus, String deviceId) {
 

@@ -13,43 +13,46 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
+import com.farmingsocket.SPackage;
+import com.farmingsocket.TcpSocketService;
+import com.farmingsocket.manager.ConstantsPool;
+import com.farmingsocket.manager.ReceiveUI;
+import com.farmingsocket.manager.UIManager;
 
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.setting.RangeExpandAdapter;
-import cn.fuck.fishfarming.adapter.setting.SettingExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
-import cn.fuck.fishfarming.utils.JSONBeanHelper;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.ICmdPackageProtocol;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
+
 
 /**
  * Created by Administrator on 2017/2/23 0023.
  */
 
-public class RangeSettingFragment extends Fragment {
+public class RangeSettingFragment extends Fragment implements ReceiveUI {
     ExpandableListView expandSettingListView;
     MyApplication myApp;
     RangeExpandAdapter adapter;
     List<CollectorInfo> collectorInfos;
-    Handler nettyHandler = new Handler(Looper.getMainLooper());
+    Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    int selectParentPos=-1;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        UIManager.getInstance().addObserver(this);
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        UIManager.getInstance().deleteObserver(this);
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class RangeSettingFragment extends Fragment {
     }
 
     MyApplication myApplication;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,79 +76,14 @@ public class RangeSettingFragment extends Fragment {
         expandSettingListView.setAdapter(adapter);
 
 
-        expandSettingListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                SocketClientManager.getInstance().closeConnect();
-            }
-        });
-
         expandSettingListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public void onGroupExpand(final int groupPosition) {
+            public void onGroupExpand(int groupPosition) {
 
-                if(groupPosition!=selectParentPos&&selectParentPos>=0){
-                    expandSettingListView.collapseGroup(selectParentPos);
-                    SocketClientManager.getInstance().closeConnect();
-                }
-                selectParentPos=groupPosition;
-                SocketClientManager.getInstance().beginConnect( collectorInfos.get(groupPosition).getDeviceID(), new IDataCompleteCallback() {
-                    @Override
-                    public void onDataComplete(SPackage spackage) {
-
-                        if(spackage.getFlag()==0x82){
-                            myApplication.hideDialog();
-                        }
-                        if (spackage.getCmdword()==19){
-                            Log.v("max", Arrays.toString( spackage.getRang()));
-                            collectorInfos.get(groupPosition).setRange(spackage.getRang());
-                            nettyHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-
-                            if(spackage.getFlag()==0x82){
-                                Toast.makeText(getContext(),"阈值设置成功",Toast.LENGTH_SHORT).show();
-                            }
-
-
-
-                        }else if (spackage.getCmdword()==21){
-                            Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
-                            collectorInfos.get(groupPosition).setMode(spackage.getMode());
-                            nettyHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                            if(spackage.getFlag()==0x82){
-                                Toast.makeText(getContext(),"模式设置成功",Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        }else if(spackage.getCmdword()==24){
-                            collectorInfos.get(groupPosition).setTime(spackage.getTime());
-                            nettyHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                            if(spackage.getFlag()==0x82){
-                                Toast.makeText(getContext(),"时间设置成功",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-
-
-
-
-                    }
-                });
-
+                TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
+                TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
+                TcpSocketService.getInstance().timeSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
+                TcpSocketService.getInstance().rangSetOrGet(ConstantsPool.MethodType.GET,(short) 0,(short) 0);
             }
         });
 
@@ -154,6 +94,71 @@ public class RangeSettingFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        SocketClientManager.getInstance().closeConnect();
+    }
+
+    private CollectorInfo findCollectorInfo(String devId){
+        CollectorInfo tmp=null;
+        for (CollectorInfo collectorInfo:collectorInfos){
+            if(collectorInfo.getDeviceID().equals(devId)){
+                tmp=collectorInfo;
+            }
+        }
+        return tmp;
+    }
+
+    @Override
+    public void update(UIManager o, Object arg) {
+
+        if(arg instanceof SPackage){
+            final SPackage spackage= (SPackage) arg;
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(spackage.getFlag()==0x82){
+                        myApplication.hideDialog();
+                    }
+                    if (spackage.getCmdword()==19){
+                        Log.v("max", Arrays.toString( spackage.getRang()));
+                        CollectorInfo collectorInfo=findCollectorInfo(spackage.getDeviceID());
+                        if(collectorInfo!=null){
+                            collectorInfo.setRange(spackage.getRang());
+                        }
+
+                        adapter.notifyDataSetChanged();
+
+                        if(spackage.getFlag()==0x82){
+                            Toast.makeText(getContext(),"阈值设置成功",Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else if (spackage.getCmdword()==21){
+
+                        CollectorInfo collectorInfo=findCollectorInfo(spackage.getDeviceID());
+                        if(collectorInfo!=null){
+                            collectorInfo.setMode(spackage.getMode());
+                        }
+                        adapter.notifyDataSetChanged();
+                        if(spackage.getFlag()==0x82){
+                            Toast.makeText(getContext(),"模式设置成功",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }else if(spackage.getCmdword()==24){
+                        CollectorInfo collectorInfo=findCollectorInfo(spackage.getDeviceID());
+                        if(collectorInfo!=null){
+                            collectorInfo.setTime(spackage.getTime());
+                        }
+                        adapter.notifyDataSetChanged();
+                        if(spackage.getFlag()==0x82){
+                            Toast.makeText(getContext(),"时间设置成功",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+
+
+
+        }
+
+
     }
 }

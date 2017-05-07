@@ -12,14 +12,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
-import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
 import cn.fuck.fishfarming.adapter.history.HistoryExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
-import cn.fuck.fishfarming.cache.JsonObjectManager;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.DataAnalysisHelper;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 /**
  * Created by Administrator on 2016/12/8.

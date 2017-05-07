@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.farmingsocket.TcpSocketService;
+import com.farmingsocket.manager.ConstantsPool;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -25,16 +27,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.application.MyApplication;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.ICmdPackageProtocol;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 /**
  * Created by Administrator on 2017/2/5 0005.
@@ -95,35 +90,42 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    class GraoupViewTag{
+        TextView titleView;
+        Button saveBtn;
+
+    }
+
     @Override
     public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
+        GraoupViewTag viewTag = null;
         if(convertView==null){
             convertView= LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_setting_group,null);
+            viewTag=new GraoupViewTag();
+            viewTag.titleView= ButterKnife.findById(convertView,R.id.titleView);
+            viewTag.saveBtn=ButterKnife.findById(convertView,R.id.button3);
+            convertView.setTag(viewTag);
+
         }
-        TextView titleView= ButterKnife.findById(convertView,R.id.titleView);
-        final Button saveBtn=ButterKnife.findById(convertView,R.id.button3);
+        viewTag= (GraoupViewTag) convertView.getTag();
 
-        titleView.setText(getGroup(groupPosition).getPondName());
+        viewTag.titleView.setText(getGroup(groupPosition).getPondName());
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
+        viewTag.saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
                 int[] ranges=collectorInfos.get(groupPosition).getRange();
                 int time=collectorInfos.get(groupPosition).getTime();
                 if(ranges!=null&&ranges.length==2){
                     MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
                     myApplication.showDialog("阈值数据保存中...");
 
-                    SocketClientManager.getInstance().getHandler().rangSetOrGet(ICmdPackageProtocol.MethodType.POST, ranges[1], ranges[0],null);
-
+                    TcpSocketService.getInstance().rangSetOrGet(ConstantsPool.MethodType.POST, ranges[1], ranges[0]);
                 }
-
                 if(time>0){
-                    SocketClientManager.getInstance().getHandler().timeSetOrGet(ICmdPackageProtocol.MethodType.POST, (short) time,null);
+                    TcpSocketService.getInstance().timeSetOrGet(ConstantsPool.MethodType.POST, (short) time);
                 }
-
-
-
             }
         });
 
@@ -134,64 +136,76 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
     private void showToastMessage(String message){
         Toast.makeText(ctx,message,Toast.LENGTH_SHORT).show();
     }
+    class ViewTag{
+        EditText min_edit;
+        EditText max_edit;
+        EditText timeEdit;
+        Button switchButton;
+    }
 
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ViewTag tag;
         if(convertView==null){
             convertView=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_range_child,null);
-        }
-        final TextView modeLabel=ButterKnife.findById(convertView,R.id.textView16);
-        EditText min_edit=ButterKnife.findById(convertView,R.id.min_edit);
-        EditText max_edit=ButterKnife.findById(convertView,R.id.max_edit);
-        EditText timeEdit=ButterKnife.findById(convertView,R.id.timeEdit);
-        final SwitchButton switchButton=ButterKnife.findById(convertView,R.id.switchButton);
-        switchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int modeVal= ICmdPackageProtocol.MANUAL_MODE;
-                if(switchButton.isChecked()){
-                    modeVal= ICmdPackageProtocol.AUTO_MODE;
-                    modeLabel.setText("自动");
-                }else{
-                    modeLabel.setText("手动");
+            tag=new ViewTag();
+
+            tag.min_edit=ButterKnife.findById(convertView,R.id.min_edit);
+            tag.max_edit=ButterKnife.findById(convertView,R.id.max_edit);
+            tag.timeEdit=ButterKnife.findById(convertView,R.id.timeEdit);
+            tag.switchButton=ButterKnife.findById(convertView,R.id.switchButton);
+            convertView.setTag(tag);
+            tag.max_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,1));
+            tag.min_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,0));
+            tag.timeEdit.addTextChangedListener(new TextWatcherImpl(groupPosition,2));
+            tag.switchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Button btn= (Button) v;
+
+                    int modeVal= ConstantsPool.MANUAL_MODE;
+
+                    if(btn.isSelected()){
+                        modeVal= ConstantsPool.AUTO_MODE;
+                        btn.setText("自动");
+                    }else{
+                        btn.setText("手动");
+                    }
+
+                    MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
+                    myApplication.showDialog("模式设置中...");
+                    TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
+                    TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.POST,
+                            (short) modeVal);
                 }
+            });
 
-                MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
-                myApplication.showDialog("模式设置中...");
-                SocketClientManager.getInstance().getHandler().modeStatusSetOrGet(ICmdPackageProtocol.MethodType.POST,
-                        (short) modeVal, null);
-            }
-        });
+        }
 
-        max_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,1));
-        min_edit.addTextChangedListener(new TextWatcherImpl(groupPosition,0));
-        timeEdit.addTextChangedListener(new TextWatcherImpl(groupPosition,2));
+        tag= (ViewTag) convertView.getTag();
         CollectorInfo collectorInfo=collectorInfos.get(groupPosition);
 
         if(collectorInfo.getRange()!=null&&collectorInfo.getRange().length==2){
-            min_edit.setText(String.valueOf(collectorInfo.getRange()[0]));
-            max_edit.setText(String.valueOf(collectorInfo.getRange()[1]));
+            tag.min_edit.setText(String.valueOf(collectorInfo.getRange()[0]));
+            tag.max_edit.setText(String.valueOf(collectorInfo.getRange()[1]));
         }else{
-            min_edit.setText(String.valueOf(-1));
-            max_edit.setText(String.valueOf(-1));
+            tag.min_edit.setText(String.valueOf(-1));
+            tag.max_edit.setText(String.valueOf(-1));
         }
 
-        timeEdit.setText(String.valueOf(collectorInfo.getTime()));
+        tag.timeEdit.setText(String.valueOf(collectorInfo.getTime()));
 
 
 
 
-        if(collectorInfo.getMode()== ICmdPackageProtocol.AUTO_MODE){
-            switchButton.setChecked(true);
-            modeLabel.setText("自动");
+        if(collectorInfo.getMode()== ConstantsPool.AUTO_MODE){
+            tag.switchButton.setSelected(true);
+            tag.switchButton.setText("自动");
         }else{
-            switchButton.setChecked(false);
-            modeLabel.setText("手动");
+            tag.switchButton.setSelected(false);
+            tag.switchButton.setText("手动");
         }
-
-
-
-
         return convertView;
     }
 

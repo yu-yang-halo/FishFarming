@@ -34,7 +34,6 @@ import cn.fuck.fishfarming.fragment.MoreFragment;
 import cn.fuck.fishfarming.fragment.RealDataFragment;
 import cn.fuck.fishfarming.fragment.RemoteControlFragment;
 import cn.fuck.fishfarming.fragment.VideoFragment;
-import cn.netty.farmingsocket.SocketClientManager;
 
 public class TabActivity extends StatusBarActivity {
     public static String KEY_POSITION="tab_position";
@@ -87,7 +86,6 @@ public class TabActivity extends StatusBarActivity {
             @Override
             public void onTabSelect(int position) {
                 currentPos=position;
-                SocketClientManager.getInstance().closeConnect();
                 setSelectPos(position);
             }
 

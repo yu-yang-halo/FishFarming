@@ -35,21 +35,22 @@ public class RealDataItemAdapter extends BaseAdapter {
 
     public RealDataItemAdapter(Map<String,String> dict, Context ctx){
         this.ctx=ctx;
-        dict.remove("30");
-        this.dict=dict;
-        this.datas=new ArrayList<String>(dict.values());
-
-        Collections.sort(datas, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                String[]  arr1=o1.split("\\|");
-                String[]  arr2=o2.split("\\|");
-                if(arr1.length==5&&arr2.length==5){
-                    return  Integer.parseInt(arr1[4])-Integer.parseInt(arr2[4]);
+        if(dict!=null){
+            dict.remove("30");
+            this.dict=dict;
+            this.datas=new ArrayList<String>(dict.values());
+            Collections.sort(datas, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    String[]  arr1=o1.split("\\|");
+                    String[]  arr2=o2.split("\\|");
+                    if(arr1.length==5&&arr2.length==5){
+                        return  Integer.parseInt(arr1[4])-Integer.parseInt(arr2[4]);
+                    }
+                    return 0;
                 }
-                return 0;
-            }
-        });
+            });
+        }
 
 
 
@@ -82,15 +83,10 @@ public class RealDataItemAdapter extends BaseAdapter {
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_realdata_item,null);
         }
 
-
         String    value  =datas.get(i);
         String[]  dataArr=value.split("\\|");
         TextView nameLabel=ButterKnife.findById(view,R.id.textView10);
         TextView valueLabel=ButterKnife.findById(view,R.id.textView11);
-
-
-
-
 
 
         final ClipView containerViewValue=ButterKnife.findById(view,R.id.containerViewValue);

@@ -1,4 +1,4 @@
-package cn.netty.farmingsocket;
+package com.farmingsocket;
 
 
 import java.io.DataInputStream;
@@ -25,6 +25,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import com.farmingsocket.SPackage.DeviceType;
+import com.farmingsocket.manager.UIManager;
+
 
 public class TcpCoreManager implements IReceive2{
 	/**
@@ -38,7 +41,7 @@ public class TcpCoreManager implements IReceive2{
 	private final static String TCP_SERVER="183.78.182.98";
 	//private final static String TCP_SERVER="192.168.11.193";
 	private final static int TCP_PORT = 9101;
-	private final static int CONNECT_TIME_OUT=2500;//毫秒
+	private final static int CONNECT_TIME_OUT=11*1000;//毫秒
 	private final static int HEART_RATE=5000;//毫秒
 	private final static int RECEIVE_TIME_OUT=11*1000;//毫秒
 	private Socket sendSocket;
@@ -61,6 +64,7 @@ public class TcpCoreManager implements IReceive2{
 		isListenserData=false;
 		if(heartTimer!=null){
 			heartTimer.cancel();
+			heartTimer=null;
 		}
 		try {
 			synchronized (lockObj){
@@ -94,10 +98,11 @@ public class TcpCoreManager implements IReceive2{
 					sendSocket.connect(socketAddress, CONNECT_TIME_OUT);
 					sendSocket.setKeepAlive(true);
 					sendSocket.setOOBInline(true);
-					sendSocket.setSoTimeout(RECEIVE_TIME_OUT);
+					//sendSocket.setSoTimeout(RECEIVE_TIME_OUT);
 					clientOS=sendSocket.getOutputStream();
 					clientIS=sendSocket.getInputStream();
 				} catch (IOException e) {
+					e.printStackTrace();
 					sendSocket = new Socket();
 					
 				}
@@ -193,12 +198,63 @@ public class TcpCoreManager implements IReceive2{
 
 		System.err.println(" len:: "+len+"\n"+thPackage);
 
+
+
+		sendFuckHeart(thPackage.getDeviceID());
+
+
 		/**
-		 * UIManager 发送消息给【BaseUI】界面
+		 * UIManager 发送消息给【ReceiveUI】界面
 		 */
+		UIManager.getInstance().setChanged();
+		UIManager.getInstance().notifyDataObservers(thPackage);
 
 
+	}
+	/**
+	 * 检测数据上报
+	 */
+	public void checkData(String deviceID) {
+	
+		SPackage data1 = new SPackage(DeviceType.Android, deviceID,
+				new byte[] { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF }
+		         , (short) 0x0003, (byte) 0x01, (short) 0);
 
+		sendData(data1.getNeedSendDataPackages());
+	
+	}
+
+	
+	public void sendFuckHeart(final String deviceID) {
+
+		 if(heartTimer==null){
+			 heartTimer=new Timer();
+			 heartTimer.schedule(new TimerTask() {
+				 @Override
+				 public void run() {
+					 /**
+					  * 终端心跳
+					  */
+					 SPackage data1 = new SPackage(DeviceType.Android, deviceID,
+							 new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0001, (byte) 0x00, (short) 0);
+
+					 sendData(data1.getNeedSendDataPackages());
+
+//					 SPackage data0 = new SPackage(DeviceType.Water, deviceID,
+//							 new byte[] { 0x12, 0x78, (byte) 0xA0, (byte) 0x9C, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0002,
+//							 (byte) 0x00, (short) 1);
+//					 data0.setContents(new byte[] { (byte) 0xFF });
+//
+//					 sendData(data0.getNeedSendDataPackages());
+				 }
+			 },200,5000);
+		 }
+
+
+		
+
+		
+	
 	}
 
 	/**

@@ -31,7 +31,7 @@
         <EditText
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:inputType="number|numberDecimal"
+            android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/min_edit"
             android:layout_marginLeft="-120dp"
@@ -41,7 +41,7 @@
         <EditText
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:inputType="number|numberDecimal"
+            android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/max_edit"
             android:layout_marginLeft="41dp"
@@ -70,22 +70,13 @@
         android:layout_height="40dp"
         android:layout_below="@id/relativeLayout">
 
-        <TextView
-            android:text="手动"
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:id="@+id/textView16"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/switchButton"
-            android:layout_toEndOf="@+id/switchButton" />
-
-        <com.kyleduo.switchbutton.SwitchButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:id="@+id/switchButton"
-            app:kswTintColor="#16A560"
-            style="@style/SwitchButtonStyle"
+            android:background="@drawable/button_switch"
+            android:text="手动"
+            android:textColor="#fff"
             android:gravity="center"
             android:layout_marginLeft="21dp"
             android:layout_centerVertical="true"
@@ -94,38 +85,38 @@
             android:layout_marginStart="21dp" />
 
         <TextView
-            android:text="分"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView19"
-            android:layout_alignBaseline="@+id/timeEdit"
-            android:layout_alignBottom="@+id/timeEdit"
-            android:layout_toRightOf="@+id/timeEdit"
-            android:layout_toEndOf="@+id/timeEdit" />
-
-        <TextView
             android:text="间隔时间"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView18"
             android:layout_alignBaseline="@+id/timeEdit"
             android:layout_alignBottom="@+id/timeEdit"
-            android:layout_toRightOf="@+id/textView16"
-            android:layout_toEndOf="@+id/textView16"
-            android:layout_marginLeft="73dp"
-            android:layout_marginStart="73dp" />
+            android:layout_toLeftOf="@+id/timeEdit"
+            android:layout_toStartOf="@+id/timeEdit" />
+
+        <TextView
+            android:text="分"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView19"
+            android:layout_alignBaseline="@+id/timeEdit"
+            android:layout_alignBottom="@+id/timeEdit"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="67dp"
+            android:layout_marginEnd="67dp" />
 
         <EditText
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:inputType="number|numberDecimal"
+            android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/timeEdit"
-            android:layout_marginLeft="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/textView18"
-            android:layout_toEndOf="@+id/textView18" />
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/textView19"
+            android:layout_toStartOf="@+id/textView19"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
     </RelativeLayout>
 </RelativeLayout>
 </RelativeLayout>

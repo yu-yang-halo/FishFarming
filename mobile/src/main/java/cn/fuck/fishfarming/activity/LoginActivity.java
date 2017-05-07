@@ -148,10 +148,12 @@ public class LoginActivity extends FragmentActivity {
                             String result=dict.get("LoginNResult");
 
                             Type type=new TypeToken<List<UserInfo>>(){}.getType();
-
-                            List<UserInfo> userInfos=gson.fromJson(result,type);
-
-
+                            List<UserInfo> userInfos;
+                            try{
+                                userInfos=gson.fromJson(result,type);
+                            }catch (Exception e){
+                                userInfos=null;
+                            }
 
 
                             if(userInfos==null||userInfos.size()<=0){

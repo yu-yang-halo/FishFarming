@@ -10,36 +10,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.kaopiz.kprogresshud.KProgressHUD;
+
 
 import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
-import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
-import cn.fuck.fishfarming.adapter.setting.SettingExpandAdapter;
-import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.fragment.AlertSettingFragment;
 import cn.fuck.fishfarming.fragment.RangeSettingFragment;
-import cn.fuck.fishfarming.utils.JSONBeanHelper;
+
 import cn.fuck.fishfarming.utils.ViewFindUtils;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.ICmdPackageProtocol;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
+
 
 /**
  * Created by Administrator on 2016/12/10 0010.

@@ -13,43 +13,50 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.farmingsocket.DataAnalysisHelper;
+import com.farmingsocket.SPackage;
+import com.farmingsocket.TcpSocketService;
+import com.farmingsocket.manager.ReceiveUI;
+import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.DataAnalysisHelper;
-import cn.netty.farmingsocket.data.ICmdPackageProtocol;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 /**
  * Created by Administrator on 2016/12/3 0003.
  */
 
-public class RemoteControlFragment extends Fragment {
+public class RemoteControlFragment extends Fragment implements ReceiveUI {
 
     private static final  String TAG="RemoteControlFragment";
 
     @BindView(R.id.expandControlListView)
     ExpandableListView expandRemoteControlListView;
-    Handler nettyHandler = new Handler(Looper.getMainLooper());
+    Handler mainHandler = new Handler(Looper.getMainLooper());
 
     MyApplication myApp;
     RemoteControlExpandAdapter adapter;
     KProgressHUD hud;
-    int parentSelectId=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.e(TAG,"onAttach..............");
+        UIManager.getInstance().addObserver(this);
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e(TAG,"onDetach..............");
+        UIManager.getInstance().deleteObserver(this);
     }
 
     @Nullable
@@ -72,91 +79,19 @@ public class RemoteControlFragment extends Fragment {
         expandRemoteControlListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(final int i) {
-                if(parentSelectId!=-1){
-                    expandRemoteControlListView.collapseGroup(parentSelectId);
-                }
-                parentSelectId=i;
+
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Map<String,String> cacheData= JsonObjectManager.getMapObject(getContext(),deviceId);
                 if(cacheData==null||cacheData.size()<=0){
                     hud= KProgressHUD
                             .create(getActivity()).setLabel("数据加载中...")
                             .show();
+
                 }
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
 
-                SocketClientManager.getInstance().beginConnect(deviceId,new IDataCompleteCallback() {
-                    @Override
-                    public void onDataComplete(final SPackage spackage) {
-
-                        if(spackage!=null){
-                            if (spackage.getCmdword()==21){
-                                Log.v("Mode", spackage.getMode()==ICmdPackageProtocol.MANUAL_MODE?"手动":"自动");
-                                myApp.getCollectorInfos().get(i).setMode(spackage.getMode());
-                            }
-                        }
-
-
-                        nettyHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (spackage==null){
-                                    if(parentSelectId!=-1){
-                                        expandRemoteControlListView.collapseGroup(parentSelectId);
-                                    }
-                                    return;
-                                }
-
-                                Log.v("analysisData","analysisData : "+spackage);
-                                Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
-                                if(dict.size()>0){
-                                    if(hud!=null){
-                                        hud.dismiss();
-                                    }
-
-                                    if(dict.size()==1&&dict.keySet().contains("30")){
-
-
-                                        String statusValue=dict.get("30");
-
-                                        Log.v("control","30 : "+statusValue);
-                                        dict= JsonObjectManager.getMapObject(myApp,deviceId);
-                                        if(dict!=null){
-                                            dict.put("30",statusValue);
-                                        }
-                                        Log.v("control","dict : "+dict);
-                                    }
-                                    JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            }
-                        });
-
-                    }
-                });
-            }
-        });
-
-        expandRemoteControlListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int i) {
-                Log.v("onGroupCollapse","onGroupCollapse"+i);
-                if(parentSelectId==i){
-                    parentSelectId=-1;
-                }
-                SocketClientManager.getInstance().closeConnect();
-
-                nettyHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if(hud!=null){
-                            hud.dismiss();
-                        }
-
-                    }
-                });
+                TcpSocketService.getInstance().setDeviceId(deviceId);
+                TcpSocketService.getInstance().sendFuckHeart();
             }
         });
 
@@ -170,17 +105,11 @@ public class RemoteControlFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Log.e(TAG,"onStart..............");
-        if(parentSelectId!=-1){
-            expandRemoteControlListView.collapseGroup(parentSelectId);
-        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        SocketClientManager.getInstance().closeConnect();
-        Log.e(TAG,"onStop..............");
     }
 
     @Override
@@ -195,5 +124,54 @@ public class RemoteControlFragment extends Fragment {
         }
         Log.e(TAG,"onHiddenChanged.............."+hidden);
 
+    }
+
+    @Override
+    public void update(UIManager o, Object arg) {
+        if(arg instanceof SPackage){
+            final SPackage spackage= (SPackage) arg;
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (spackage.getCmdword()==21){
+                        CollectorInfo collectorInfo= DataAnalysisHelper.findCollectorInfo( myApp.getCollectorInfos(),spackage.getDeviceID());
+                        if(collectorInfo!=null){
+                            collectorInfo.setMode(spackage.getMode());
+                        }
+                    }else{
+                        Log.v("analysisData","analysisData : "+spackage);
+                        if(hud!=null){
+                            hud.dismiss();
+                        }
+                        if(spackage.getCmdword()==15){
+                            MyApplication myApplication= (MyApplication) getContext().getApplicationContext();
+                            myApplication.hideDialog();
+
+
+                        }
+
+                        Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
+                        if(dict.size()>0){
+
+                            if(dict.size()==1&&dict.keySet().contains(spackage.getDeviceID())){
+                                String statusValue=dict.get(spackage.getDeviceID());
+                                Log.v("control",spackage.getDeviceID()+" : "+statusValue);
+                                dict= JsonObjectManager.getMapObject(myApp,spackage.getDeviceID());
+                                if(dict!=null){
+                                    dict.put(spackage.getDeviceID(),statusValue);
+                                }
+                                Log.v("control","dict : "+dict);
+                            }
+                            JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+
+                }
+            });
+
+        }
     }
 }

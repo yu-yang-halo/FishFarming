@@ -1,5 +1,6 @@
 package cn.fuck.fishfarming.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,7 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.farmingsocket.DataAnalysisHelper;
+import com.farmingsocket.SPackage;
+import com.farmingsocket.TcpSocketService;
+import com.farmingsocket.manager.ReceiveUI;
+import com.farmingsocket.manager.UIManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,20 +32,15 @@ import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.AlertAdapter;
-import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
 import cn.fuck.fishfarming.utils.JSONBeanHelper;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.DataAnalysisHelper;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
 
 /**
  * Created by Administrator on 2016/12/3 0003.
  */
 
-public class AlertFragment extends Fragment {
+public class AlertFragment extends Fragment implements ReceiveUI{
     CollectorInfo collectorInfo;
     Handler mainHandler = new Handler(Looper.getMainLooper());
     ListView alertListView;
@@ -48,6 +49,20 @@ public class AlertFragment extends Fragment {
     AlertAdapter alertAdapter;
 
     Set<String> messages=new HashSet<>();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        UIManager.getInstance().addObserver(this);
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        UIManager.getInstance().deleteObserver(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,76 +118,67 @@ public class AlertFragment extends Fragment {
         if(!hidden){
 
             if(collectorInfo!=null){
-                SocketClientManager.getInstance().beginConnect(collectorInfo.getDeviceID(),new IDataCompleteCallback() {
-                    @Override
-                    public void onDataComplete(final SPackage spackage) {
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.v("analysisData","analysisData : "+spackage);
-                                Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
-                                if(dict.size()>0){
-                                    Log.v("dict","dict : "+dict);
-                                    //{3=PH|7.71|20.0| |3, 1=溶氧|7.07|20.0|mg/L|1, 30=00000000, 6=亚硝酸盐|0.08|20.0|mg/L|5, 5=水温|12.34|20.0|℃|2, 4=氨氮|0.29|20.0|mg/L|4}
-
-                                    JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
-                                    List<SensorInfo> sensorInfos=myApp.getSensorInfos();
-
-
-
-                                    if(sensorInfos!=null){
-                                        for (SensorInfo sensorInfo: sensorInfos){
-                                             String realData=dict.get(sensorInfo.getF_ID());
-                                             if(realData!=null){
-                                                 String[] datas=realData.split("\\|");
-                                                 if(datas!=null&&datas.length==5){
-                                                      float value=Float.parseFloat(datas[1]);
-
-                                                      if(value>sensorInfo.getF_Upper()){
-                                                          //超过上限
-                                                          messages.add(datas[0]+"超过上限 [当前值:"+value+"  上限值:"+sensorInfo.getF_Upper()+"]" );
-                                                      }else if(value<sensorInfo.getF_Lower()){
-                                                          //超过下限
-                                                          messages.add(datas[0]+"低于下限 [当前值:"+value+"  下限值:"+sensorInfo.getF_Lower()+"]" );
-                                                      }
-
-                                                 }
-                                             }
-                                        }
-
-                                        if (messages.size()<0){
-                                            tips.setVisibility(View.VISIBLE);
-                                            alertListView.setVisibility(View.GONE);
-                                        }else{
-                                            tips.setVisibility(View.GONE);
-                                            alertListView.setVisibility(View.VISIBLE);
-
-                                            alertAdapter.setMessages(new ArrayList<String>(messages));
-
-                                            alertAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-
-
-
-
-
-
-
-
-
-
-                                }
-                            }
-                        });
-
-                    }
-                });
+                TcpSocketService.getInstance().setDeviceId(collectorInfo.getDeviceID());
+                TcpSocketService.getInstance().sendFuckHeart();
 
             }
-        }else{
-            SocketClientManager.getInstance().closeConnect();
+        }
+    }
 
+    @Override
+    public void update(UIManager o, Object arg) {
+        if(arg instanceof SPackage){
+            final SPackage spackage= (SPackage) arg;
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
+                    if(dict.size()>0){
+                        Log.v("dict","dict : "+dict);
+
+                        JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
+                        List<SensorInfo> sensorInfos=myApp.getSensorInfos();
+
+
+
+                        if(sensorInfos!=null){
+                            for (SensorInfo sensorInfo: sensorInfos){
+                                String realData=dict.get(sensorInfo.getF_ID());
+                                if(realData!=null){
+                                    String[] datas=realData.split("\\|");
+                                    if(datas!=null&&datas.length==5){
+                                        float value=Float.parseFloat(datas[1]);
+
+                                        if(value>sensorInfo.getF_Upper()){
+                                            //超过上限
+                                            messages.add(datas[0]+"超过上限 [当前值:"+value+"  上限值:"+sensorInfo.getF_Upper()+"]" );
+                                        }else if(value<sensorInfo.getF_Lower()){
+                                            //超过下限
+                                            messages.add(datas[0]+"低于下限 [当前值:"+value+"  下限值:"+sensorInfo.getF_Lower()+"]" );
+                                        }
+
+                                    }
+                                }
+                            }
+
+                            if (messages.size()<0){
+                                tips.setVisibility(View.VISIBLE);
+                                alertListView.setVisibility(View.GONE);
+                            }else{
+                                tips.setVisibility(View.GONE);
+                                alertListView.setVisibility(View.VISIBLE);
+
+                                alertAdapter.setMessages(new ArrayList<String>(messages));
+
+                                alertAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+
+
+                    }
+                }
+            });
         }
     }
 }

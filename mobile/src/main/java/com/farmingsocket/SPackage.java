@@ -1,12 +1,10 @@
-package cn.netty.farmingsocket;
+package com.farmingsocket;
 
 import java.util.Arrays;
 
-import io.netty.buffer.ByteBuf;
-
-import static cn.netty.farmingsocket.data.ICmdPackageProtocol.AUTO_MODE;
 
 public class SPackage {
+	
 	public byte[] getContents() {
 		return contents;
 	}
@@ -196,9 +194,9 @@ public class SPackage {
 			System.out.format("序号[1-2]厂家信息%02x%02x\n",bytes[1],bytes[2]);
 			System.out.format("序号[3]版本号%02x\n",bytes[3]);
 			System.out.format("序号[4-5]设备类型%02x%02x\n",bytes[4],bytes[5]);
-		    String customNo=String.format("%02x-%02x-%02x-%02x",bytes[6],bytes[7],bytes[8],bytes[9]);
+		    String deviceId=String.format("%02x-%02x-%02x-%02x",bytes[6],bytes[7],bytes[8],bytes[9]);
 
-		    System.out.format("序号[6-9]设备地址%02x%02x%02x%02x  customNO:%s\n",bytes[6],bytes[7],bytes[8],bytes[9],customNo);
+		    System.out.format("序号[6-9]设备地址%02x%02x%02x%02x  deviceId:%s\n",bytes[6],bytes[7],bytes[8],bytes[9],deviceId);
 		    
 		    System.out.format("序号[10-17]命令流水号%02x%02x%02x%02x%02x%02x%02x%02x\n",bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15],bytes[16],bytes[17]);
 		    //0003 3--内容  19--设置信息  15--电机控制状态
@@ -219,11 +217,6 @@ public class SPackage {
 		System.out.println("*******************************************************");
 		
 	}
-	
-	
-	
-	
-	
 	
 	public String getDeviceID() {
 		return deviceID.toLowerCase();

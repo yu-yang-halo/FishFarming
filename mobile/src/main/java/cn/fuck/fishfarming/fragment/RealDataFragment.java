@@ -17,6 +17,11 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.farmingsocket.DataAnalysisHelper;
+import com.farmingsocket.SPackage;
+import com.farmingsocket.TcpSocketService;
+import com.farmingsocket.manager.ReceiveUI;
+import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.Map;
@@ -28,18 +33,11 @@ import cn.fuck.fishfarming.adapter.realdata.RealDataExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
 import cn.fuck.fishfarming.weather.WeatherViewManager;
-import cn.netty.farmingsocket.SPackage;
-import cn.netty.farmingsocket.SocketClientManager;
-import cn.netty.farmingsocket.data.DataAnalysisHelper;
-import cn.netty.farmingsocket.data.IDataCompleteCallback;
-
-import static cn.fuck.fishfarming.cache.JsonObjectManager.getMapObject;
-
 
 /**
  * Created by Administrator on 2016/4/1.
  */
-public class RealDataFragment extends Fragment {
+public class RealDataFragment extends Fragment implements ReceiveUI{
 
     private static final  String TAG="RealDataFragment";
 
@@ -48,16 +46,22 @@ public class RealDataFragment extends Fragment {
     @BindView(R.id.weatherView)
     View weatherView;
 
-    Handler  nettyHandler = new Handler(Looper.getMainLooper());
+    Handler  mainHandler = new Handler(Looper.getMainLooper());
 
     MyApplication myApp;
     RealDataExpandAdapter adapter;
     KProgressHUD hud;
-    int parentSelectId=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.e(TAG,"onAttach..... ");
+        UIManager.getInstance().addObserver(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        UIManager.getInstance().deleteObserver(this);
     }
 
     @Nullable
@@ -83,11 +87,6 @@ public class RealDataFragment extends Fragment {
             @Override
             public void onGroupExpand(int i) {
 
-                if(parentSelectId!=-1){
-                    expandRealDataListView.collapseGroup(parentSelectId);
-                }
-                parentSelectId=i;
-
 
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
@@ -102,62 +101,14 @@ public class RealDataFragment extends Fragment {
 
                 }
 
-                SocketClientManager.getInstance().beginConnect(deviceId,new IDataCompleteCallback() {
-                    @Override
-                    public void onDataComplete(final SPackage spackage) {
-                        nettyHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                TcpSocketService.getInstance().setDeviceId(deviceId);
+                TcpSocketService.getInstance().sendFuckHeart();
 
-                                if (spackage==null){
-                                    if(parentSelectId!=-1){
-                                        Toast.makeText(myApp,"连接已断开",Toast.LENGTH_SHORT).show();
-                                        expandRealDataListView.collapseGroup(parentSelectId);
-                                    }
-                                    return;
-                                }
 
-                                Log.v("analysisData","analysisData : "+spackage);
-                                Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
-                                if(dict.size()>0){
 
-                                    if(hud!=null){
-                                        hud.dismiss();
-                                    }
-                                    Log.v("dict","dict : "+dict);
-
-                                    JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
-
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(myApp,"实时数据更新成功",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                    }
-                });
             }
         });
 
-        expandRealDataListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int i) {
-                Log.v("onGroupCollapse","onGroupCollapse"+i);
-                if(parentSelectId==i){
-                    parentSelectId=-1;
-                }
-                SocketClientManager.getInstance().closeConnect();
-
-                nettyHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(hud!=null){
-                            hud.dismiss();
-                        }
-                    }
-                });
-            }
-        });
 
 
 
@@ -169,16 +120,13 @@ public class RealDataFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.e(TAG,"onStart..... ");
-        if(parentSelectId!=-1){
-            expandRealDataListView.collapseGroup(parentSelectId);
-        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
         Log.e(TAG,"onStop..... ");
-        SocketClientManager.getInstance().closeConnect();
+
     }
 
     @Override
@@ -192,6 +140,34 @@ public class RealDataFragment extends Fragment {
                 }
             }
 
+        }
+    }
+
+    @Override
+    public void update(UIManager o, Object arg) {
+        if(arg instanceof SPackage){
+            final SPackage spackage= (SPackage) arg;
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    Log.v("analysisData","analysisData : "+spackage);
+                    Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
+                    if(dict.size()>0){
+
+                        if(hud!=null){
+                            hud.dismiss();
+                        }
+                        Log.v("dict","dict : "+dict);
+
+                        JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
+
+                        adapter.notifyDataSetChanged();
+                        //Toast.makeText(myApp,"实时数据更新成功",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }

@@ -23,13 +23,14 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <com.kyleduo.switchbutton.SwitchButton
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:id="@+id/switch1"
-            app:kswTintColor="#16A560"
-            style="@style/SwitchButtonStyle"
+            android:background="@drawable/button_switch"
             android:gravity="center"
+            android:text="关"
+            android:textColor="#fff"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
