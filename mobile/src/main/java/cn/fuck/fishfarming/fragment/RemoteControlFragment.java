@@ -45,6 +45,7 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
     MyApplication myApp;
     RemoteControlExpandAdapter adapter;
     KProgressHUD hud;
+    int selectPos=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,14 +80,14 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
         expandRemoteControlListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(final int i) {
-
+                if(selectPos>=0&&selectPos!=i){
+                    expandRemoteControlListView.collapseGroup(selectPos);
+                }
+                selectPos=i;
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Map<String,String> cacheData= JsonObjectManager.getMapObject(getContext(),deviceId);
                 if(cacheData==null||cacheData.size()<=0){
-                    hud= KProgressHUD
-                            .create(getActivity()).setLabel("数据加载中...")
-                            .show();
-
+                    myApp.showDialog("数据加载中...");
                 }
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
 
@@ -95,7 +96,12 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
             }
         });
 
-
+        expandRemoteControlListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                TcpSocketService.getInstance().closeConnect();
+            }
+        });
 
 
         return view;
@@ -110,17 +116,20 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
     @Override
     public void onStop() {
         super.onStop();
+        collapseGroupAll();
     }
-
+    private void collapseGroupAll(){
+        if(adapter!=null&&expandRemoteControlListView!=null){
+            for (int i=0;i< adapter.getGroupCount();i++){
+                expandRemoteControlListView.collapseGroup(i);
+            }
+        }
+    }
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if(hidden){
-            if(adapter!=null&&expandRemoteControlListView!=null){
-                for (int i=0;i< adapter.getGroupCount();i++){
-                    expandRemoteControlListView.collapseGroup(i);
-                }
-            }
+            collapseGroupAll();
         }
         Log.e(TAG,"onHiddenChanged.............."+hidden);
 
@@ -141,16 +150,11 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
                         }
                     }else{
                         Log.v("analysisData","analysisData : "+spackage);
-                        if(hud!=null){
-                            hud.dismiss();
-                        }
+
                         if(spackage.getCmdword()==15){
-                            MyApplication myApplication= (MyApplication) getContext().getApplicationContext();
-                            myApplication.hideDialog();
-
-
+                            myApp.hideDialog();
                         }
-
+                        myApp.hideDialogNoMessage();
                         Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
                         if(dict.size()>0){
 

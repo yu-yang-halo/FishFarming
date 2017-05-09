@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.application.MyApplication;
+import cn.fuck.fishfarming.utils.DateUtils;
 
 /**
  * Created by Administrator on 2017/2/5 0005.
@@ -209,6 +210,7 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
@@ -238,7 +240,8 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
             if(s.toString().isEmpty()){
                 return;
             }
-            int val= Integer.parseInt(s.toString());
+
+            int val= DateUtils.toInt(s.toString());
 
             if(type==1){
                 int[] range=collectorInfos.get(pos).getRange();

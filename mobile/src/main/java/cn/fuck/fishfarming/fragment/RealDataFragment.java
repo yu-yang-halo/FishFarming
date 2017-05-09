@@ -51,6 +51,7 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
     MyApplication myApp;
     RealDataExpandAdapter adapter;
     KProgressHUD hud;
+    int selectPos=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -63,7 +64,7 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
         super.onDetach();
         UIManager.getInstance().deleteObserver(this);
     }
-
+    MyApplication myApplication;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
         ButterKnife.bind(this,view);
 
         WeatherViewManager.initViewData(getActivity(),weatherView,0);
-
+        myApplication= (MyApplication) getActivity().getApplicationContext();
 
 
         myApp= (MyApplication)getActivity().getApplicationContext();
@@ -87,6 +88,10 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
             @Override
             public void onGroupExpand(int i) {
 
+                if(selectPos>=0&&selectPos!=i){
+                    expandRealDataListView.collapseGroup(selectPos);
+                }
+                selectPos=i;
 
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
@@ -95,9 +100,8 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
 
                 if(cacheData==null||cacheData.size()<=0){
 
-                    hud= KProgressHUD
-                            .create(getActivity()).setLabel("数据加载中...")
-                            .show();
+
+                    myApplication.showDialog("数据加载中...");
 
                 }
 
@@ -105,40 +109,37 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
                 TcpSocketService.getInstance().sendFuckHeart();
 
 
-
             }
         });
-
-
-
-
+        expandRealDataListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                TcpSocketService.getInstance().closeConnect();
+            }
+        });
 
         return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.e(TAG,"onStart..... ");
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        Log.e(TAG,"onStop..... ");
-
+        collapseGroupAll();
     }
 
+    private void collapseGroupAll(){
+        if(adapter!=null&&expandRealDataListView!=null){
+            for (int i=0;i< adapter.getGroupCount();i++){
+                expandRealDataListView.collapseGroup(i);
+            }
+        }
+    }
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.e(TAG,"onHiddenChanged "+hidden);
         if(hidden){
-            if(adapter!=null&&expandRealDataListView!=null){
-                for (int i=0;i< adapter.getGroupCount();i++){
-                    expandRealDataListView.collapseGroup(i);
-                }
-            }
+            collapseGroupAll();
 
         }
     }
@@ -156,9 +157,8 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
                     Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
                     if(dict.size()>0){
 
-                        if(hud!=null){
-                            hud.dismiss();
-                        }
+                        myApplication.hideDialogNoMessage();
+
                         Log.v("dict","dict : "+dict);
 
                         JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);

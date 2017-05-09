@@ -100,7 +100,7 @@ public class DataAnalysisHelper {
                                 String.format("%s|%.2f|%.1f|%s|%d",
                                         ConstantUtils.CONTENTS.get(key),
                                         value,
-                                        20.0,
+                                        40.0,
                                         ConstantUtils.UNITS.get(key),ConstantUtils.ORDERS.get(key)));
                     }
                 }

@@ -40,6 +40,7 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
     List<CollectorInfo> collectorInfos;
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
+    int selectPos=-1;
 
     @Override
     public void onAttach(Context context) {
@@ -79,14 +80,24 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
         expandSettingListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-
+                if(selectPos>=0&&selectPos!=groupPosition){
+                    expandSettingListView.collapseGroup(selectPos);
+                }
+                selectPos=groupPosition;
                 TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
                 TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
                 TcpSocketService.getInstance().timeSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
                 TcpSocketService.getInstance().rangSetOrGet(ConstantsPool.MethodType.GET,(short) 0,(short) 0);
+
+
             }
         });
-
+        expandSettingListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                TcpSocketService.getInstance().closeConnect();
+            }
+        });
 
         return convertView;
     }
@@ -94,8 +105,24 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
     @Override
     public void onStop() {
         super.onStop();
+        collapseGroupAll();
     }
 
+    private void collapseGroupAll(){
+        if(adapter!=null&&expandSettingListView!=null){
+            for (int i=0;i< adapter.getGroupCount();i++){
+                expandSettingListView.collapseGroup(i);
+            }
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden){
+            collapseGroupAll();
+        }
+    }
     private CollectorInfo findCollectorInfo(String devId){
         CollectorInfo tmp=null;
         for (CollectorInfo collectorInfo:collectorInfos){

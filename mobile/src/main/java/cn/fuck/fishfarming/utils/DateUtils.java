@@ -45,6 +45,24 @@ public class DateUtils {
 
 		return "";
 	}
+	public   static  float toFloat(String str){
+		float value=-1;
+		try {
+			value=Float.parseFloat(str.toString());
+		}catch (Exception e){
+
+		}
+		return value;
+	}
+	public   static  int toInt(String str){
+		int value=-1;
+		try {
+			value=Integer.parseInt(str.toString());
+		}catch (Exception e){
+
+		}
+		return value;
+	}
 	public static String formatString(String timeStr){
 		String format = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 		SimpleDateFormat sdf = new SimpleDateFormat(format);

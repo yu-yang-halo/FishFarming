@@ -21,6 +21,7 @@ import java.util.List;
 
 import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.utils.DateUtils;
 
 /**
  * Created by Administrator on 2017/2/10 0010.
@@ -121,7 +122,7 @@ public class SettingItemAdapter extends BaseAdapter{
             if(s.toString().isEmpty()){
                 return;
             }
-            float val= Float.parseFloat(s.toString());
+            float val= DateUtils.toFloat(s.toString());
 
             if(isMax){
                 sensorInfos.get(pos).setFixUpper(val);

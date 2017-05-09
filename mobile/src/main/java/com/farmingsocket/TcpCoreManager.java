@@ -49,6 +49,15 @@ public class TcpCoreManager implements IReceive2{
 	private Timer heartTimer;
 	OutputStream clientOS;
 	InputStream clientIS;
+	private String deviceID;
+
+	public String getDeviceID() {
+		return deviceID;
+	}
+
+	public void setDeviceID(String deviceID) {
+		this.deviceID = deviceID;
+	}
 
 	private Object lockObj=new Object();
 
@@ -172,7 +181,6 @@ public class TcpCoreManager implements IReceive2{
 							if(buffers==null){
 								continue;
 							}else{
-
 								onReadData(buffers,buffers.length);
 							}
 					}
@@ -200,7 +208,7 @@ public class TcpCoreManager implements IReceive2{
 
 
 
-		sendFuckHeart(thPackage.getDeviceID());
+		sendFuckHeart();
 
 
 		/**
@@ -209,8 +217,8 @@ public class TcpCoreManager implements IReceive2{
 		UIManager.getInstance().setChanged();
 		UIManager.getInstance().notifyDataObservers(thPackage);
 
-
 	}
+
 	/**
 	 * 检测数据上报
 	 */
@@ -225,7 +233,7 @@ public class TcpCoreManager implements IReceive2{
 	}
 
 	
-	public void sendFuckHeart(final String deviceID) {
+	public void sendFuckHeart() {
 
 		 if(heartTimer==null){
 			 heartTimer=new Timer();

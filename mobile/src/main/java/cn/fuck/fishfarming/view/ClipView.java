@@ -51,6 +51,10 @@ public class ClipView extends ImageView {
         // left top right bottom
         // left左边距离x起点的位置   right右边距离x起点的位置
 
+        if(percentage>1){
+            percentage=1.0f;
+        }
+
         canvas.clipRect(canvas.getWidth()*percentage,0,canvas.getWidth(),canvas.getHeight(), Region.Op.REPLACE);//设置显示范围
 
         canvas.drawColor(Color.WHITE);

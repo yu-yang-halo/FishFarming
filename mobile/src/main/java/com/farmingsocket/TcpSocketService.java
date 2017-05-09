@@ -41,6 +41,8 @@ public class TcpSocketService {
 	 */
 	public void sendFuckHeart() {
 
+		sendRegisterDevice();
+
 		SPackage data0 = new SPackage(DeviceType.Water, deviceID,
 				new byte[] { 0x12, 0x78, (byte) 0xA0, (byte) 0x9C, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0002,
 				(byte) 0x00, (short) 1);
@@ -147,11 +149,18 @@ public class TcpSocketService {
 
 	}
 	public  void  closeConnect(){
-		tcpCoreManager.closeConnect();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				tcpCoreManager.closeConnect();
+			}
+		}).start();
+
 	}
 
 
 	public void setDeviceId(String deviceId) {
 		this.deviceID = deviceId;
+		tcpCoreManager.setDeviceID(deviceId);
 	}
 }
