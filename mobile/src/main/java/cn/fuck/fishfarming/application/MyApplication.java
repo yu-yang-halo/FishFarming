@@ -16,6 +16,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.videogo.openapi.EZOpenSDK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,13 +91,39 @@ public class MyApplication extends Application {
         this.userAccount = userAccount;
     }
 
+
+    //开发者需要填入自己申请的appkey
+    public static String AppKey = "08202da424924e5ea45e88b1b8a61c91";
+
+    public static EZOpenSDK getOpenSDK() {
+        return EZOpenSDK.getInstance();
+    }
+
+    private void initSDK() {
+        {
+            /**
+             * sdk日志开关，正式发布需要去掉
+             */
+            EZOpenSDK.showSDKLog(true);
+
+            /**
+             * 设置是否支持P2P取流,详见api
+             */
+            EZOpenSDK.enableP2P(false);
+
+            /**
+             * APP_KEY请替换成自己申请的
+             */
+            EZOpenSDK.initLib(this, AppKey, "");
+        }
+    }
     @Override
     public void onCreate() {
         super.onCreate();
 
         enableFIR();
         locationInit();
-
+        initSDK();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -157,6 +184,11 @@ public class MyApplication extends Application {
                 public void onReceiveLocation(BDLocation bdLocation) {
                     Log.e("BDLocation",bdLocation.getCity());
                     ContentBox.loadString(getApplicationContext(),ContentBox.KEY_CITYNAME,bdLocation.getCity());
+                }
+
+                @Override
+                public void onConnectHotSpotMessage(String s, int i) {
+
                 }
             });
 

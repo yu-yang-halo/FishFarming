@@ -8,9 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/lib" />
             <option value="$PROJECT_DIR$/mobile" />
             <option value="$PROJECT_DIR$/tv" />
+            <option value="$PROJECT_DIR$/webservice" />
+            <option value="$PROJECT_DIR$/ysCloud" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

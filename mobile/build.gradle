@@ -9,11 +9,11 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 11
-        versionName "1.0.1"
+        versionName "1.0.2"
         multiDexEnabled true
-//        ndk{
-//            abiFilters "armeabi"
-//        }
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
     }
     buildTypes {
         release {
@@ -43,12 +43,10 @@ dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.kyleduo.switchbutton:library:1.4.4'
-    compile project(path: ':lib')
-    compile files('libs/gson-2.2.4.jar')
+    compile project(path: ':webservice')
+    compile project(path: ':ysCloud')
     compile 'com.android.support:design:24.2.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
-    compile files('libs/HCNetSDK.jar')
-    compile files('libs/PlayerSDK.jar')
     compile 'im.fir:fir-sdk:latest.integration@aar'
     compile 'com.appyvet:materialrangebar:1.3'
 }

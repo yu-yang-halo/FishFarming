@@ -43,8 +43,8 @@ public class TcpCoreManager implements IReceive2{
 	private Handler mainHandler=new Handler(Looper.getMainLooper());
 	private static final String TAG="TCPCoreManger";
 	private static TcpCoreManager instance = new TcpCoreManager();
-	private final static String TCP_SERVER="183.78.182.98";
-	//private final static String TCP_SERVER="192.168.11.193";
+	//private final static String TCP_SERVER="183.78.182.98";
+	private final static String TCP_SERVER="118.89.182.250";
 	private final static int TCP_PORT = 9101;
 	private final static int CONNECT_TIME_OUT=11*1000;//毫秒
 	private final static int HEART_RATE=5000;//毫秒

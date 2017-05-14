@@ -1,26 +1,18 @@
 package cn.fuck.fishfarming.activity;
 
-import android.support.v4.app.FragmentActivity;
-
 /**
  * Created by Administrator on 2016/11/30 0030.
  */
 
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Bundle;
+        import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.Button;
+        import android.view.View;
 
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.widget.RelativeLayout;
 
-import com.flyco.tablayout.CommonTabLayout;
+        import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
@@ -33,25 +25,23 @@ import cn.fuck.fishfarming.fragment.FragmentProtocol;
 import cn.fuck.fishfarming.fragment.MoreFragment;
 import cn.fuck.fishfarming.fragment.RealDataFragment;
 import cn.fuck.fishfarming.fragment.RemoteControlFragment;
-import cn.fuck.fishfarming.fragment.VideoFragment;
 
 public class TabActivity extends StatusBarActivity {
     public static String KEY_POSITION="tab_position";
     private Context mContext = this;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitles = {"实时", "视频", "控制", "预警","更多"};
+    private String[] mTitles = {"实时", "控制", "预警","更多"};
     private int[] mIconUnselectIds = {
-            R.mipmap.tab_realdata0, R.mipmap.tab_video0,
+            R.mipmap.tab_realdata0,
             R.mipmap.tab_control0, R.mipmap.tab_alert0,R.mipmap.tab_more0};
     private int[] mIconSelectIds = {
-            R.mipmap.tab_realdata1, R.mipmap.tab_video1,
+            R.mipmap.tab_realdata1,
             R.mipmap.tab_control1, R.mipmap.tab_alert1,R.mipmap.tab_more1};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private View mDecorView;
     private CommonTabLayout mTabLayout_1;
     public RelativeLayout mainRelativeLayout;
     private int currentPos;
-    private FragmentProtocol protocol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +50,18 @@ public class TabActivity extends StatusBarActivity {
         mainRelativeLayout= (RelativeLayout) findViewById(R.id.mainRelativeLayout);
 
         currentPos=getIntent().getIntExtra(KEY_POSITION,0);
-        if(currentPos>=4){
-            currentPos=4;
+        if(currentPos>1){
+            currentPos=currentPos-1;
+        }
+        if(currentPos>=3){
+            currentPos=3;
         }
 
         initCustomActionBar();
 
-        protocol=new VideoFragment();
+
 
         mFragments.add(new RealDataFragment());
-        mFragments.add((Fragment) protocol);
         mFragments.add(new RemoteControlFragment());
         mFragments.add(new AlertFragment());
         mFragments.add(new MoreFragment());
@@ -106,26 +98,13 @@ public class TabActivity extends StatusBarActivity {
         mTabLayout_1.setCurrentTab(position);
         tvTitle.setText(mTitles[position]);
 
-        if(position==2){
+        if(position==1){
             rightBtn.setVisibility(View.VISIBLE);
         }else{
             rightBtn.setVisibility(View.GONE);
 
         }
-        if(position==1){
-
-            fullScreenBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(v.getVisibility()==View.VISIBLE){
-                        v.setVisibility(View.GONE);
-                    }
-                    protocol.screenScale(0);
-                }
-            });
-        }else{
-            fullScreenBtn.setVisibility(View.GONE);
-        }
+        fullScreenBtn.setVisibility(View.GONE);
 
     }
 

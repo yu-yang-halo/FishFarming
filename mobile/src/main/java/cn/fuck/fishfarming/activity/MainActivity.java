@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.videogo.main.EzvizWebViewActivity;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -93,17 +94,14 @@ public class MainActivity extends StatusBarActivity {
 
                 if(myApp.getCollectorInfos()!=null){
                     if(position<4){
-                        if(position==1&&myApp.getVideoInfos()==null){
-                            showToast("视频数据加载未完成,请重试");
-                            onStart();
-                        }else {
-
-                            if(position==1){
-                                if(!NetworkHelper.isWifi(MainActivity.this)){
-                                    showToast("建议在wifi网络下观看视频");
-                                }
+                        if(position==1){
+                            if(!NetworkHelper.isWifi(MainActivity.this)){
+                                showToast("建议在wifi网络下观看视频");
                             }
 
+                            Intent intent=new Intent(MainActivity.this,EzvizWebViewActivity.class);
+                            startActivity(intent);
+                        }else {
                             Intent intent=new Intent(MainActivity.this,TabActivity.class);
                             intent.putExtra(KEY_POSITION,position);
                             startActivity(intent);
