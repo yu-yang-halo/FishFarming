@@ -1,6 +1,10 @@
 package com.farmingsocket;
 
 
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
+
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -36,6 +40,7 @@ public class TcpCoreManager implements IReceive2{
 	 * 1.发送心跳保持连接确保不被服务器踢掉
 	 * 2.重连机制
 	 */
+	private Handler mainHandler=new Handler(Looper.getMainLooper());
 	private static final String TAG="TCPCoreManger";
 	private static TcpCoreManager instance = new TcpCoreManager();
 	private final static String TCP_SERVER="183.78.182.98";
@@ -69,7 +74,7 @@ public class TcpCoreManager implements IReceive2{
 		return instance;
 	}
 	public void closeConnect(){
-
+		reconnCount=0;
 		isListenserData=false;
 		if(heartTimer!=null){
 			heartTimer.cancel();
@@ -94,7 +99,7 @@ public class TcpCoreManager implements IReceive2{
 		}
 		
 	}
-
+	int reconnCount=0;
 	private void connect(){
 		synchronized (lockObj){
 			if(sendSocket==null){
@@ -111,9 +116,16 @@ public class TcpCoreManager implements IReceive2{
 					clientOS=sendSocket.getOutputStream();
 					clientIS=sendSocket.getInputStream();
 				} catch (IOException e) {
-					e.printStackTrace();
 					sendSocket = new Socket();
-					
+					if(reconnCount<3){
+						reconnCount++;
+						System.err.println("开始重连。。。。"+reconnCount);
+						connect();
+
+					}else {
+						reconnCount=0;
+					}
+
 				}
 			}
 
