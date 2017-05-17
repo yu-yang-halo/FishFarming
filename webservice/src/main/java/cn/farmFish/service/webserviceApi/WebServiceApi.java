@@ -25,10 +25,10 @@ public class WebServiceApi {
 	public static final MediaType JSON
 			= MediaType.parse("application/json; charset=utf-8");
 
-	private static String REQUEST_URL="http://183.78.182.98:9110/service.svc/";
+	private static String REQUEST_URL="http://118.89.182.250:9110/service.svc/";
 
 
-	private static String REQUEST_ALERT_URL="http://183.78.182.98:9005/AppService/AppHandler.ashx";
+	private static String REQUEST_ALERT_URL="http://118.89.182.250:9005/AppService/AppHandler.ashx";
 
 
 
