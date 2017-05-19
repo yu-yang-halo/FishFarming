@@ -36,7 +36,6 @@ public class RealDataItemAdapter extends BaseAdapter {
     public RealDataItemAdapter(Map<String,String> dict, Context ctx){
         this.ctx=ctx;
         if(dict!=null){
-            dict.remove("30");
             this.dict=dict;
             this.datas=new ArrayList<String>(dict.values());
             Collections.sort(datas, new Comparator<String>() {

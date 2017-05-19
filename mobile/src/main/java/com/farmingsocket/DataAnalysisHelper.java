@@ -88,8 +88,8 @@ public class DataAnalysisHelper {
                     System.arraycopy(contents,i+1,floatBaytes,0,4);
 
                     float value=getFloat(floatBaytes,0);
-                    if(contents[i]==0x1e){
-                        dict.put(contents[i]+"",getBytesString(floatBaytes));
+                    if(contents[i]==(byte) 0x1e){
+                        dict.put(spackage.getDeviceID(),getBytesString(floatBaytes));
                     }else{
                         if(value<=0){
                             continue;

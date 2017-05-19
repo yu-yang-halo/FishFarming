@@ -165,13 +165,10 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
 
                     Button btn= (Button) v;
 
-                    int modeVal= ConstantsPool.MANUAL_MODE;
+                    int modeVal= ConstantsPool.AUTO_MODE;
 
                     if(btn.isSelected()){
-                        modeVal= ConstantsPool.AUTO_MODE;
-                        btn.setText("自动");
-                    }else{
-                        btn.setText("手动");
+                        modeVal= ConstantsPool.MANUAL_MODE;
                     }
 
                     MyApplication myApplication= (MyApplication) ctx.getApplicationContext();

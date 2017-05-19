@@ -110,18 +110,19 @@ public class AlertFragment extends Fragment implements ReceiveUI{
     @Override
     public void onStop() {
         super.onStop();
+        TcpSocketService.getInstance().closeConnect();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if(!hidden){
-
             if(collectorInfo!=null){
                 TcpSocketService.getInstance().setDeviceId(collectorInfo.getDeviceID());
                 TcpSocketService.getInstance().sendFuckHeart();
-
             }
+        }else{
+            TcpSocketService.getInstance().closeConnect();
         }
     }
 

@@ -336,7 +336,7 @@ public class SPackage {
 	public byte getTime() {
 
 		if(contents.length==3){
-			if(contents[0]==0xA5&&contents[1]==0x5A){
+			if(contents[0]==(byte) 0xA5&&contents[1]==(byte)0x5A){
 				return (byte) contents[2];
 			}
 		}

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.farmingsocket.DataAnalysisHelper;
 import com.farmingsocket.SPackage;
 import com.farmingsocket.TcpSocketService;
+import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.ReceiveUI;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -87,12 +88,13 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
                 final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
                 Map<String,String> cacheData= JsonObjectManager.getMapObject(getContext(),deviceId);
                 if(cacheData==null||cacheData.size()<=0){
-                    myApp.showDialog("数据加载中...");
+                    myApp.showDialogNoTips("数据加载中...");
                 }
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
 
                 TcpSocketService.getInstance().setDeviceId(deviceId);
                 TcpSocketService.getInstance().sendFuckHeart();
+                TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
             }
         });
 
@@ -134,7 +136,6 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
         Log.e(TAG,"onHiddenChanged.............."+hidden);
 
     }
-
     @Override
     public void update(UIManager o, Object arg) {
         if(arg instanceof SPackage){
@@ -148,17 +149,17 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
                         if(collectorInfo!=null){
                             collectorInfo.setMode(spackage.getMode());
                         }
+                        adapter.notifyDataSetChanged();
                     }else{
                         Log.v("analysisData","analysisData : "+spackage);
 
                         if(spackage.getCmdword()==15){
                             myApp.hideDialog();
                         }
-                        myApp.hideDialogNoMessage();
                         Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
                         if(dict.size()>0){
-
-                            if(dict.size()==1&&dict.keySet().contains(spackage.getDeviceID())){
+                            myApp.hideDialogNoMessage();
+                            if(dict.keySet().contains(spackage.getDeviceID())){
                                 String statusValue=dict.get(spackage.getDeviceID());
                                 Log.v("control",spackage.getDeviceID()+" : "+statusValue);
                                 dict= JsonObjectManager.getMapObject(myApp,spackage.getDeviceID());
@@ -168,8 +169,9 @@ public class RemoteControlFragment extends Fragment implements ReceiveUI {
                                 Log.v("control","dict : "+dict);
                             }
                             JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
-                            adapter.notifyDataSetChanged();
+
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
 

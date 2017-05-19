@@ -152,6 +152,7 @@ public class TcpSocketService {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				System.out.println("TCP关闭连接....");
 				tcpCoreManager.closeConnect();
 			}
 		}).start();

@@ -47,7 +47,7 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
         if(dicts==null){
             return 0;
         }
-
+        dicts.remove(collectorInfos.get(i).getDeviceID());
         return 1;
     }
 

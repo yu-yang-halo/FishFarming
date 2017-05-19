@@ -74,14 +74,14 @@ public class TcpCoreManager implements IReceive2{
 		return instance;
 	}
 	public void closeConnect(){
-		reconnCount=0;
 		isListenserData=false;
-		if(heartTimer!=null){
-			heartTimer.cancel();
-			heartTimer=null;
-		}
+
 		try {
 			synchronized (lockObj){
+				if(heartTimer!=null){
+					heartTimer.cancel();
+					heartTimer=null;
+				}
 				if(sendSocket!=null){
 					sendSocket.close();
 					sendSocket=null;
@@ -99,12 +99,13 @@ public class TcpCoreManager implements IReceive2{
 		}
 		
 	}
-	int reconnCount=0;
 	private void connect(){
 		synchronized (lockObj){
 			if(sendSocket==null){
 				sendSocket = new Socket();
 				System.err.println("create new socket...");
+			}else{
+				return;
 			}
 			if(sendSocket!=null&&!sendSocket.isConnected()){
 				SocketAddress socketAddress = new InetSocketAddress(TCP_SERVER,TCP_PORT);
@@ -116,16 +117,7 @@ public class TcpCoreManager implements IReceive2{
 					clientOS=sendSocket.getOutputStream();
 					clientIS=sendSocket.getInputStream();
 				} catch (IOException e) {
-					sendSocket = new Socket();
-					if(reconnCount<3){
-						reconnCount++;
-						System.err.println("开始重连。。。。"+reconnCount);
-						connect();
-
-					}else {
-						reconnCount=0;
-					}
-
+					sendSocket =null;
 				}
 			}
 
@@ -139,8 +131,6 @@ public class TcpCoreManager implements IReceive2{
 
 
 	public void sendData(final byte[] buffer) {
-
-
 		isListenserData=true;
 		new Thread(new Runnable() {
 			@Override
@@ -174,18 +164,14 @@ public class TcpCoreManager implements IReceive2{
 				    while (true){
 
 					while(isListenserData){
-						if(sendSocket==null){
-							continue;
-						}
-						if(sendSocket.isClosed()){
-
-							continue;
-						}
-
+						synchronized (lockObj){
+							if(sendSocket==null||sendSocket.isClosed()){
+								continue;
+							}
 							if(clientIS==null){
 								continue;
 							}
-
+						}
 							/**
                              * 读取完整的包
 							 */
@@ -246,29 +232,32 @@ public class TcpCoreManager implements IReceive2{
 
 	
 	public void sendFuckHeart() {
+		synchronized (lockObj){
+			if(heartTimer==null){
+				heartTimer=new Timer();
+				heartTimer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						/**
+						 * 终端心跳
+						 */
+						SPackage data1 = new SPackage(DeviceType.Android, deviceID,
+								new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0001, (byte) 0x00, (short) 0);
 
-		 if(heartTimer==null){
-			 heartTimer=new Timer();
-			 heartTimer.schedule(new TimerTask() {
-				 @Override
-				 public void run() {
-					 /**
-					  * 终端心跳
-					  */
-					 SPackage data1 = new SPackage(DeviceType.Android, deviceID,
-							 new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0001, (byte) 0x00, (short) 0);
+						sendData(data1.getNeedSendDataPackages());
 
-					 sendData(data1.getNeedSendDataPackages());
+					 SPackage data0 = new SPackage(DeviceType.Water, deviceID,
+							 new byte[] { 0x12, 0x78, (byte) 0xA0, (byte) 0x9C, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0002,
+							 (byte) 0x00, (short) 1);
+					 data0.setContents(new byte[] { (byte) 0xFF });
 
-//					 SPackage data0 = new SPackage(DeviceType.Water, deviceID,
-//							 new byte[] { 0x12, 0x78, (byte) 0xA0, (byte) 0x9C, 0x00, 0x00, 0x00, 0x00 }, (short) 0x0002,
-//							 (byte) 0x00, (short) 1);
-//					 data0.setContents(new byte[] { (byte) 0xFF });
-//
-//					 sendData(data0.getNeedSendDataPackages());
-				 }
-			 },200,5000);
-		 }
+					 sendData(data0.getNeedSendDataPackages());
+					}
+				},200,5000);
+			}
+
+
+		}
 
 
 		
@@ -282,6 +271,9 @@ public class TcpCoreManager implements IReceive2{
 	 */
 	private List<Byte> mBytes=new ArrayList<>();
 	public byte[] execute(InputStream is) {
+		if(is==null){
+			return null;
+		}
 		mBytes.clear();
 		int lenStartIndex=21;
 		int lenEndIndex=22;

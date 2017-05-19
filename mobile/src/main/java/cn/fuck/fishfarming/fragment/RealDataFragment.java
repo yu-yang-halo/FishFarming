@@ -101,7 +101,7 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
                 if(cacheData==null||cacheData.size()<=0){
 
 
-                    myApplication.showDialog("数据加载中...");
+                    myApplication.showDialogNoTips("数据加载中...");
 
                 }
 
@@ -155,17 +155,13 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
 
                     Log.v("analysisData","analysisData : "+spackage);
                     Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
-                    if(dict.size()>0){
-
+                    if(dict.size()>1){
                         myApplication.hideDialogNoMessage();
-
                         Log.v("dict","dict : "+dict);
-
                         JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
-
                         adapter.notifyDataSetChanged();
-                        //Toast.makeText(myApp,"实时数据更新成功",Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
         }

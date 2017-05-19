@@ -268,10 +268,36 @@ public class MyApplication extends Application {
             }
         },8000);
     }
+
+    public void showDialogNoTips(String message){
+        hud= KProgressHUD
+                .create(currentActivity).setLabel(message).show();
+
+        timer=new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(hud!=null){
+                            hud.dismiss();
+                            hud=null;
+                        }
+                    }
+                });
+
+            }
+        },10000);
+    }
+
+
+
     public void hideDialog(){
         if(hud!=null){
             hud.dismiss();
             hud=null;
+            timer.cancel();
             Toast.makeText(this,"设置成功",Toast.LENGTH_SHORT).show();
         }
     }
@@ -279,6 +305,7 @@ public class MyApplication extends Application {
         if(hud!=null){
             hud.dismiss();
             hud=null;
+            timer.cancel();
         }
     }
 }

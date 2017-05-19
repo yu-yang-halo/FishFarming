@@ -85,10 +85,11 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
                 }
                 selectPos=groupPosition;
                 TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
+                TcpSocketService.getInstance().sendFuckHeart();
+
                 TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
                 TcpSocketService.getInstance().timeSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
                 TcpSocketService.getInstance().rangSetOrGet(ConstantsPool.MethodType.GET,(short) 0,(short) 0);
-
 
             }
         });
@@ -141,8 +142,8 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(spackage.getFlag()==0x82){
-                        myApplication.hideDialog();
+                    if(spackage.getFlag()==(byte)0x82){
+                        myApplication.hideDialogNoMessage();
                     }
                     if (spackage.getCmdword()==19){
                         Log.v("max", Arrays.toString( spackage.getRang()));
@@ -153,7 +154,7 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
 
                         adapter.notifyDataSetChanged();
 
-                        if(spackage.getFlag()==0x82){
+                        if(spackage.getFlag()==(byte)0x82){
                             Toast.makeText(getContext(),"阈值设置成功",Toast.LENGTH_SHORT).show();
                         }
 
@@ -164,7 +165,7 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
                             collectorInfo.setMode(spackage.getMode());
                         }
                         adapter.notifyDataSetChanged();
-                        if(spackage.getFlag()==0x82){
+                        if(spackage.getFlag()==(byte) 0x82){
                             Toast.makeText(getContext(),"模式设置成功",Toast.LENGTH_SHORT).show();
                         }
 
@@ -175,7 +176,7 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
                             collectorInfo.setTime(spackage.getTime());
                         }
                         adapter.notifyDataSetChanged();
-                        if(spackage.getFlag()==0x82){
+                        if(spackage.getFlag()==(byte)0x82){
                             Toast.makeText(getContext(),"时间设置成功",Toast.LENGTH_SHORT).show();
                         }
                     }
