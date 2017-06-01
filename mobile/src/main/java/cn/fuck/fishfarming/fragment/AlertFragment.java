@@ -16,11 +16,10 @@ import android.widget.TextView;
 import com.farmingsocket.DataAnalysisHelper;
 import com.farmingsocket.SPackage;
 import com.farmingsocket.TcpSocketService;
-import com.farmingsocket.manager.ReceiveUI;
+
 import com.farmingsocket.manager.UIManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,7 @@ import cn.fuck.fishfarming.utils.JSONBeanHelper;
  * Created by Administrator on 2016/12/3 0003.
  */
 
-public class AlertFragment extends Fragment implements ReceiveUI{
+public class AlertFragment extends BaseFragment{
     CollectorInfo collectorInfo;
     Handler mainHandler = new Handler(Looper.getMainLooper());
     ListView alertListView;
@@ -128,6 +127,7 @@ public class AlertFragment extends Fragment implements ReceiveUI{
 
     @Override
     public void update(UIManager o, Object arg) {
+        super.update(o,arg);
         if(arg instanceof SPackage){
             final SPackage spackage= (SPackage) arg;
             mainHandler.post(new Runnable() {

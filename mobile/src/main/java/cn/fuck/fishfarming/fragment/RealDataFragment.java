@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.farmingsocket.DataAnalysisHelper;
 import com.farmingsocket.SPackage;
 import com.farmingsocket.TcpSocketService;
-import com.farmingsocket.manager.ReceiveUI;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -37,7 +36,7 @@ import cn.fuck.fishfarming.weather.WeatherViewManager;
 /**
  * Created by Administrator on 2016/4/1.
  */
-public class RealDataFragment extends Fragment implements ReceiveUI{
+public class RealDataFragment extends BaseFragment{
 
     private static final  String TAG="RealDataFragment";
 
@@ -146,6 +145,7 @@ public class RealDataFragment extends Fragment implements ReceiveUI{
 
     @Override
     public void update(UIManager o, Object arg) {
+        super.update(o, arg);
         if(arg instanceof SPackage){
             final SPackage spackage= (SPackage) arg;
             mainHandler.post(new Runnable() {

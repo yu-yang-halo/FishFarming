@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.farmingsocket.SPackage;
 import com.farmingsocket.TcpSocketService;
 import com.farmingsocket.manager.ConstantsPool;
-import com.farmingsocket.manager.ReceiveUI;
 import com.farmingsocket.manager.UIManager;
 
 import java.util.Arrays;
@@ -33,7 +32,7 @@ import cn.fuck.fishfarming.application.MyApplication;
  * Created by Administrator on 2017/2/23 0023.
  */
 
-public class RangeSettingFragment extends Fragment implements ReceiveUI {
+public class RangeSettingFragment extends BaseFragment{
     ExpandableListView expandSettingListView;
     MyApplication myApp;
     RangeExpandAdapter adapter;
@@ -136,7 +135,7 @@ public class RangeSettingFragment extends Fragment implements ReceiveUI {
 
     @Override
     public void update(UIManager o, Object arg) {
-
+        super.update(o, arg);
         if(arg instanceof SPackage){
             final SPackage spackage= (SPackage) arg;
             mainHandler.post(new Runnable() {
