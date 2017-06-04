@@ -36,7 +36,10 @@ public class BaseFragment extends Fragment implements ReceiveUI {
                             showMessage("socket登录超时");
                             break;
                         case ConstantUtils.ERROR_CODE_SCOKET_READ_TIMEOUT:
-                            showMessage("读取超时异常，关闭连接");
+                            showMessage("读取超时异常，已关闭连接");
+                            break;
+                        case ConstantUtils.ERROR_CODE_ERROR_PROTOCAL:
+                            showMessage("协议解析异常，已关闭连接");
                             break;
                     }
 

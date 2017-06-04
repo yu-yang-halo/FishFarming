@@ -153,7 +153,9 @@ public class TcpCoreManager implements IReceive2 {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
+
                 reciveLoop();
+
                 connect();
 
                 /**
@@ -179,38 +181,43 @@ public class TcpCoreManager implements IReceive2 {
 
 
     public void reciveLoop() {
-        if(isListenserData||createOnce){
-            return;
-        }
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
+        synchronized (lockObj) {
+            if(!isListenserData){
+                isListenserData=true;
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (true) {
 
-                    while (isListenserData) {
-                        synchronized (lockObj) {
-                            if (sendSocket == null || sendSocket.isClosed() || clientIS == null) {
-                                continue;
+                            while (isListenserData) {
+                                synchronized (lockObj) {
+                                    if (sendSocket == null || sendSocket.isClosed() || clientIS == null) {
+                                        continue;
+                                    }
+                                }
+                                /**
+                                 * 读取完整的包
+                                 */
+                                byte[] buffers = execute(clientIS);
+                                if (buffers == null) {
+                                    continue;
+                                } else {
+                                    onReadData(buffers, buffers.length);
+                                }
                             }
-                        }
-                        /**
-                         * 读取完整的包
-                         */
-                        byte[] buffers = execute(clientIS);
-                        if (buffers == null) {
-                            continue;
-                        } else {
-                            onReadData(buffers, buffers.length);
+
+                            if (!isListenserData) {
+                                break;
+                            }
+
                         }
                     }
+                });
 
-                    if (!isListenserData) {
-                        break;
-                    }
-
-                }
             }
-        });
+
+        }
+
 
 
     }
@@ -290,6 +297,36 @@ public class TcpCoreManager implements IReceive2 {
      */
     private List<Byte> mBytes = new ArrayList<>();
 
+    private void checkProtocal(int index,byte data){
+        switch (index){
+            case 0:
+                if(data!=(byte) 0x2a){
+                    UIManager.getInstance().setChanged();
+                    UIManager.getInstance().notifyDataObservers(ConstantUtils.ERROR_CODE_ERROR_PROTOCAL);
+
+                    closeConnect();
+                }
+                break;
+            case 1:
+                if(data != (byte) 0x54){
+                    UIManager.getInstance().setChanged();
+                    UIManager.getInstance().notifyDataObservers(ConstantUtils.ERROR_CODE_ERROR_PROTOCAL);
+
+                    closeConnect();
+                }
+                break;
+            case 2:
+                if(data!=(byte) 0x5a){
+                    UIManager.getInstance().setChanged();
+                    UIManager.getInstance().notifyDataObservers(ConstantUtils.ERROR_CODE_ERROR_PROTOCAL);
+
+                    closeConnect();
+                }
+                break;
+        }
+
+    }
+
     public byte[] execute(InputStream is) {
         if (is == null) {
             return null;
@@ -307,6 +344,8 @@ public class TcpCoreManager implements IReceive2 {
         try {
             while ((len = is.read()) != -1) {
                 temp = (byte) len;
+                checkProtocal(count,temp);
+
                 if (count >= lenStartIndex && count <= lenEndIndex) {
                     lenField[count - lenStartIndex] = temp;//保存len字段
                     if (count == lenEndIndex) {//len字段保存结束，需要解析出来具体的长度了

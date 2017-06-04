@@ -155,7 +155,19 @@ public class RemoteControlFragment extends BaseFragment {
 
                         if(spackage.getCmdword()==15){
                             myApp.hideDialog();
+                        }else if(spackage.getCmdword()==16){
+                            myApp.hideDialog();
+                            if(spackage.getFlag()==(byte) 0x82){
+                                byte[] contents=spackage.getContents();
+                                if(contents!=null&&contents.length>=1){
+                                    if(contents[0]==ConstantsPool.AUTO_MODE){
+                                        showMessage("处于自动模式,无法手动控制");
+                                    }
+                                }
+
+                            }
                         }
+
                         Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
                         if(dict.size()>0){
                             myApp.hideDialogNoMessage();
@@ -168,6 +180,7 @@ public class RemoteControlFragment extends BaseFragment {
                                 }
                                 Log.v("control","dict : "+dict);
                             }
+
                             JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
 
                         }

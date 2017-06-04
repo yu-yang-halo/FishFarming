@@ -11,6 +11,7 @@ public class ConstantUtils {
     public static final int ERROR_CODE_SCOKET_COLOSE=0x1000;
     public static final int ERROR_CODE_SCOKET_LOGIN_TIMEOUT=0x1001;
     public static final int ERROR_CODE_SCOKET_READ_TIMEOUT=0x1002;
+    public static final int ERROR_CODE_ERROR_PROTOCAL=0x1003;
 
     public static Map<String,String> CONTENTS=new HashMap<>();
     public static Map<String,String> UNITS   =new HashMap<>();

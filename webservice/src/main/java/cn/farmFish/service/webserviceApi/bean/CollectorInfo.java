@@ -37,8 +37,8 @@ public class CollectorInfo {
     }
 
     private byte mode;
-    private int[] range=new int[]{-1,-1};
-    private int time=-1;
+    private int[] range=new int[]{0,0};
+    private int time=0;
 
     public int getTime() {
         return time;
