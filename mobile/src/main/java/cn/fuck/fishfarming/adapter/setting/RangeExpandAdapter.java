@@ -11,19 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.farmingsocket.TcpSocketService;
 import com.farmingsocket.manager.ConstantsPool;
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.kyleduo.switchbutton.SwitchButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;

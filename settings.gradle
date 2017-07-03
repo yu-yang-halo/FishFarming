@@ -1,1 +1,1 @@
-include ':mobile', ':tv', ':webservice', ':ysCloud'
+include  ':mobile',  ':ysCloud'
