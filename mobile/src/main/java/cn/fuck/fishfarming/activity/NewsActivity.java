@@ -5,27 +5,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.kaopiz.kprogresshud.KProgressHUD;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.bean.NewsInfo;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.web.WebActivity;
 
@@ -73,69 +61,7 @@ public class NewsActivity extends StatusBarActivity {
                 .create(this).setLabel("数据加载中...")
                 .show();
 
-        WebServiceApi.getInstance().GetNewsList(2, 10, new WebServiceCallback() {
-            @Override
-            public void onSuccess(final String jsonData) {
-                okHttpHander.post(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        if(hud!=null){
-                            hud.dismiss();
-                        }
-
-                        Log.v("jsonData","jsonData "+jsonData);
-
-                        Gson gson=new Gson();
-                        Map<String,String> dict=gson.fromJson(jsonData,Map.class);
-
-
-
-                        Type type=new TypeToken<List<NewsInfo>>(){}.getType();
-                        List<NewsInfo> results=gson.fromJson(dict.get("GetNewsListResult"),type);
-                        datas=new ArrayList<Map<String, String>>();
-                        if(results!=null){
-
-                            for(NewsInfo newsInfo:results){
-                                Map<String,String> map=new HashMap<String, String>();
-                                map.put("title",newsInfo.getTitle());
-                                map.put("url",newsInfo.getUrl());
-                                datas.add(map);
-
-                            }
-
-                        }
-
-
-
-
-                        String[] from = new String[]{"title"};
-                        int[]    to   = new int[]{R.id.titleView};
-                        SimpleAdapter simpleAdapter=new SimpleAdapter(NewsActivity.this,datas,R.layout.adapter_news,from,to);
-                        newsListView.setAdapter(simpleAdapter);
-
-
-
-
-
-                    }
-                });
-            }
-
-            @Override
-            public void onFail(final String errorData) {
-                okHttpHander.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(hud!=null){
-                            hud.dismiss();
-                        }
-                        showToast(errorData);
-
-                    }
-                });
-            }
-        });
 
 
     }

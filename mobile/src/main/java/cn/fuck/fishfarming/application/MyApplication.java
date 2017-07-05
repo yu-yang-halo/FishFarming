@@ -3,7 +3,6 @@ package cn.fuck.fishfarming.application;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.Notification;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,19 +14,12 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.farmingsocket.client.bean.BaseInfo;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.videogo.openapi.EZOpenSDK;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
-import cn.farmFish.service.webserviceApi.bean.UserInfo;
-import cn.farmFish.service.webserviceApi.bean.VideoInfo;
 import cn.fuck.fishfarming.cache.ContentBox;
 
 import im.fir.sdk.FIR;
@@ -38,24 +30,17 @@ import im.fir.sdk.FIR;
 public class MyApplication extends Application {
     LocationClient mLocationClient;
     Handler mainHandler=new Handler(Looper.getMainLooper());
-    private String customerNo;
-    private String userAccount;
-    private List<CollectorInfo> collectorInfos;
-    private Map<String,String>  realDataDict;
-    private List<VideoInfo>     videoInfos;
-
     private Activity currentActivity;
 
-    private UserInfo loginUserInfo;
+    private BaseInfo baseInfo;
 
-    private List<SensorInfo> sensorInfos;
 
-    public List<SensorInfo> getSensorInfos() {
-        return sensorInfos;
+    public BaseInfo getBaseInfo() {
+        return baseInfo;
     }
 
-    public void setSensorInfos(List<SensorInfo> sensorInfos) {
-        this.sensorInfos = sensorInfos;
+    public void setBaseInfo(BaseInfo baseInfo) {
+        this.baseInfo = baseInfo;
     }
 
     public void onLowMemory() {
@@ -64,31 +49,6 @@ public class MyApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-    }
-
-
-    public List<VideoInfo> getVideoInfos() {
-        return videoInfos;
-    }
-
-    public void setVideoInfos(List<VideoInfo> videoInfos) {
-        this.videoInfos = videoInfos;
-    }
-
-    public String getCustomerNo() {
-        return customerNo;
-    }
-
-    public void setCustomerNo(String customerNo) {
-        this.customerNo = customerNo;
-    }
-
-    public String getUserAccount() {
-        return userAccount;
-    }
-
-    public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount;
     }
 
 
@@ -211,39 +171,7 @@ public class MyApplication extends Application {
 
     }
 
-    public List<CollectorInfo> getCollectorInfos() {
-//
-//        List<CollectorInfo> collectorInfos2=new ArrayList<>();
-//        for (CollectorInfo info : collectorInfos){
-//            collectorInfos2.add(info);
-//
-//            CollectorInfo info2=new CollectorInfo();
-//            info2.setUserType(info.getUserType());
-//            info2.setPondName(info.getPondName()+"2");
-//            info2.setCustomerNo(info.getCustomerNo());
-//            info2.setCollectorID(info.getCollectorID());
-//            info2.setDeviceID(info.getDeviceID()+"-XX");
-//
-//            collectorInfos2.add(info2);
-//        }
 
-        return collectorInfos;
-    }
-
-    public void setCollectorInfos(List<CollectorInfo> collectorInfos) {
-        this.collectorInfos = collectorInfos;
-
-
-    }
-
-
-    public UserInfo getLoginUserInfo() {
-        return loginUserInfo;
-    }
-
-    public void setLoginUserInfo(UserInfo loginUserInfo) {
-        this.loginUserInfo = loginUserInfo;
-    }
     KProgressHUD hud;
     Timer timer;
     public void showDialog(String message){
@@ -290,8 +218,6 @@ public class MyApplication extends Application {
             }
         },10000);
     }
-
-
 
     public void hideDialog(){
         if(hud!=null){

@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import com.farmingsocket.client.bean.BaseDevice;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
 
@@ -21,12 +19,12 @@ import cn.fuck.fishfarming.cache.JsonObjectManager;
  */
 
 public class RealDataExpandAdapter extends BaseExpandableListAdapter {
-    private List<CollectorInfo> collectorInfos;
+    private List<BaseDevice> collectorInfos;
     private Context ctx;
 
     private  Map<String,String> dicts;
 
-    public RealDataExpandAdapter(List<CollectorInfo> collectorInfos, Context ctx){
+    public RealDataExpandAdapter(List<BaseDevice> collectorInfos, Context ctx){
         this.collectorInfos=collectorInfos;
         this.ctx=ctx;
     }
@@ -42,17 +40,17 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int i) {
 
-        dicts=JsonObjectManager.getMapObject(ctx,collectorInfos.get(i).getDeviceID());
+        dicts=JsonObjectManager.getMapObject(ctx,collectorInfos.get(i).getMac());
 
         if(dicts==null){
             return 0;
         }
-        dicts.remove(collectorInfos.get(i).getDeviceID());
+        dicts.remove(collectorInfos.get(i).getMac());
         return 1;
     }
 
     @Override
-    public CollectorInfo getGroup(int i) {
+    public BaseDevice getGroup(int i) {
         if(collectorInfos!=null){
             return collectorInfos.get(i);
         }
@@ -88,7 +86,7 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
         TextView titleView=ButterKnife.findById(view,R.id.titleView);
 
 
-        titleView.setText(getGroup(i).getPondName());
+        titleView.setText(getGroup(i).getName());
 
 
         return view;

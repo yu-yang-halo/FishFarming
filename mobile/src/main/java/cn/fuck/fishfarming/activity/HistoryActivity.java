@@ -41,7 +41,7 @@ public class HistoryActivity extends StatusBarActivity{
 
 
 
-        adapter=new HistoryExpandAdapter(myApp.getCollectorInfos(),this);
+        adapter=new HistoryExpandAdapter(myApp.getBaseInfo().getDevice(),this);
 
         expandHistoryListView.setAdapter(adapter);
         expandHistoryListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {

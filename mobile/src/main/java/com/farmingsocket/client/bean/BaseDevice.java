@@ -9,13 +9,18 @@ public class BaseDevice {
 	private String name;
 	private List<Map<String, String>> switchs;
 	private String mac;
-	
-	
-	
+	private int online;
+
 
 	@Override
 	public String toString() {
-		return "BaseDevice [gprsmac=" + gprsmac + ", name=" + name + ", switchs=" + switchs + ", mac=" + mac + "]";
+		return "BaseDevice{" +
+				"gprsmac='" + gprsmac + '\'' +
+				", name='" + name + '\'' +
+				", switchs=" + switchs +
+				", mac='" + mac + '\'' +
+				", online=" + online +
+				'}';
 	}
 
 	public String getGprsmac() {
@@ -51,4 +56,11 @@ public class BaseDevice {
 		this.mac = mac;
 	}
 
+	public int getOnline() {
+		return online;
+	}
+
+	public void setOnline(int online) {
+		this.online = online;
+	}
 }

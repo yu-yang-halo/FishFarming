@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,11 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.appyvet.rangebar.RangeBar;
+import com.farmingsocket.client.bean.SensorInfo;
 
-
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.utils.DateUtils;
 
@@ -28,7 +24,7 @@ import cn.fuck.fishfarming.utils.DateUtils;
  */
 
 public class SettingItemAdapter extends BaseAdapter{
-    private  List<SensorInfo> sensorInfos;
+    private List<SensorInfo> sensorInfos;
     private  Context ctx;
 
     public SettingItemAdapter(List<SensorInfo> sensorInfos, Context ctx){
@@ -88,9 +84,6 @@ public class SettingItemAdapter extends BaseAdapter{
 
         minEdit.addTextChangedListener(new TextWatcherImpl(position,false));
         maxEdit.addTextChangedListener(new TextWatcherImpl(position,true));
-
-
-
 
 
 

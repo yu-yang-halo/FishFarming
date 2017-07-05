@@ -5,21 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
-
-import com.farmingsocket.manager.ConstantsPool;
+import com.farmingsocket.client.bean.BaseDevice;
 import com.farmingsocket.manager.UIManager;
-
-import java.util.Arrays;
 import java.util.List;
-
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.setting.RangeExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
@@ -33,7 +26,7 @@ public class RangeSettingFragment extends BaseFragment{
     ExpandableListView expandSettingListView;
     MyApplication myApp;
     RangeExpandAdapter adapter;
-    List<CollectorInfo> collectorInfos;
+    List<BaseDevice> collectorInfos;
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
     int selectPos=-1;
@@ -68,7 +61,7 @@ public class RangeSettingFragment extends BaseFragment{
         expandSettingListView=ButterKnife.findById(convertView,R.id.expandSettingListView);
 
         myApp= (MyApplication)getActivity().getApplicationContext();
-        collectorInfos=myApp.getCollectorInfos();
+        collectorInfos=myApp.getBaseInfo().getDevice();
         adapter=new RangeExpandAdapter(collectorInfos,getActivity());
         expandSettingListView.setAdapter(adapter);
 
@@ -80,19 +73,14 @@ public class RangeSettingFragment extends BaseFragment{
                     expandSettingListView.collapseGroup(selectPos);
                 }
                 selectPos=groupPosition;
-                TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
-                TcpSocketService.getInstance().sendFuckHeart();
 
-                TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
-                TcpSocketService.getInstance().timeSetOrGet(ConstantsPool.MethodType.GET,(short) 0);
-                TcpSocketService.getInstance().rangSetOrGet(ConstantsPool.MethodType.GET,(short) 0,(short) 0);
 
             }
         });
         expandSettingListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                TcpSocketService.getInstance().closeConnect();
+
             }
         });
 
@@ -119,70 +107,5 @@ public class RangeSettingFragment extends BaseFragment{
         if(hidden){
             collapseGroupAll();
         }
-    }
-    private CollectorInfo findCollectorInfo(String devId){
-        CollectorInfo tmp=null;
-        for (CollectorInfo collectorInfo:collectorInfos){
-            if(collectorInfo.getDeviceID().equals(devId)){
-                tmp=collectorInfo;
-            }
-        }
-        return tmp;
-    }
-
-    @Override
-    public void update(UIManager o, Object arg) {
-        super.update(o, arg);
-        if(arg instanceof SPackage){
-            final SPackage spackage= (SPackage) arg;
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(spackage.getFlag()==(byte)0x82){
-                        myApplication.hideDialogNoMessage();
-                    }
-                    if (spackage.getCmdword()==19){
-                        Log.v("max", Arrays.toString( spackage.getRang()));
-                        CollectorInfo collectorInfo=findCollectorInfo(spackage.getDeviceID());
-                        if(collectorInfo!=null){
-                            collectorInfo.setRange(spackage.getRang());
-                        }
-
-                        adapter.notifyDataSetChanged();
-
-                        if(spackage.getFlag()==(byte)0x82){
-                            Toast.makeText(getContext(),"阈值设置成功",Toast.LENGTH_SHORT).show();
-                        }
-
-                    }else if (spackage.getCmdword()==21){
-
-                        CollectorInfo collectorInfo=findCollectorInfo(spackage.getDeviceID());
-                        if(collectorInfo!=null){
-                            collectorInfo.setMode(spackage.getMode());
-                        }
-                        adapter.notifyDataSetChanged();
-                        if(spackage.getFlag()==(byte) 0x82){
-                            Toast.makeText(getContext(),"模式设置成功",Toast.LENGTH_SHORT).show();
-                        }
-
-
-                    }else if(spackage.getCmdword()==24){
-                        CollectorInfo collectorInfo=findCollectorInfo(spackage.getDeviceID());
-                        if(collectorInfo!=null){
-                            collectorInfo.setTime(spackage.getTime());
-                        }
-                        adapter.notifyDataSetChanged();
-                        if(spackage.getFlag()==(byte)0x82){
-                            Toast.makeText(getContext(),"时间设置成功",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-
-
-
-        }
-
-
     }
 }

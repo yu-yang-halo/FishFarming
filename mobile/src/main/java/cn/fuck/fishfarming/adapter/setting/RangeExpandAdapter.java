@@ -15,13 +15,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.farmingsocket.client.bean.BaseDevice;
 import com.farmingsocket.manager.ConstantsPool;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.utils.DateUtils;
@@ -31,13 +31,13 @@ import cn.fuck.fishfarming.utils.DateUtils;
  */
 
 public class RangeExpandAdapter extends BaseExpandableListAdapter {
-    private List<CollectorInfo> collectorInfos;
+    private List<BaseDevice> collectorInfos;
     private Context ctx;
     private KProgressHUD hud;
 
     Handler mainUIHandeler=new Handler(Looper.getMainLooper());
 
-    public RangeExpandAdapter(List<CollectorInfo> collectorInfos, Context ctx){
+    public RangeExpandAdapter(List<BaseDevice> collectorInfos, Context ctx){
         this.ctx=ctx;
         this.collectorInfos=collectorInfos;
     }
@@ -58,7 +58,7 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public CollectorInfo getGroup(int groupPosition) {
+    public BaseDevice getGroup(int groupPosition) {
         if(collectorInfos!=null){
             return collectorInfos.get(groupPosition);
         }
@@ -104,23 +104,12 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
         }
         viewTag= (GraoupViewTag) convertView.getTag();
 
-        viewTag.titleView.setText(getGroup(groupPosition).getPondName());
+        viewTag.titleView.setText(getGroup(groupPosition).getName());
 
         viewTag.saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
-                int[] ranges=collectorInfos.get(groupPosition).getRange();
-                int time=collectorInfos.get(groupPosition).getTime();
-                if(ranges!=null&&ranges.length==2){
-                    MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
-                    myApplication.showDialog("阈值数据保存中...");
 
-                    TcpSocketService.getInstance().rangSetOrGet(ConstantsPool.MethodType.POST, ranges[1], ranges[0]);
-                }
-                if(time>0){
-                    TcpSocketService.getInstance().timeSetOrGet(ConstantsPool.MethodType.POST, (short) time);
-                }
             }
         });
 
@@ -167,37 +156,16 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
 
                     MyApplication myApplication= (MyApplication) ctx.getApplicationContext();
                     myApplication.showDialog("模式设置中...");
-                    TcpSocketService.getInstance().setDeviceId(collectorInfos.get(groupPosition).getDeviceID());
-                    TcpSocketService.getInstance().modeStatusSetOrGet(ConstantsPool.MethodType.POST,
-                            (short) modeVal);
+
                 }
             });
 
         }
 
         tag= (ViewTag) convertView.getTag();
-        CollectorInfo collectorInfo=collectorInfos.get(groupPosition);
-
-        if(collectorInfo.getRange()!=null&&collectorInfo.getRange().length==2){
-            tag.min_edit.setText(String.valueOf(collectorInfo.getRange()[0]));
-            tag.max_edit.setText(String.valueOf(collectorInfo.getRange()[1]));
-        }else{
-            tag.min_edit.setText(String.valueOf(-1));
-            tag.max_edit.setText(String.valueOf(-1));
-        }
-
-        tag.timeEdit.setText(String.valueOf(collectorInfo.getTime()));
+        BaseDevice collectorInfo=collectorInfos.get(groupPosition);
 
 
-
-
-        if(collectorInfo.getMode()== ConstantsPool.AUTO_MODE){
-            tag.switchButton.setSelected(true);
-            tag.switchButton.setText("自动");
-        }else{
-            tag.switchButton.setSelected(false);
-            tag.switchButton.setText("手动");
-        }
         return convertView;
     }
 
@@ -234,22 +202,6 @@ public class RangeExpandAdapter extends BaseExpandableListAdapter {
 
             int val= DateUtils.toInt(s.toString());
 
-            if(type==1){
-                int[] range=collectorInfos.get(pos).getRange();
-
-                if(range!=null&&range.length==2){
-                    collectorInfos.get(pos).setRange(new int[]{range[0],(int)val});
-                }
-
-
-            }else if(type==0){
-                int[] range=collectorInfos.get(pos).getRange();
-                if(range!=null&&range.length==2){
-                    collectorInfos.get(pos).setRange(new int[]{(int)val,range[1]});
-                }
-            }else if(type==2){
-                collectorInfos.get(pos).setTime( val);
-            }
 
 
         }

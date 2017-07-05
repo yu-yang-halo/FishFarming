@@ -1,17 +1,18 @@
 package com.farmingsocket.client;
 
 import java.net.SocketTimeoutException;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.farmingsocket.client.bean.BaseInfo;
+import com.farmingsocket.client.bean.BaseCommand;
+import com.farmingsocket.helper.JSONParseHelper;
 import com.farmingsocket.helper.YYLogger;
 import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.UIManager;
-import com.google.gson.Gson;
+
 import okhttp3.Response;
 import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
 
 public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 	private static final WebSocketReqImpl instance = new WebSocketReqImpl();
@@ -75,8 +76,11 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 
 		YYLogger.debug(TAG, "onMessage ...." + text);
 
+		BaseCommand baseCommand= (BaseCommand) JSONParseHelper.parseObject(text);
 
-		UIManager.getInstance().notifyDataObservers(text);
+
+
+		UIManager.getInstance().notifyDataObservers(baseCommand,baseCommand.getCommand());
 
 	}
 
@@ -87,7 +91,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 		YYLogger.debug(TAG, "onFailure ...." + t);
 
 		if(t instanceof SocketTimeoutException){
-			UIManager.getInstance().notifyDataObservers(ConstantsPool.ERROR_CODE_READ_TIMEOUT);
+			UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_READ_TIMEOUT);
 		}else {
 
 		}
@@ -100,7 +104,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 	public void onClosing(WebSocket webSocket, int code, String reason) {
 		super.onClosing(webSocket, code, reason);
 		YYLogger.debug(TAG, "onClosing ...." + reason);
-		UIManager.getInstance().notifyDataObservers(ConstantsPool.ERROR_CODE_CONNECT_CLOSING);
+		UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_CLOSING);
 	}
 
 	@Override
@@ -109,7 +113,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 
 		YYLogger.debug(TAG, "onClosed ...." + reason);
 
-		UIManager.getInstance().notifyDataObservers(ConstantsPool.ERROR_CODE_CONNECT_CLOSED);
+		UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_CLOSED);
 
 	}
 

@@ -1,7 +1,6 @@
 package cn.fuck.fishfarming.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
-
-import static butterknife.ButterKnife.findById;
 
 /**
  * Created by Administrator on 2016/11/27 0027.

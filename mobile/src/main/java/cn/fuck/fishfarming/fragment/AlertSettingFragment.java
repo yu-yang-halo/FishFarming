@@ -10,21 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-
+import com.farmingsocket.client.bean.BaseDevice;
 import com.kaopiz.kprogresshud.KProgressHUD;
-
 import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.setting.SettingExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
-import cn.fuck.fishfarming.utils.JSONBeanHelper;
 
 /**
  * Created by Administrator on 2017/2/23 0023.
@@ -34,7 +26,7 @@ public class AlertSettingFragment extends Fragment {
     ExpandableListView expandSettingListView;
     MyApplication myApp;
     SettingExpandAdapter adapter;
-    List<CollectorInfo> collectorInfos;
+    List<BaseDevice> collectorInfos;
     Handler nettyHandler = new Handler(Looper.getMainLooper());
 
     int selectParentPos=-1;
@@ -57,7 +49,7 @@ public class AlertSettingFragment extends Fragment {
         expandSettingListView=ButterKnife.findById(convertView,R.id.expandSettingListView);
 
         myApp= (MyApplication)getActivity().getApplicationContext();
-        collectorInfos=myApp.getCollectorInfos();
+        collectorInfos=myApp.getBaseInfo().getDevice();
         adapter=new SettingExpandAdapter(collectorInfos,getActivity());
         expandSettingListView.setAdapter(adapter);
 
@@ -76,28 +68,6 @@ public class AlertSettingFragment extends Fragment {
                 hud.show();
 
 
-                WebServiceApi.getInstance().GetCollecotSensorList(collectorInfos.get(groupPosition).getCollectorID(), "1", "1", new WebServiceCallback() {
-                    @Override
-                    public void onSuccess(String jsonData) {
-                        final List<SensorInfo> sensorInfos= JSONBeanHelper.convertSensorBean(jsonData);
-
-                        System.err.println("onSuccess result::::::"+sensorInfos);
-                        nettyHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                hud.dismiss();
-                                adapter.setSensorInfos(sensorInfos);
-                                adapter.notifyDataSetChanged();
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFail(String errorData) {
-                        System.err.println("onFail result::::::"+errorData);
-                    }
-                });
             }
         });
 

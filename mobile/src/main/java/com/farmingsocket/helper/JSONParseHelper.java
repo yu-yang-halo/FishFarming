@@ -3,6 +3,7 @@ package com.farmingsocket.helper;
 import android.util.Log;
 
 import com.farmingsocket.client.bean.BaseInfo;
+import com.farmingsocket.manager.ConstantsPool;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -17,22 +18,37 @@ import cn.fuck.fishfarming.utils.ConstantUtils;
  */
 
 public class JSONParseHelper {
-    private static Map<String,Class> classMap=new HashMap<>();
+    private static Map<Integer,Class> classMap=new HashMap<>();
     static {
-        classMap.put("100",BaseInfo.class);
-        classMap.put("101",BaseInfo.class);
-        classMap.put("102",BaseInfo.class);
-        classMap.put("104",BaseInfo.class);
-        classMap.put("106",BaseInfo.class);
-        classMap.put("109",BaseInfo.class);
+        classMap.put(ConstantsPool.COMMAND_LOGIN_INFO,BaseInfo.class);
+        classMap.put(ConstantsPool.COMMAND_SIWTCH_CONTROL_INFO,BaseInfo.class);
+        classMap.put(ConstantsPool.COMMAND_REAL_TIME_DATA,BaseInfo.class);
+        classMap.put(ConstantsPool.COMMAND_HISTORY_DATA,BaseInfo.class);
+        classMap.put(ConstantsPool.COMMAND_RISKINDEX_NS,BaseInfo.class);
+        classMap.put(ConstantsPool.COMMAND_ONLINE_STATUS,BaseInfo.class);
     }
 
-    public static BaseInfo parseBaseInfo(String text){
+    public static int objectToInt(Object object){
+        if(object instanceof Number){
+            int value= ((Number) object).intValue();
+
+            return value;
+        }
+
+        return 0;
+    }
+
+    public static Object parseObject(String text){
+
+        Map  dict=parseMapObject(text);
+        int command=objectToInt(dict.get("command"));
+        Class clazz=classMap.get(command);
+
         Gson gson = new Gson();
-        BaseInfo baseInfo = gson.fromJson(text, BaseInfo.class);
+        Object object = gson.fromJson(text, clazz);
 
 
-        return baseInfo;
+        return object;
     }
 
     /**
@@ -49,7 +65,7 @@ public class JSONParseHelper {
      */
 
 
-    public static Map  parseMapObject(String text){
+    private static Map  parseMapObject(String text){
         Gson gson = new Gson();
         Map dict = gson.fromJson(text, Map.class);
 

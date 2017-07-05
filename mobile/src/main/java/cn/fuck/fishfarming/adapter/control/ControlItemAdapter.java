@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.farmingsocket.manager.ConstantsPool;
+import com.farmingsocket.client.bean.BaseDevice;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.application.MyApplication;
 
@@ -31,11 +28,11 @@ public class ControlItemAdapter extends BaseAdapter {
     private Context ctx;
     private Map<String,String> dict;
     private List<String> datas;
-    private String[] electrics;
+    private List<Map<String,String>> electrics;
     private String deviceId;
     static Handler nettyHandler=new Handler(Looper.myLooper());
     KProgressHUD hud;
-    CollectorInfo collectorInfo;
+    BaseDevice collectorInfo;
     public ControlItemAdapter(Context ctx){
         this.ctx=ctx;
     }
@@ -52,10 +49,10 @@ public class ControlItemAdapter extends BaseAdapter {
         this.deviceId = deviceId;
     }
 
-    public void setCollectorInfo(CollectorInfo collectorInfo) {
+    public void setCollectorInfo(BaseDevice collectorInfo) {
         this.collectorInfo = collectorInfo;
         if(collectorInfo!=null){
-            this.electrics=collectorInfo.getDeviceElectricsArr();
+            this.electrics=collectorInfo.getSwitchs();
         }
 
     }
@@ -65,7 +62,7 @@ public class ControlItemAdapter extends BaseAdapter {
         if(electrics==null){
             return 0;
         }
-        return electrics.length;
+        return electrics.size();
     }
 
     @Override
@@ -73,7 +70,7 @@ public class ControlItemAdapter extends BaseAdapter {
         if(electrics==null){
             return null;
         }
-        return electrics[i];
+        return electrics.get(i);
     }
 
     @Override
@@ -91,7 +88,7 @@ public class ControlItemAdapter extends BaseAdapter {
         TextView nameLabel=ButterKnife.findById(view,R.id.textView10);
 
         final Button switch1=ButterKnife.findById(view,R.id.switch1);
-        nameLabel.setText(electrics[i]);
+        nameLabel.setText(electrics.get(i).keySet().toString());
         if(dict!=null&&dict.get(deviceId)!=null){
             //00000000
             String value=dict.get(deviceId);
@@ -105,18 +102,11 @@ public class ControlItemAdapter extends BaseAdapter {
         switch1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(collectorInfo.getMode()== ConstantsPool.AUTO_MODE&&i<5){
-                    Toast.makeText(ctx,"处于自动模式,无法手动控制",Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                    return;
-                }
                 boolean isChecked=!switch1.isSelected();
 
                 MyApplication application= (MyApplication) ctx.getApplicationContext();
                 application.showDialog("设置中...");
 
-                TcpSocketService.getInstance().setDeviceId(collectorInfo.getDeviceID());
-                TcpSocketService.getInstance().sendFuckControlCmd(i + 1, isChecked ? 1 : 0, deviceId);
             }
         });
 

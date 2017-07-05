@@ -1,22 +1,23 @@
-package cn.fuck.fishfarming.fragment;
+package cn.fuck.fishfarming.activity;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.ReceiveUI;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
-import cn.fuck.fishfarming.utils.ConstantUtils;
+import cn.fuck.fishfarming.application.MyApplication;
 
 /**
- * Created by Administrator on 2017/5/19 0019.
+ * Created by Administrator on 2017/7/5 0005.
  */
 
-public class BaseFragment extends Fragment implements ReceiveUI {
+public class BaseActivity extends FragmentActivity implements ReceiveUI {
     protected Handler mainHandler=new Handler(Looper.getMainLooper());
     protected KProgressHUD hud;
     @Override
@@ -54,8 +55,16 @@ public class BaseFragment extends Fragment implements ReceiveUI {
     }
 
     protected void showToast(String message){
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
 
+    protected void setBaseInfo(BaseInfo baseInfo){
+        MyApplication myApp= (MyApplication) getApplicationContext();
+        myApp.setBaseInfo(baseInfo);
+    }
+    protected BaseInfo getBaseInf(){
+        MyApplication myApp= (MyApplication) getApplicationContext();
+        return myApp.getBaseInfo();
+    }
 }

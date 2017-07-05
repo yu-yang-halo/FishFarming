@@ -1,42 +1,15 @@
 package cn.fuck.fishfarming.activity;
 
-
-import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.videogo.main.EzvizWebViewActivity;
-
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.NewsInfo;
-import cn.farmFish.service.webserviceApi.bean.VideoInfo;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.GridItemAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
@@ -92,7 +65,7 @@ public class MainActivity extends StatusBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(myApp.getCollectorInfos()!=null){
+                if(myApp.getBaseInfo()!=null){
                     if(position<4){
                         if(position==1){
                             if(!NetworkHelper.isWifi(MainActivity.this)){
@@ -128,7 +101,7 @@ public class MainActivity extends StatusBarActivity {
 
     }
     private boolean checkDataLoadCompleted(){
-        if(myApp.getCollectorInfos()==null){
+        if(myApp.getBaseInfo()==null){
             showToast("数据加载未完成,请重试");
             onStart();
             return false;
@@ -140,57 +113,5 @@ public class MainActivity extends StatusBarActivity {
     protected void onStart() {
         super.onStart();
 
-        WebServiceApi.getInstance().GetUserVideoInfo(myApp.getUserAccount(), new WebServiceCallback() {
-            @Override
-            public void onSuccess(String jsonData) {
-                Log.v("GetUserVideoInfo",jsonData);
-                Log.v("jsonData","jsonData : "+jsonData);
-                Gson gson=new Gson();
-                Map<String,String> dict=gson.fromJson(jsonData,Map.class);
-
-                Type type=new TypeToken<List<VideoInfo>>(){}.getType();
-                List<VideoInfo> results=gson.fromJson(dict.get("GetUserVideoInfoResult"),type);
-
-
-                if(results!=null&&results.size()>0){
-
-                    Collections.sort(results, new Comparator<VideoInfo>() {
-                                @Override
-                                public int compare(VideoInfo o1, VideoInfo o2) {
-
-                                    return o1.getF_IndexCode() - o2.getF_IndexCode();
-                                }
-                            });
-
-                    myApp.setVideoInfos(results);
-
-                }
-
-            }
-
-            @Override
-            public void onFail(String errorData) {
-
-            }
-        });
-
-
-
-        WebServiceApi.getInstance().GetCollectorInfo(myApp.getUserAccount(), myApp.getCustomerNo(), new WebServiceCallback() {
-            @Override
-            public void onSuccess(String jsonData) {
-                Log.v("Tag",jsonData);
-                Gson gson=new Gson();
-                Map<String,String> dict=gson.fromJson(jsonData,Map.class);
-                Type type=new TypeToken<List<CollectorInfo>>(){}.getType();
-                List<CollectorInfo> results=gson.fromJson(dict.get("GetCollectorInfoResult"),type);
-                myApp.setCollectorInfos(results);
-            }
-
-            @Override
-            public void onFail(String errorData) {
-                Log.v("Tag",errorData);
-            }
-        });
     }
 }

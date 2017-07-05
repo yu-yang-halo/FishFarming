@@ -33,10 +33,10 @@ public class UIManager {
 	}
 
 	public void notifyObservers() {
-		notifyDataObservers(null);
+		notifyDataObservers(null,-1);
 	}
 
-	public void notifyDataObservers(Object arg) {
+	public void notifyDataObservers(Object arg,int command) {
 		Object[] arrLocal;
 		synchronized (this) {
 			if (!changed)
@@ -46,7 +46,7 @@ public class UIManager {
 		}
 
 		for (int i = arrLocal.length - 1; i >= 0; i--)
-			((IDataObserver) arrLocal[i]).update(this, arg);
+			((IDataObserver) arrLocal[i]).update(this, arg,command);
 	}
 
 	public synchronized void deleteObservers() {

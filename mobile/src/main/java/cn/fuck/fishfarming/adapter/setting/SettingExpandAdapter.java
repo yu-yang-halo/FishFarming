@@ -13,31 +13,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.client.bean.SensorInfo;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import cn.farmFish.service.webserviceApi.WebServiceApi;
-import cn.farmFish.service.webserviceApi.WebServiceCallback;
-import cn.farmFish.service.webserviceApi.bean.CollectorInfo;
-import cn.farmFish.service.webserviceApi.bean.SensorInfo;
 import cn.fuck.fishfarming.R;
-import cn.fuck.fishfarming.adapter.control.ControlItemAdapter;
 
 /**
  * Created by Administrator on 2017/2/5 0005.
  */
 
 public class SettingExpandAdapter extends BaseExpandableListAdapter {
-    private List<CollectorInfo> collectorInfos;
+    private List<BaseDevice> collectorInfos;
     private List<SensorInfo> sensorInfos;
     private Context ctx;
     private KProgressHUD hud;
     private int flags;
     Handler mainUIHandeler=new Handler(Looper.getMainLooper());
-    public SettingExpandAdapter(List<CollectorInfo> collectorInfos,Context ctx){
+    public SettingExpandAdapter(List<BaseDevice> collectorInfos,Context ctx){
         this.ctx=ctx;
         this.collectorInfos=collectorInfos;
     }
@@ -65,7 +62,7 @@ public class SettingExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public CollectorInfo getGroup(int groupPosition) {
+    public BaseDevice getGroup(int groupPosition) {
         if(collectorInfos!=null){
             return collectorInfos.get(groupPosition);
         }
@@ -110,7 +107,7 @@ public class SettingExpandAdapter extends BaseExpandableListAdapter {
 
                 if(isExpanded){
 
-                    CollectorInfo  collectorInfo=collectorInfos.get(groupPosition);
+                    BaseDevice  collectorInfo=collectorInfos.get(groupPosition);
 
                     final List<SensorInfo> changeList=new ArrayList<SensorInfo>();
 
@@ -145,48 +142,7 @@ public class SettingExpandAdapter extends BaseExpandableListAdapter {
                                 .create(ctx).setLabel("数据保存中...").show();
                         flags=0;
 
-                        for (SensorInfo sensorInfo:changeList){
-
-                            WebServiceApi.getInstance().SetCollectorSensor(collectorInfo.getCollectorID(), "1", Integer.parseInt(sensorInfo.getF_ID()), sensorInfo.getF_Lower(),
-                                    sensorInfo.getF_Upper(), (short) 0, new WebServiceCallback() {
-                                        @Override
-                                        public void onSuccess(String jsonData) {
-                                            Log.v("onSuccess",jsonData+" flags "+flags);
-
-                                            synchronized (this){
-                                                flags++;
-
-                                                if(flags>=changeList.size()){
-                                                    mainUIHandeler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            hud.dismiss();
-                                                        }
-                                                    });
-                                                }
-                                            }
-
-
-                                        }
-
-                                        @Override
-                                        public void onFail(String errorData) {
-                                            Log.v("onFail",errorData+" flags "+flags);
-
-                                            synchronized (this){
-                                                flags++;
-                                                if(flags>=changeList.size()){
-                                                    mainUIHandeler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            hud.dismiss();
-                                                        }
-                                                    });
-                                                }
-                                            }
-
-                                        }
-                                    });
+                        for (SensorInfo sensorInfo:changeList) {
 
                         }
 
@@ -206,7 +162,7 @@ public class SettingExpandAdapter extends BaseExpandableListAdapter {
 
 
 
-        titleView.setText(getGroup(groupPosition).getPondName());
+        titleView.setText(getGroup(groupPosition).getName());
 
 
         return convertView;

@@ -14,13 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-
-import com.farmingsocket.helper.DataAnalysisHelper;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
-
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
@@ -75,7 +71,7 @@ public class RealDataFragment extends BaseFragment{
 
 
 
-        adapter=new RealDataExpandAdapter(myApp.getCollectorInfos(),getActivity());
+        adapter=new RealDataExpandAdapter(myApp.getBaseInfo().getDevice(),getActivity());
 
 
         expandRealDataListView.setAdapter(adapter);
@@ -88,7 +84,7 @@ public class RealDataFragment extends BaseFragment{
                 }
                 selectPos=i;
 
-                final String deviceId=myApp.getCollectorInfos().get(i).getDeviceID();
+                final String deviceId=myApp.getBaseInfo().getDevice().get(i).getMac();
                 Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
 
                 Map<String,String> cacheData=JsonObjectManager.getMapObject(myApp,deviceId);
@@ -100,8 +96,6 @@ public class RealDataFragment extends BaseFragment{
 
                 }
 
-                TcpSocketService.getInstance().setDeviceId(deviceId);
-                TcpSocketService.getInstance().sendFuckHeart();
 
 
             }
@@ -109,7 +103,7 @@ public class RealDataFragment extends BaseFragment{
         expandRealDataListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                TcpSocketService.getInstance().closeConnect();
+
             }
         });
 
@@ -139,27 +133,4 @@ public class RealDataFragment extends BaseFragment{
         }
     }
 
-    @Override
-    public void update(UIManager o, Object arg) {
-        super.update(o, arg);
-        if(arg instanceof SPackage){
-            final SPackage spackage= (SPackage) arg;
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    Log.v("analysisData","analysisData : "+spackage);
-                    Map<String,String> dict= DataAnalysisHelper.analysisData(spackage);
-                    if(dict.size()>1){
-                        myApplication.hideDialogNoMessage();
-                        Log.v("dict","dict : "+dict);
-                        JsonObjectManager.cacheMapObjectToLocal(myApp,spackage.getDeviceID(),dict);
-                        adapter.notifyDataSetChanged();
-                    }
-
-                }
-            });
-        }
-    }
 }
