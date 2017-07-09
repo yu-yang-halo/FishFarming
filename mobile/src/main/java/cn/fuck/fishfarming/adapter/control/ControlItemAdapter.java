@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.farmingsocket.client.WebSocketReqImpl;
 import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.client.bean.UControlItem;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.application.MyApplication;
 
 /**
@@ -26,51 +30,37 @@ import cn.fuck.fishfarming.application.MyApplication;
 
 public class ControlItemAdapter extends BaseAdapter {
     private Context ctx;
-    private Map<String,String> dict;
-    private List<String> datas;
-    private List<Map<String,String>> electrics;
-    private String deviceId;
-    static Handler nettyHandler=new Handler(Looper.myLooper());
-    KProgressHUD hud;
-    BaseDevice collectorInfo;
+    private List<UControlItem> uControlItems;
+    private BaseDevice collectorInfo;
+    private Map<String,String> stringSwitchNameMap;
     public ControlItemAdapter(Context ctx){
         this.ctx=ctx;
     }
 
-    public void setDict(Map<String, String> dict) {
-        this.dict = dict;
-        if(dict!=null){
-            this.datas=new ArrayList<String>(dict.values());
-        }
-
+    public void setControlItems(List<UControlItem> uControlItems) {
+        this.uControlItems = uControlItems;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
 
     public void setCollectorInfo(BaseDevice collectorInfo) {
         this.collectorInfo = collectorInfo;
-        if(collectorInfo!=null){
-            this.electrics=collectorInfo.getSwitchs();
-        }
-
+        this.stringSwitchNameMap= collectorInfo.getStringSwitchMap();
     }
 
     @Override
     public int getCount() {
-        if(electrics==null){
+        if(uControlItems==null){
             return 0;
         }
-        return electrics.size();
+        return uControlItems.size();
     }
 
     @Override
     public Object getItem(int i) {
-        if(electrics==null){
+        if(uControlItems==null){
             return null;
         }
-        return electrics.get(i);
+        return uControlItems.get(i);
     }
 
     @Override
@@ -88,13 +78,18 @@ public class ControlItemAdapter extends BaseAdapter {
         TextView nameLabel=ButterKnife.findById(view,R.id.textView10);
 
         final Button switch1=ButterKnife.findById(view,R.id.switch1);
-        nameLabel.setText(electrics.get(i).keySet().toString());
-        if(dict!=null&&dict.get(deviceId)!=null){
-            //00000000
-            String value=dict.get(deviceId);
-            char status=value.charAt(i);
-            switch1.setSelected(status=='0'?false:true);
-            switch1.setText(status=='0'?"关":"开");
+
+        final UControlItem uControlItem=uControlItems.get(i);
+        uControlItem.setName(stringSwitchNameMap.get(uControlItem.getNumber()));
+
+        nameLabel.setText(uControlItem.getName());
+
+
+        if(uControlItem!=null){
+            String status= uControlItem.getStatus();
+
+            switch1.setSelected("00".equals(status)?false:true);
+            switch1.setText("00".equals(status)?"关":"开");
         }else{
             switch1.setSelected(false);
             switch1.setText("关");
@@ -104,8 +99,12 @@ public class ControlItemAdapter extends BaseAdapter {
             public void onClick(View v) {
                 boolean isChecked=!switch1.isSelected();
 
-                MyApplication application= (MyApplication) ctx.getApplicationContext();
-                application.showDialog("设置中...");
+                WebSocketReqImpl.getInstance().controlDevice(collectorInfo.getMac(),
+                        collectorInfo.getGprsmac(),
+                        uControlItem.getNumber(),
+                        isChecked?1:0);
+
+
 
             }
         });

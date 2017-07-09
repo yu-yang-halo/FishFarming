@@ -1,6 +1,7 @@
 package cn.fuck.fishfarming.adapter.realdata;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,13 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.client.bean.BaseRealTimeData;
+
 import java.util.List;
 import java.util.Map;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
 
 /**
@@ -21,8 +25,6 @@ import cn.fuck.fishfarming.cache.JsonObjectManager;
 public class RealDataExpandAdapter extends BaseExpandableListAdapter {
     private List<BaseDevice> collectorInfos;
     private Context ctx;
-
-    private  Map<String,String> dicts;
 
     public RealDataExpandAdapter(List<BaseDevice> collectorInfos, Context ctx){
         this.collectorInfos=collectorInfos;
@@ -40,12 +42,13 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int i) {
 
-        dicts=JsonObjectManager.getMapObject(ctx,collectorInfos.get(i).getMac());
+        BaseRealTimeData baseRealTimeData=DataHelper.getMyApp().getRealTimeData(collectorInfos.get(i).getMac());
 
-        if(dicts==null){
+
+        if(baseRealTimeData==null){
             return 0;
         }
-        dicts.remove(collectorInfos.get(i).getMac());
+
         return 1;
     }
 
@@ -58,8 +61,11 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int i, int i1) {
-        return dicts;
+    public BaseRealTimeData getChild(int i, int i1) {
+        BaseRealTimeData baseRealTimeData=DataHelper.getMyApp().getRealTimeData(collectorInfos.get(i).getMac());
+
+
+        return baseRealTimeData;
     }
 
     @Override
@@ -84,9 +90,19 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_realdata_group,null);
         }
         TextView titleView=ButterKnife.findById(view,R.id.titleView);
+        TextView onlineView=ButterKnife.findById(view,R.id.statusView);
 
 
         titleView.setText(getGroup(i).getName());
+        int status=DataHelper.getMyApp().getOnlineStatus(collectorInfos.get(i).getMac());
+
+        if(status==1){
+            onlineView.setText("在线");
+            onlineView.setTextColor(Color.parseColor("#8000ff00"));
+        }else{
+            onlineView.setText("离线");
+            onlineView.setTextColor(Color.parseColor("#80ff0000"));
+        }
 
 
         return view;
@@ -99,7 +115,7 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_realdata_child,null);
         }
         ListView listView=ButterKnife.findById(view,R.id.listView);
-        RealDataItemAdapter adapter=new RealDataItemAdapter(dicts,ctx);
+        RealDataItemAdapter adapter=new RealDataItemAdapter(getChild(i,i1),ctx);
         listView.setAdapter(adapter);
 
         int totalHeight=0;

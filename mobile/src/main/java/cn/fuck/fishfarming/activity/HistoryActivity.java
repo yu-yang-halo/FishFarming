@@ -7,12 +7,18 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ExpandableListView;
 
+import com.farmingsocket.client.WebSocketReqImpl;
+import com.farmingsocket.client.bean.BaseHistData;
+import com.farmingsocket.manager.ConstantsPool;
+import com.farmingsocket.manager.UIManager;
+
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.history.HistoryExpandAdapter;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.application.MyApplication;
 
 /**
@@ -22,10 +28,9 @@ import cn.fuck.fishfarming.application.MyApplication;
 public class HistoryActivity extends StatusBarActivity{
     @BindView(R.id.expandHistoryListView)
     ExpandableListView expandHistoryListView;
-    Handler nettyHandler = new Handler(Looper.getMainLooper());
 
-    MyApplication myApp;
     HistoryExpandAdapter adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,17 +42,18 @@ public class HistoryActivity extends StatusBarActivity{
         tvTitle.setText("历史数据");
 
 
-        myApp= (MyApplication)getApplicationContext();
 
-
-
-        adapter=new HistoryExpandAdapter(myApp.getBaseInfo().getDevice(),this);
+        adapter=new HistoryExpandAdapter(DataHelper.getMyApp().getBaseDevices(),this);
 
         expandHistoryListView.setAdapter(adapter);
         expandHistoryListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int i) {
+                final String mac=DataHelper.getMyApp().getBaseDevices().get(i).getMac();
+                final String gprsMac=DataHelper.getMyApp().getBaseDevices().get(i).getGprsmac();
 
+                WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,0);
+                DataHelper.setDay(mac,0);
             }
         });
 
@@ -59,8 +65,31 @@ public class HistoryActivity extends StatusBarActivity{
         });
 
 
+        UIManager.getInstance().addObserver(this);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        UIManager.getInstance().deleteObserver(this);
+    }
+    @Override
+    public void update(UIManager o, final Object arg, final int command) {
+        super.update(o, arg, command);
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+               if(command== ConstantsPool.COMMAND_HISTORY_DATA){
+                   if(arg!=null){
+                       BaseHistData baseHistData= (BaseHistData) arg;
+                       DataHelper.getMyApp().setHistDatas(baseHistData);
 
+                       adapter.notifyDataSetChanged();
+                   }
+
+               }
+            }
+        });
     }
 }

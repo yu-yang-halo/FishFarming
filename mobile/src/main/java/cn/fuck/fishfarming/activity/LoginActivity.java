@@ -136,14 +136,17 @@ public class LoginActivity extends BaseActivity {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
+
                 if(command== ConstantsPool.COMMAND_LOGIN_INFO){
+                    if(hud!=null){
+                        hud.dismiss();
+                    }
                     if (arg!=null){
                         BaseInfo baseInfo= (BaseInfo) arg;
                         setBaseInfo(baseInfo);
 
                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
-
                     }
                 }
             }

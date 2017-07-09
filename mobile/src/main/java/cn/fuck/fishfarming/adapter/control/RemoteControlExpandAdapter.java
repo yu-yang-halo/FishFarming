@@ -1,6 +1,7 @@
 package cn.fuck.fishfarming.adapter.control;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.client.bean.BaseSwitchInfo;
+import com.farmingsocket.client.bean.UControlItem;
+import com.farmingsocket.helper.JSONParseHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +20,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
 
 /**
@@ -26,7 +31,6 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
     private List<BaseDevice> collectorInfos;
     private Context ctx;
 
-    private  Map<String,String> dicts;
     ControlItemAdapter adapter;
     public RemoteControlExpandAdapter(List<BaseDevice> collectorInfos, Context ctx){
         this.collectorInfos=collectorInfos;
@@ -44,10 +48,9 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
+        BaseSwitchInfo baseSwitchInfo=DataHelper.getMyApp().getDevswitchStatus(collectorInfos.get(i).getMac());
 
-        dicts=JsonObjectManager.getMapObject(ctx,collectorInfos.get(i).getMac());
-
-        if(dicts==null){
+        if(baseSwitchInfo==null){
             return 0;
         }
 
@@ -63,8 +66,11 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int i, int i1) {
-        return dicts;
+    public List<UControlItem> getChild(int i, int i1) {
+        BaseSwitchInfo baseSwitchInfo=DataHelper.getMyApp().getDevswitchStatus(collectorInfos.get(i).getMac());
+        List<UControlItem> uControlItemList= JSONParseHelper.convertSwitchInfo(baseSwitchInfo);
+
+        return uControlItemList;
     }
 
     @Override
@@ -89,9 +95,19 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_control_group,null);
         }
         TextView titleView=ButterKnife.findById(view,R.id.titleView);
-
+        TextView onlineView=ButterKnife.findById(view,R.id.statusView);
 
         titleView.setText(getGroup(i).getName());
+
+        int status= DataHelper.getMyApp().getOnlineStatus(collectorInfos.get(i).getMac());
+
+        if(status==1){
+            onlineView.setText("在线");
+            onlineView.setTextColor(Color.parseColor("#8000ff00"));
+        }else{
+            onlineView.setText("离线");
+            onlineView.setTextColor(Color.parseColor("#80ff0000"));
+        }
 
 
         return view;
@@ -104,11 +120,9 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_realdata_child,null);
         }
 
-        String deviceID=getGroup(i).getMac();
         ListView listView=ButterKnife.findById(view,R.id.listView);
         adapter.setCollectorInfo(collectorInfos.get(i));
-        adapter.setDeviceId(deviceID);
-        adapter.setDict(dicts);
+        adapter.setControlItems(getChild(i,i1));
         listView.setAdapter(adapter);
 
         int totalHeight=0;

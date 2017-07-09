@@ -21,7 +21,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * 控制设备开关 command 101 {"mac": ,"gprsmac": ,"command":101,"switch":{"no":
 	 * ,"val": }}
 	 */
-	public void controlDevice(String mac, String gprsmac, String no, String val) {
+	public void controlDevice(String mac, String gprsmac, String no, int val) {
 
 		String reqJSON = "{\"mac\": " + mac + " ,\"gprsmac\":" + gprsmac + " ,\"command\":101,\"switch\":{\"no\": " + no
 				+ " ,\"val\":" + val + " }}";

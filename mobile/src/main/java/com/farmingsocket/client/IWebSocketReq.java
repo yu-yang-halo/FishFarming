@@ -21,7 +21,7 @@ public interface IWebSocketReq {
 	 * command 101
 	 * {"mac": ,"gprsmac": ,"command":101,"switch":{"no": ,"val": }}
 	 */
-	public void controlDevice(String mac,String gprsmac,String no,String val);
+	public void controlDevice(String mac,String gprsmac,String no,int val);
 	
 	/**
 	 * 获取实时数据
@@ -85,6 +85,9 @@ public interface IWebSocketReq {
 	 * {"command": }
 	 */
 	public void stopAllRealTimeData();
+
+
+
 	
 	public void reqWebSocketData(String json);
 	

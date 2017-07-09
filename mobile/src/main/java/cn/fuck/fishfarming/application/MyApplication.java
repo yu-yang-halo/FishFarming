@@ -14,10 +14,21 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.client.bean.BaseHistData;
 import com.farmingsocket.client.bean.BaseInfo;
+import com.farmingsocket.client.bean.BaseOnlineData;
+import com.farmingsocket.client.bean.BaseRealTimeData;
+import com.farmingsocket.client.bean.BaseSwitchInfo;
+import com.farmingsocket.client.bean.UControlItem;
+import com.farmingsocket.helper.JSONParseHelper;
+import com.farmingsocket.server.YYWebSocketServer;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.videogo.openapi.EZOpenSDK;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import cn.fuck.fishfarming.cache.ContentBox;
@@ -38,6 +49,84 @@ public class MyApplication extends Application {
     public BaseInfo getBaseInfo() {
         return baseInfo;
     }
+
+    public List<BaseDevice> getBaseDevices() {
+        if(baseInfo!=null){
+            return baseInfo.getDevice();
+        }
+
+        return null;
+    }
+
+    private Map<String,BaseRealTimeData> realTimeDataCache=new HashMap<>();
+    private Map<String,Integer> onlineCache=new HashMap<>();
+    private Map<String,BaseSwitchInfo> switchInfoCache=new HashMap<>();
+    private Map<String,BaseHistData> histDatasCache=new HashMap<>();
+
+    public void setHistDatas(BaseHistData baseHistData){
+        if(baseHistData!=null){
+            histDatasCache.put(baseHistData.getMac(),baseHistData);
+        }
+    }
+
+    public BaseHistData getHistDatas(String mac){
+        if(mac!=null){
+            return histDatasCache.get(mac);
+        }
+        return null;
+    }
+
+
+    public void setRealTimeData(BaseRealTimeData realTimeData){
+        if(realTimeData!=null){
+            realTimeDataCache.put(realTimeData.getMac(),realTimeData);
+        }
+    }
+
+    public void setDevswitchStatus(BaseSwitchInfo baseSwitchInfo){
+        if(baseSwitchInfo!=null){
+
+            switchInfoCache.put(baseSwitchInfo.getMac(),baseSwitchInfo);
+        }
+    }
+
+    public BaseSwitchInfo getDevswitchStatus(String mac){
+        if(mac!=null){
+            return switchInfoCache.get(mac);
+        }
+        return null;
+    }
+
+
+    public void setOnlineData(BaseOnlineData baseOnlineData){
+        if(baseOnlineData!=null){
+            List<BaseDevice> devices=baseOnlineData.getDevice();
+
+            for (BaseDevice dev:devices){
+                onlineCache.put(dev.getMac(),dev.getOnline());
+            }
+
+        }
+    }
+    public int getOnlineStatus(String mac){
+        if(mac!=null){
+            if(onlineCache.get(mac)==null){
+                return 0;
+            }
+            return onlineCache.get(mac);
+        }
+        return 0;
+    }
+
+
+    public BaseRealTimeData getRealTimeData(String mac){
+        if(mac!=null){
+           return realTimeDataCache.get(mac);
+        }
+        return null;
+    }
+
+
 
     public void setBaseInfo(BaseInfo baseInfo) {
         this.baseInfo = baseInfo;
@@ -121,8 +210,24 @@ public class MyApplication extends Application {
             }
         });
 
+        DataHelper.init(getApplicationContext());
 
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                YYWebSocketServer.getInstance().startServer();
+            }
+        }).start();
+
+    }
+    private  int port;
+    public  void setPort(int port){
+        this.port=port;
+    }
+
+    public  int getPort(){
+        return port;
     }
 
     private void enableFIR(){

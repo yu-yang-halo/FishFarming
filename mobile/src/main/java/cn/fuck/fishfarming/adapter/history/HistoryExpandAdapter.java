@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.farmingsocket.client.WebSocketReqImpl;
 import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.client.bean.BaseHistData;
+import com.farmingsocket.helper.JSONParseHelper;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -22,6 +26,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.activity.TabEntity;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.weather.WeatherViewManager;
 
 /**
@@ -59,8 +64,6 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int i) {
 
-
-
         return 1;
     }
 
@@ -73,8 +76,9 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int i, int i1) {
-        return null;
+    public BaseHistData getChild(int i, int i1) {
+        BaseHistData baseHistData=DataHelper.getMyApp().getHistDatas(collectorInfos.get(i).getMac());
+        return baseHistData;
     }
 
     @Override
@@ -128,8 +132,8 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
 
             view.setTag(holder);
         }
-        final String deviceId=collectorInfos.get(i).getMac();
-
+        final String mac=collectorInfos.get(i).getMac();
+        final String gprsMac=collectorInfos.get(i).getGprsmac();
         holder= (ViewHolder) view.getTag();
         final ViewHolder finalHolder = holder;
 
@@ -141,8 +145,8 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
             public void onTabSelect(int position) {
                 Log.v("onTabSelect","onTabSelect "+position);
                 WeatherViewManager.initViewData(ctx, finalHolder.weatherView,2-position);
-                loadHistDatas(deviceId,position-2, finalHolder.hisListView);
-
+                WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,2-position);
+                DataHelper.setDay(mac,2-position);
             }
 
             @Override
@@ -150,134 +154,32 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
                 Log.v("onTabReselect","onTabReselect "+position);
             }
         });
+        final HisItemAdapter hisItemAdapter= (HisItemAdapter) holder.hisListView.getAdapter();
 
-        loadHistDatas(deviceId,0, finalHolder.hisListView);
+        hisItemAdapter.setDicts(JSONParseHelper.convertWantData(getChild(i,i1)));
+        hisItemAdapter.notifyDataSetChanged();
 
+        int len=hisItemAdapter.getCount();
+        int totalHeight=0;
+        if(len>0){
+            ViewGroup.LayoutParams params=holder.hisListView.getLayoutParams();
+
+            View cell=hisItemAdapter.getView(0,null,holder.hisListView);
+            cell.measure(0,0);
+
+            totalHeight=cell.getMeasuredHeight()*len;
+            params.height=totalHeight;
+            holder.hisListView.setLayoutParams(params);
+
+        }
+
+
+        holder.mTabLayout_1.setCurrentTab(2-DataHelper.getDay(mac));
+        WeatherViewManager.initViewData(ctx, finalHolder.weatherView,DataHelper.getDay(mac));
         return view;
     }
 
-    private void loadHistDatas(String deviceId, int addDays, final ListView listView){
-        final HisItemAdapter hisItemAdapter= (HisItemAdapter) listView.getAdapter();
 
-        hud= KProgressHUD
-                .create(ctx).setLabel("数据加载中...")
-                .show();
-//
-//        WebServiceApi.getInstance().GetCollectorData(deviceId,
-//                DateUtils.createNowDate("yyyy-MM-dd", addDays), new WebServiceCallback() {
-//                    @Override
-//                    public void onSuccess(final String jsonData) {
-//
-//
-//                        okhttpHandler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if(hud!=null){
-//                                    hud.dismiss();
-//                                }
-//
-//                                Log.v("loadHistDatas","onSuccess----"+jsonData);
-//
-//                                Gson gson=new Gson();
-//                                Map<String,String> dict=gson.fromJson(jsonData,Map.class);
-//                                Type type=new TypeToken<List<CollectorData>>(){}.getType();
-//                                List<CollectorData> results=gson.fromJson(dict.get("GetCollectorDataResult"),type);
-//
-//
-//                                Map<String,List<CollWantData>> dicts=new HashMap<String, List<CollWantData>>();
-//
-//                                for (CollectorData collectorData:results){
-//
-//                                    for(Field field:collectorData.getClass().getDeclaredFields()){
-//
-//                                        if(field.getName().contains("F_Param")){
-//
-//                                            String key=field.getName().substring(7);
-//                                            String realDataVal=null;
-//                                            field.setAccessible(true);
-//                                            try {
-//                                                realDataVal=(String)field.get(collectorData);
-//                                            } catch (IllegalAccessException e) {
-//                                                e.printStackTrace();
-//                                            }
-//                                            if(realDataVal==null||Float.parseFloat(realDataVal)<=0){
-//                                                continue;
-//                                            }
-//
-//
-//                                            List<CollWantData> values=dicts.get(key);
-//
-//                                            if(values==null){
-//                                                values=new ArrayList<CollWantData>();
-//                                            }
-//
-//                                            try {
-//
-//                                                String time=collectorData.getF_ReceivedTime();
-//                                                String val= (String) field.get(collectorData);
-//
-//
-//                                                CollWantData data=new CollWantData(Integer.parseInt(time),Float.parseFloat(val));
-//                                                data.setType(Integer.parseInt(key));
-//                                                data.setOrder(ConstantUtils.ORDERS.get(key));
-//
-//
-//                                                values.add(data);
-//                                            } catch (IllegalAccessException e) {
-//                                                e.printStackTrace();
-//                                            }
-//
-//                                            dicts.put(key,values);
-//
-//                                        }
-//
-//                                    }
-//
-//
-//
-//                                }
-//
-//                                Log.v("dicts",dicts.toString());
-//
-//                                hisItemAdapter.setDicts(dicts);
-//                                hisItemAdapter.notifyDataSetChanged();
-//
-//                                int len=hisItemAdapter.getCount();
-//                                int totalHeight=0;
-//                                if(len>0){
-//                                    ViewGroup.LayoutParams params=listView.getLayoutParams();
-//
-//                                    View cell=hisItemAdapter.getView(0,null,listView);
-//                                    cell.measure(0,0);
-//
-//                                    totalHeight=cell.getMeasuredHeight()*len;
-//                                    params.height=totalHeight;
-//                                    listView.setLayoutParams(params);
-//
-//                                }
-//
-//                            }
-//                        });
-//
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onFail(final String errorData) {
-//                        Log.v("loadHistDatas","onFail----"+errorData);
-//                        okhttpHandler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if(hud!=null){
-//                                    hud.dismiss();
-//                                }
-//                                Toast.makeText(ctx,errorData,Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    }
-//                });
-    }
 
     @Override
     public boolean isChildSelectable(int i, int i1) {

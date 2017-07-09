@@ -17,6 +17,7 @@ public class ConstantsPool {
 
 
 
+
 	public static final int COMMAND_LOGIN_INFO=100;
 	public static final int COMMAND_SIWTCH_CONTROL_INFO=101;
 	public static final int COMMAND_REAL_TIME_DATA=102;

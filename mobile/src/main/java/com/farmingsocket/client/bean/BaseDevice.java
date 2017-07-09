@@ -1,5 +1,10 @@
 package com.farmingsocket.client.bean;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -7,10 +12,32 @@ public class BaseDevice {
 
 	private String gprsmac;
 	private String name;
+	@SerializedName("switchs")
 	private List<Map<String, String>> switchs;
 	private String mac;
 	private int online;
 
+	private Map<String,String> stringSwitchgMap;
+
+
+	public Map<String, String> getStringSwitchMap() {
+		stringSwitchgMap=new HashMap<>();
+
+		if(switchs!=null){
+
+			for(Map dict:switchs){
+				Iterator<Map.Entry<String,String>> entryIterator=dict.entrySet().iterator();
+
+				while (entryIterator.hasNext()) {
+					Map.Entry<String, String> entry = entryIterator.next();
+					stringSwitchgMap.put(entry.getKey(), entry.getValue());
+				}
+			}
+
+		}
+
+		return stringSwitchgMap;
+	}
 
 	@Override
 	public String toString() {

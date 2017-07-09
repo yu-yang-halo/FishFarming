@@ -17,7 +17,7 @@ import cn.fuck.fishfarming.R;
  * Created by Administrator on 2016/12/3 0003.
  */
 
-public class StatusBarActivity extends FragmentActivity {
+public class StatusBarActivity extends BaseActivity {
     protected  TextView tvTitle;
     protected  Button leftBtn;
     protected  Button rightBtn;

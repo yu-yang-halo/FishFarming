@@ -2,16 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+        <include layout="@layout/view_weather"
+            android:id="@+id/weatherView"
+            android:layout_height="90dp"
+            android:visibility="gone"
+            android:layout_width="match_parent">
 
+        </include>
 
-
-
-        <ExpandableListView
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/expandControlListView">
+            android:layout_height="match_parent">
+
+                <ExpandableListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/expandControlListView">
 
 
-        </ExpandableListView>
+                </ExpandableListView>
+
+        </com.baoyz.widget.PullRefreshLayout>
+
+
+
 
 </LinearLayout>

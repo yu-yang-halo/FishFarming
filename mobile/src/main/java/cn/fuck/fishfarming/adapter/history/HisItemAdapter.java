@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.farmingsocket.client.bean.CollWantData;
+import com.farmingsocket.client.bean.UCollWantData;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -39,22 +39,22 @@ import cn.fuck.fishfarming.utils.ConstantUtils;
 
 public class HisItemAdapter extends BaseAdapter {
     private Context ctx;
-    private Map<String,List<CollWantData>> dicts;
-    private List<List<CollWantData>> values;
+    private Map<String,List<UCollWantData>> dicts;
+    private List<List<UCollWantData>> values;
 
 
-    public Map<String, List<CollWantData>> getDicts() {
+    public Map<String, List<UCollWantData>> getDicts() {
         return dicts;
     }
 
-    public void setDicts(Map<String,List<CollWantData>> dicts) {
+    public void setDicts(Map<String,List<UCollWantData>> dicts) {
         this.dicts = dicts;
 
         if(dicts!=null){
             this.values=new ArrayList<>(dicts.values());
-            Collections.sort(values, new Comparator<List<CollWantData>>() {
+            Collections.sort(values, new Comparator<List<UCollWantData>>() {
                 @Override
-                public int compare(List<CollWantData> o1, List<CollWantData> o2) {
+                public int compare(List<UCollWantData> o1, List<UCollWantData> o2) {
                     if(o1!=null&&o1.size()>0&&o2!=null&&o2.size()>0){
                         return  o1.get(0).getOrder()-o2.get(0).getOrder();
                     }
@@ -67,7 +67,7 @@ public class HisItemAdapter extends BaseAdapter {
 
     }
 
-    public HisItemAdapter(Context ctx, Map<String,List<CollWantData>> dicts){
+    public HisItemAdapter(Context ctx, Map<String,List<UCollWantData>> dicts){
         this.ctx   = ctx;
         setDicts(dicts);
 
@@ -179,13 +179,13 @@ public class HisItemAdapter extends BaseAdapter {
     }
 
 
-    private float averageVal(List<CollWantData> items){
+    private float averageVal(List<UCollWantData> items){
         if(items==null||items.size()==0){
             return 0.0f;
         }
         int size=items.size();
         float sum=0.0f;
-        for (CollWantData data:items){
+        for (UCollWantData data:items){
             sum+=data.getValue();
         }
         return sum/size;
@@ -193,18 +193,18 @@ public class HisItemAdapter extends BaseAdapter {
 
     private void setData(int position,LineChart mChart) {
 
-        List<CollWantData> items=values.get(position);
+        List<UCollWantData> items=values.get(position);
         float average=averageVal(items);
         String title="";
         if(items!=null&&items.size()>0){
-            String name= ConstantUtils.CONTENTS.get(String.valueOf(items.get(0).getType()));
-            String unit= ConstantUtils.UNITS.get(String.valueOf(items.get(0).getType()));
+            String name= ConstantUtils.CONTENTS.get("a"+items.get(0).getType());
+            String unit= ConstantUtils.UNITS.get("a"+items.get(0).getType());
             title=String.format("平均%s(%.2f%s)",name,average,unit);
         }
 
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
-        for(CollWantData data:items){
+        for(UCollWantData data:items){
             yVals1.add(new Entry(data.getReviceTime(), data.getValue()));
         }
 

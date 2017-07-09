@@ -77,10 +77,10 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 		YYLogger.debug(TAG, "onMessage ...." + text);
 
 		BaseCommand baseCommand= (BaseCommand) JSONParseHelper.parseObject(text);
+		int command=baseCommand.getCommand();
 
-
-
-		UIManager.getInstance().notifyDataObservers(baseCommand,baseCommand.getCommand());
+		UIManager.getInstance().setChanged();
+		UIManager.getInstance().notifyDataObservers(baseCommand,command);
 
 	}
 
@@ -89,11 +89,11 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 		super.onFailure(webSocket, t, response);
 
 		YYLogger.debug(TAG, "onFailure ...." + t);
-
+		UIManager.getInstance().setChanged();
 		if(t instanceof SocketTimeoutException){
 			UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_READ_TIMEOUT);
 		}else {
-
+			UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_FAILURE);
 		}
 
 
@@ -104,6 +104,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 	public void onClosing(WebSocket webSocket, int code, String reason) {
 		super.onClosing(webSocket, code, reason);
 		YYLogger.debug(TAG, "onClosing ...." + reason);
+		UIManager.getInstance().setChanged();
 		UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_CLOSING);
 	}
 
@@ -112,7 +113,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 		super.onClosed(webSocket, code, reason);
 
 		YYLogger.debug(TAG, "onClosed ...." + reason);
-
+		UIManager.getInstance().setChanged();
 		UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_CLOSED);
 
 	}

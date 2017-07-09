@@ -10,15 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
+import com.baoyz.widget.PullRefreshLayout;
+import com.farmingsocket.client.WebSocketReqImpl;
+import com.farmingsocket.client.bean.BaseOnlineData;
+import com.farmingsocket.client.bean.BaseSwitchInfo;
+import com.farmingsocket.client.bean.UControlItem;
+import com.farmingsocket.helper.JSONParseHelper;
+import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
+
+import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.application.MyApplication;
 import cn.fuck.fishfarming.cache.JsonObjectManager;
+import cn.fuck.fishfarming.weather.WeatherViewManager;
 
 /**
  * Created by Administrator on 2016/12/3 0003.
@@ -28,13 +40,16 @@ public class RemoteControlFragment extends BaseFragment {
 
     private static final  String TAG="RemoteControlFragment";
 
+    @BindView(R.id.weatherView)
+    View weatherView;
+
     @BindView(R.id.expandControlListView)
     ExpandableListView expandRemoteControlListView;
-    Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    MyApplication myApp;
+    @BindView(R.id.swipeRefreshLayout)
+    PullRefreshLayout swipeRefreshLayout;
+
     RemoteControlExpandAdapter adapter;
-    KProgressHUD hud;
     int selectPos=-1;
     @Override
     public void onAttach(Context context) {
@@ -57,13 +72,17 @@ public class RemoteControlFragment extends BaseFragment {
         View view=inflater.inflate(R.layout.fr_control, null);
         ButterKnife.bind(this,view);
 
-
-        myApp= (MyApplication)getActivity().getApplicationContext();
-
+        WeatherViewManager.initViewData(getActivity(),weatherView,0);
 
 
-        adapter=new RemoteControlExpandAdapter(myApp.getBaseInfo().getDevice(),getActivity());
+        swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                WebSocketReqImpl.getInstance().fetchDeviceOnlineStatus();
+            }
+        });
 
+        adapter=new RemoteControlExpandAdapter(DataHelper.getMyApp().getBaseDevices(),getActivity());
 
 
         expandRemoteControlListView.setAdapter(adapter);
@@ -74,12 +93,13 @@ public class RemoteControlFragment extends BaseFragment {
                     expandRemoteControlListView.collapseGroup(selectPos);
                 }
                 selectPos=i;
-                final String deviceId=myApp.getBaseInfo().getDevice().get(i).getMac();
-                Map<String,String> cacheData= JsonObjectManager.getMapObject(getContext(),deviceId);
-                if(cacheData==null||cacheData.size()<=0){
-                    myApp.showDialogNoTips("数据加载中...");
-                }
-                Log.v("onGroupExpand","onGroupExpand"+i+"  deviceId:"+deviceId);
+                final String mac=DataHelper.getMyApp().getBaseDevices().get(i).getMac();
+                final String gprsMac=DataHelper.getMyApp().getBaseDevices().get(i).getGprsmac();
+                DataHelper.getMyApp().showDialogNoTips("数据加载中...");
+
+                WebSocketReqImpl.getInstance().fetchDeviceStatus(mac,gprsMac);
+
+                Log.v("onGroupExpand","onGroupExpand"+i+"  mac:"+mac);
 
 
             }
@@ -99,7 +119,7 @@ public class RemoteControlFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        WebSocketReqImpl.getInstance().fetchDeviceOnlineStatus();
     }
 
     @Override
@@ -124,4 +144,33 @@ public class RemoteControlFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void update(UIManager o, final Object arg, final int command) {
+        super.update(o, arg, command);
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+                DataHelper.getMyApp().hideDialogNoMessage();
+                switch (command){
+                    case ConstantsPool.COMMAND_SIWTCH_CONTROL_INFO:
+                        if(arg!=null){
+                            BaseSwitchInfo baseSwitchInfo= (BaseSwitchInfo) arg;
+
+                            DataHelper.getMyApp().setDevswitchStatus(baseSwitchInfo);
+                            adapter.notifyDataSetChanged();
+                        }
+                        break;
+                    case ConstantsPool.COMMAND_ONLINE_STATUS:
+                        if(arg!=null){
+                            BaseOnlineData baseOnlineData= (BaseOnlineData) arg;
+                            DataHelper.getMyApp().setOnlineData(baseOnlineData);
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        break;
+                }
+            }
+        });
+    }
 }
