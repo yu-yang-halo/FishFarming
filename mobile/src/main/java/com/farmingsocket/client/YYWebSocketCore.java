@@ -54,10 +54,8 @@ public class YYWebSocketCore {
 		PORT=	DataHelper.getMyApp().getPort();
 		//Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/"+HEAD_REQ+username+"/"+password).build();
 		Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/").build();
-
-		
-		
 		client.newWebSocket(request, listenser);
+
 		
 		
 

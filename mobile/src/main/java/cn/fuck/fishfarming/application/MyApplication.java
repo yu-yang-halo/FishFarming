@@ -213,12 +213,6 @@ public class MyApplication extends Application {
         DataHelper.init(getApplicationContext());
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                YYWebSocketServer.getInstance().startServer();
-            }
-        }).start();
 
     }
     private  int port;

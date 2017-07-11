@@ -1,5 +1,6 @@
 package com.farmingsocket.client;
 
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -46,7 +47,6 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 				}
 			}
 		});
-		
 
 	}
 
@@ -61,6 +61,23 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 		});
 
 	}
+
+
+	@Override
+	public void logout() {
+		writeExecutor.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				if (mWebSocket != null) {
+					mWebSocket.cancel();
+				} else {
+					YYLogger.debug(TAG, "mWebSocket is null ");
+				}
+			}
+		});
+	}
+
 
 	@Override
 	public void onOpen(WebSocket webSocket, Response response) {
@@ -92,9 +109,12 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 		UIManager.getInstance().setChanged();
 		if(t instanceof SocketTimeoutException){
 			UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_READ_TIMEOUT);
-		}else {
+		}else if(t instanceof SocketException){
+			UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_CLOSED);
+		}else{
 			UIManager.getInstance().notifyDataObservers(null,ConstantsPool.ERROR_CODE_CONNECT_FAILURE);
 		}
+
 
 
 

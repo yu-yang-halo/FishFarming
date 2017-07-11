@@ -6,6 +6,12 @@ public interface IWebSocketReq {
 	 */
 	
 	public void login(String username,String password);
+
+	/**
+	 * 登出
+	 */
+	public void logout();
+
 	
 	/**
 	 * 发送心跳
@@ -88,7 +94,7 @@ public interface IWebSocketReq {
 
 
 
-	
+
 	public void reqWebSocketData(String json);
 	
 	

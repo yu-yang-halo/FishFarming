@@ -13,6 +13,7 @@ import com.farmingsocket.client.WebSocketReqImpl;
 import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.UIManager;
+import com.farmingsocket.server.YYWebSocketServer;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import butterknife.BindView;
@@ -74,6 +75,20 @@ public class LoginActivity extends BaseActivity {
 
         UIManager.getInstance().addObserver(this);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        WebSocketReqImpl.getInstance().logout();
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                YYWebSocketServer.getInstance().startServer();
+            }
+        }).start();
     }
 
     @Override
