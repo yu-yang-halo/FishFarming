@@ -71,8 +71,6 @@ public class HisItemAdapter extends BaseAdapter {
         this.ctx   = ctx;
         setDicts(dicts);
 
-
-
     }
     @Override
     public int getCount() {

@@ -25,13 +25,13 @@ public class BaseDevice {
 
 		if(switchs!=null){
 
-			for(Map dict:switchs){
-				Iterator<Map.Entry<String,String>> entryIterator=dict.entrySet().iterator();
-
-				while (entryIterator.hasNext()) {
-					Map.Entry<String, String> entry = entryIterator.next();
-					stringSwitchgMap.put(entry.getKey(), entry.getValue());
+			for(Map<String,String> dict:switchs){
+				String no=dict.get("no");
+				String name=  dict.get("name");
+				if(no!=null&&name!=null){
+					stringSwitchgMap.put(no, name);
 				}
+
 			}
 
 		}

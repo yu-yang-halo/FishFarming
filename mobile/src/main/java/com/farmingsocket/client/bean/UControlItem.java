@@ -1,12 +1,16 @@
 package com.farmingsocket.client.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Administrator on 2017/7/8 0008.
  */
 
 public class UControlItem {
     private String name;
+    @SerializedName("no")
     private String number;
+    @SerializedName("val")
     private String status;
 
 

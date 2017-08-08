@@ -20,9 +20,6 @@ import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.client.bean.BaseOnlineData;
 import com.farmingsocket.client.bean.BaseRealTimeData;
 import com.farmingsocket.client.bean.BaseSwitchInfo;
-import com.farmingsocket.client.bean.UControlItem;
-import com.farmingsocket.helper.JSONParseHelper;
-import com.farmingsocket.server.YYWebSocketServer;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.videogo.openapi.EZOpenSDK;
 
@@ -33,7 +30,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import cn.fuck.fishfarming.cache.ContentBox;
 
-import im.fir.sdk.FIR;
 
 /**
  * Created by Administrator on 2016/3/20.
@@ -227,7 +223,7 @@ public class MyApplication extends Application {
     private void enableFIR(){
 
 
-        FIR.init(this);
+        //FIR.init(this);
 
         Log.v("weather", ContentBox.getValueString(getApplicationContext(),ContentBox.KEY_WEATHER,""));
 

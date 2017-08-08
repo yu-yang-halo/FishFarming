@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 
 import com.farmingsocket.client.WebSocketReqImpl;
+import com.farmingsocket.client.bean.BaseCommand;
 import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.UIManager;
-import com.farmingsocket.server.YYWebSocketServer;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import butterknife.BindView;
@@ -83,12 +83,6 @@ public class LoginActivity extends BaseActivity {
         WebSocketReqImpl.getInstance().logout();
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                YYWebSocketServer.getInstance().startServer();
-            }
-        }).start();
     }
 
     @Override
@@ -162,6 +156,11 @@ public class LoginActivity extends BaseActivity {
 
                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
+                    }
+                }else if(command==ConstantsPool.COMMAND_ERROR){
+                    if (arg!=null){
+                        BaseCommand baseCommand= (BaseCommand) arg;
+                        showToast(baseCommand.getErrmsg());
                     }
                 }
             }

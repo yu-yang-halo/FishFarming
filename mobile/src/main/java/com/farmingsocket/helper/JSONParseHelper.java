@@ -1,7 +1,6 @@
 package com.farmingsocket.helper;
 
-import android.util.Log;
-
+import com.farmingsocket.client.bean.BaseCommand;
 import com.farmingsocket.client.bean.BaseHistData;
 import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.client.bean.BaseOnlineData;
@@ -23,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.utils.ConstantUtils;
 
 /**
@@ -34,6 +32,7 @@ import cn.fuck.fishfarming.utils.ConstantUtils;
 public class JSONParseHelper {
     private static Map<Integer,Class> classMap=new HashMap<>();
     static {
+        classMap.put(ConstantsPool.COMMAND_ERROR,BaseCommand.class);
         classMap.put(ConstantsPool.COMMAND_LOGIN_INFO,BaseInfo.class);
         classMap.put(ConstantsPool.COMMAND_SIWTCH_CONTROL_INFO,BaseSwitchInfo.class);
         classMap.put(ConstantsPool.COMMAND_REAL_TIME_DATA,BaseRealTimeData.class);
@@ -158,7 +157,7 @@ public class JSONParseHelper {
 
 
                 Map.Entry entry=entryIterator.next();
-                if(!entry.getKey().equals("time")){
+                if(!entry.getKey().equals("time")&&!entry.getKey().equals("mac")){
                     List<UCollWantData> wantDataList=wantDataMap.get(entry.getKey());
                     if(wantDataList==null){
                         wantDataList=new ArrayList<>();
@@ -186,31 +185,8 @@ public class JSONParseHelper {
         if(baseSwitchInfo==null){
             return null;
         }
-
-        List<UControlItem> uControlItemList=new ArrayList<>();
-        List<Map<String,String>> statusList=baseSwitchInfo.getSwitchs();
-
-        for (Map dict:statusList){
-
-            Iterator<Map.Entry<String,String>> entryIterator=dict.entrySet().iterator();
-            while (entryIterator.hasNext()){
-                Map.Entry<String,String> entry=entryIterator.next();
-
-                UControlItem uControlItem=new UControlItem();
-                uControlItem.setNumber(entry.getKey());
-                uControlItem.setStatus(entry.getValue());
-
-                uControlItemList.add(uControlItem);
-
-            }
-
-
-        }
-
-
+        List<UControlItem> uControlItemList=baseSwitchInfo.getuControlItems();
         return uControlItemList;
-
-
     }
 
 

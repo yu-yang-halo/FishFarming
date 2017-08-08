@@ -97,6 +97,7 @@ public class ControlItemAdapter extends BaseAdapter {
         switch1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DataHelper.getMyApp().showDialog("数据发送中...");
                 boolean isChecked=!switch1.isSelected();
 
                 WebSocketReqImpl.getInstance().controlDevice(collectorInfo.getMac(),

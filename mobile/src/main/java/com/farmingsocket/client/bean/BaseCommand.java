@@ -7,6 +7,8 @@ package com.farmingsocket.client.bean;
 public class BaseCommand {
     private int errcode;
     private int command;
+    private String errmsg="";
+
 
     public int getCommand() {
         return command;
@@ -20,11 +22,24 @@ public class BaseCommand {
         this.errcode = errcode;
     }
 
+    public int getErrcode() {
+        return errcode;
+    }
+
+    public String getErrmsg() {
+        return errmsg;
+    }
+
+    public void setErrmsg(String errmsg) {
+        this.errmsg = errmsg;
+    }
+
     @Override
     public String toString() {
         return "BaseCommand{" +
                 "errcode=" + errcode +
                 ", command=" + command +
+                ", errmsg='" + errmsg + '\'' +
                 '}';
     }
 }

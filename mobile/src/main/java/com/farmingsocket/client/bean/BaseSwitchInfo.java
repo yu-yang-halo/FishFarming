@@ -1,5 +1,6 @@
 package com.farmingsocket.client.bean;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,16 +12,15 @@ import java.util.Map;
 
 public class BaseSwitchInfo extends BaseCommand {
     private String mac;
-
-    @SerializedName("switch")
-    private List<Map<String,String>> switchs;
+    @SerializedName("switchs")
+    private List<UControlItem> uControlItems;
 
 
     @Override
     public String toString() {
         return "BaseSwitchInfo{" +
                 "mac='" + mac + '\'' +
-                ", switchs=" + switchs +
+                ", switchs=" + uControlItems +
                 '}';
     }
 
@@ -32,11 +32,11 @@ public class BaseSwitchInfo extends BaseCommand {
         this.mac = mac;
     }
 
-    public List<Map<String, String>> getSwitchs() {
-        return switchs;
+    public List<UControlItem> getuControlItems() {
+        return uControlItems;
     }
 
-    public void setSwitchs(List<Map<String, String>> switchs) {
-        this.switchs = switchs;
+    public void setuControlItems(List<UControlItem> uControlItems) {
+        this.uControlItems = uControlItems;
     }
 }
