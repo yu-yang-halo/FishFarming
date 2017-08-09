@@ -81,8 +81,6 @@ public class LoginActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         WebSocketReqImpl.getInstance().logout();
-
-
     }
 
     @Override

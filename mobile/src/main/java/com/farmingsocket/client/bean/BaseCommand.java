@@ -1,12 +1,14 @@
 package com.farmingsocket.client.bean;
 
+import com.farmingsocket.manager.ConstantsPool;
+
 /**
  * Created by Administrator on 2017/7/5 0005.
  */
 
 public class BaseCommand {
     private int errcode;
-    private int command;
+    private int command= ConstantsPool.COMMAND_ERROR;
     private String errmsg="";
 
 

@@ -95,8 +95,10 @@ public class RemoteControlFragment extends BaseFragment {
                 selectPos=i;
                 final String mac=DataHelper.getMyApp().getBaseDevices().get(i).getMac();
                 final String gprsMac=DataHelper.getMyApp().getBaseDevices().get(i).getGprsmac();
-                DataHelper.getMyApp().showDialogNoTips("数据加载中...");
 
+                if(DataHelper.getMyApp().getDevswitchStatus(mac)==null){
+                    DataHelper.getMyApp().showDialogNoTips("数据加载中...");
+                }
                 WebSocketReqImpl.getInstance().fetchDeviceStatus(mac,gprsMac);
 
                 Log.v("onGroupExpand","onGroupExpand"+i+"  mac:"+mac);

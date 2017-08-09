@@ -39,8 +39,6 @@ public class WeatherViewManager {
             holder= (ViewHolder) view.getTag();
         }
 
-
-
         WeatherJSONBean bean=getTodayWeather(ctx,mixDay);
         if(bean!=null&&bean.getResult()!=null&&
                 bean.getResult().getData()!=null
