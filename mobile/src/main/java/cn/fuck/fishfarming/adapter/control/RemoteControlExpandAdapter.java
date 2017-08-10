@@ -68,7 +68,8 @@ public class RemoteControlExpandAdapter extends BaseExpandableListAdapter {
     @Override
     public List<UControlItem> getChild(int i, int i1) {
         BaseSwitchInfo baseSwitchInfo=DataHelper.getMyApp().getDevswitchStatus(collectorInfos.get(i).getMac());
-        List<UControlItem> uControlItemList= JSONParseHelper.convertSwitchInfo(baseSwitchInfo);
+
+        List<UControlItem> uControlItemList= JSONParseHelper.convertSwitchInfo(baseSwitchInfo,collectorInfos.get(i).getStringSwitchMap());
 
         return uControlItemList;
     }
