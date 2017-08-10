@@ -51,9 +51,14 @@ public class HistoryActivity extends StatusBarActivity{
             public void onGroupExpand(int i) {
                 final String mac=DataHelper.getMyApp().getBaseDevices().get(i).getMac();
                 final String gprsMac=DataHelper.getMyApp().getBaseDevices().get(i).getGprsmac();
-
+                if(DataHelper.getMyApp().getHistDatas(mac)==null){
+                    DataHelper.getMyApp().showDialogNoTips("数据加载中...");
+                }
                 WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,0);
-                DataHelper.setDay(mac,0);
+                if(DataHelper.getDay(mac)<0){
+                    DataHelper.setDay(mac,0);
+                }
+
             }
         });
 
@@ -82,6 +87,7 @@ public class HistoryActivity extends StatusBarActivity{
             public void run() {
                if(command== ConstantsPool.COMMAND_HISTORY_DATA){
                    if(arg!=null){
+                       DataHelper.getMyApp().hideDialogNoMessage();
                        BaseHistData baseHistData= (BaseHistData) arg;
                        DataHelper.getMyApp().setHistDatas(baseHistData);
 

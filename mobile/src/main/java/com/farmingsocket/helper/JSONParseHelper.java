@@ -63,7 +63,7 @@ public class JSONParseHelper {
 
     public static int objectToInt(Object object){
         if(object==null){
-            return 0;
+            return -1;
         }
         if(object instanceof Number){
             int value= ((Number) object).intValue();

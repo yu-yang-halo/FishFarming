@@ -104,8 +104,13 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
         }
         TextView titleView=ButterKnife.findById(view,R.id.titleView);
 
+        if(getGroup(i)!=null){
+            titleView.setText(getGroup(i).getName());
+        }else{
+            titleView.setText("");
+        }
 
-        titleView.setText(getGroup(i).getName());
+
 
 
         return view;
@@ -116,7 +121,6 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
         ViewHolder holder;
         if(view==null){
             view=LayoutInflater.from(ctx).inflate(R.layout.adapter_expand_history_child,null);
-
             holder=new ViewHolder();
             ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
             String[] mTitles=new String[]{"前天","昨天","今天"};
@@ -127,26 +131,26 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
                 mTabEntities.add(new TabEntity(mTitles[k], mIconSelectIds[k], mIconUnselectIds[k]));
             }
             holder.mTabLayout_1.setTabData(mTabEntities);
-
             holder.hisListView.setAdapter(new HisItemAdapter(ctx,null));
-
             view.setTag(holder);
+        }
+        if(collectorInfos.get(i)==null){
+            return view;
         }
         final String mac=collectorInfos.get(i).getMac();
         final String gprsMac=collectorInfos.get(i).getGprsmac();
         holder= (ViewHolder) view.getTag();
         final ViewHolder finalHolder = holder;
-
-        holder.mTabLayout_1.setCurrentTab(2);
         WeatherViewManager.initViewData(ctx, finalHolder.weatherView,0);
-
+        holder.mTabLayout_1.setCurrentTab(2-DataHelper.getDay(mac));
         holder.mTabLayout_1.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
                 Log.v("onTabSelect","onTabSelect "+position);
+                DataHelper.getMyApp().showDialogNoTips("数据加载中...");
+                DataHelper.setDay(mac,2-position);
                 WeatherViewManager.initViewData(ctx, finalHolder.weatherView,2-position);
                 WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,2-position);
-                DataHelper.setDay(mac,2-position);
             }
 
             @Override
@@ -173,8 +177,6 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
 
         }
 
-
-        holder.mTabLayout_1.setCurrentTab(2-DataHelper.getDay(mac));
         WeatherViewManager.initViewData(ctx, finalHolder.weatherView,DataHelper.getDay(mac));
         return view;
     }

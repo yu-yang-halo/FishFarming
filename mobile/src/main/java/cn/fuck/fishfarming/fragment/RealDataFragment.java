@@ -96,9 +96,9 @@ public class RealDataFragment extends BaseFragment{
                 final String mac=DataHelper.getMyApp().getBaseDevices().get(i).getMac();
                 Log.v("onGroupExpand","onGroupExpand"+i+"  mac:"+mac);
 
-
-                DataHelper.getMyApp().showDialogNoTips("数据加载中...");
-
+                if(DataHelper.getMyApp().getRealTimeData(mac)==null){
+                    DataHelper.getMyApp().showDialogNoTips("数据加载中...");
+                }
                 WebSocketReqImpl.getInstance().fetchRealTimeData(mac);
 
 

@@ -1,18 +1,18 @@
 package com.farmingsocket.client;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
-import com.google.gson.Gson;
-
-import cn.fuck.fishfarming.application.DataHelper;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class YYWebSocketCore {
@@ -24,13 +24,7 @@ public class YYWebSocketCore {
 	private static final String HOSTNAME = "118.89.182.250";
 	private static final int PORT = 8080;
     private static final String HEAD_REQ="tldservice/appwebsocket/";
-
-
-
-
 	private WebSocketListener listenser;
-	
-	
 	public void setListenser(WebSocketListener listenser) {
 		this.listenser = listenser;
 	}
@@ -41,26 +35,59 @@ public class YYWebSocketCore {
 		return instance;
 	}
 
+	private static SSLSocketFactory createSSLSocketFactory() {
+		SSLSocketFactory sSLSocketFactory = null;
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, new TrustManager[]{new TrustAllManager()},
+					new SecureRandom());
+			sSLSocketFactory = sc.getSocketFactory();
+		} catch (Exception e) {
+		}
+		return sSLSocketFactory;
+	}
+
+	private static class TrustAllManager implements X509TrustManager {
+		@Override
+		public void checkClientTrusted(X509Certificate[] chain, String authType)
+				throws CertificateException {
+		}
+		@Override
+		public void checkServerTrusted(X509Certificate[] chain, String authType)
+				throws CertificateException {
+		}
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return new X509Certificate[0];
+		}
+	}
+
+	private static class TrustAllHostnameVerifier implements HostnameVerifier {
+		@Override
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
+		}
+	}
+
 	public void connect(String username,String password) {
-		
+
 		OkHttpClient client = new OkHttpClient
 				.Builder()
 //				.connectTimeout(1, TimeUnit.SECONDS)
 //				.readTimeout(1, TimeUnit.SECONDS)
 //				.writeTimeout(1, TimeUnit.SECONDS)
 				.pingInterval(5, TimeUnit.SECONDS)
-				
+				.followSslRedirects(true)
+				.hostnameVerifier(new TrustAllHostnameVerifier())
+				.sslSocketFactory(createSSLSocketFactory())
 				.build();
-		
+
+
 		//PORT=	DataHelper.getMyApp().getPort();
 		//Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/").build();
 		Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/"+HEAD_REQ+username+"/"+password).build();
-
+		//Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
 		client.newWebSocket(request, listenser);
 
-		
-		
-
 	}
-
 }
