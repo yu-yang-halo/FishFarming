@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#80ffffff">
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:text="预警设置"
+            android:background="@drawable/button_default_selector"
+            android:textColor="#fff"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
 
     <ListView
+        android:layout_marginTop="10dp"
         android:id="@+id/alertListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,4 +33,4 @@
         android:gravity="center"
         android:textColor="@color/colorGray"
         android:id="@+id/textView13" />
-</RelativeLayout>
+</LinearLayout>
