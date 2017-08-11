@@ -5,7 +5,7 @@ package com.farmingsocket.client.bean;
  */
 
 public class UCollWantData {
-    private int    reviceTime;
+    private float  reviceTime;
     private float  value;
     private int    type;
     private int    order;
@@ -27,11 +27,11 @@ public class UCollWantData {
 
     }
 
-    public int getReviceTime() {
+    public float getReviceTime() {
         return reviceTime;
     }
 
-    public void setReviceTime(int reviceTime) {
+    public void setReviceTime(float reviceTime) {
         this.reviceTime = reviceTime;
     }
 
@@ -51,7 +51,7 @@ public class UCollWantData {
                 '}';
     }
 
-    public UCollWantData(int reviceTime, float value) {
+    public UCollWantData(float reviceTime, float value) {
         this.reviceTime = reviceTime;
         this.value = value;
     }

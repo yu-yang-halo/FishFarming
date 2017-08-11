@@ -85,8 +85,8 @@ public class YYWebSocketCore {
 
 		//PORT=	DataHelper.getMyApp().getPort();
 		//Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/").build();
-		Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/"+HEAD_REQ+username+"/"+password).build();
-		//Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
+		//Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/"+HEAD_REQ+username+"/"+password).build();
+		Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
 		client.newWebSocket(request, listenser);
 
 	}

@@ -156,6 +156,7 @@ public class RealDataFragment extends BaseFragment{
                         DataHelper.getMyApp().hideDialogNoMessage();
                         if(arg!=null){
                             BaseRealTimeData  baseRealTimeData= (BaseRealTimeData) arg;
+
                             DataHelper.getMyApp().setRealTimeData(baseRealTimeData);
 
                             adapter.notifyDataSetChanged();

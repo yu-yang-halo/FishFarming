@@ -121,7 +121,7 @@ public class JSONParseHelper {
 
         return dict;
     }
-    private static int getDateHour(String dateStr) {
+    private static float getDateHour(String dateStr) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date;
@@ -135,8 +135,12 @@ public class JSONParseHelper {
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(date);
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+        int min=calendar.get(Calendar.MINUTE);
+        float floatHour=hour+min/60.0f;
 
-        return calendar.get(Calendar.HOUR_OF_DAY);
+
+        return floatHour;
 
     }
 
@@ -180,12 +184,21 @@ public class JSONParseHelper {
         return wantDataMap;
     }
 
-    public static List<UControlItem> convertSwitchInfo(BaseSwitchInfo baseSwitchInfo){
+    public static List<UControlItem> convertSwitchInfo(BaseSwitchInfo baseSwitchInfo,Map<String,String> stringSwitchgMap){
 
         if(baseSwitchInfo==null){
             return null;
         }
         List<UControlItem> uControlItemList=baseSwitchInfo.getuControlItems();
+
+        Iterator<UControlItem> itemIterator= uControlItemList.iterator();
+        while (itemIterator.hasNext()){
+            UControlItem uControlItem=itemIterator.next();
+            if(stringSwitchgMap.get(uControlItem.getNumber())==null){
+                itemIterator.remove();
+            }
+        }
+
         return uControlItemList;
     }
 
@@ -206,6 +219,9 @@ public class JSONParseHelper {
             Map.Entry<String,String> entry=entryIterator.next();
             if(!entry.getKey().equals("time")){
                 float value=objectToFloat(entry.getValue());
+                if(value<=0){
+                    continue;
+                }
                 String itemName=ConstantUtils.CONTENTS.get(entry.getKey());
                 String itemCell=ConstantUtils.UNITS.get(entry.getKey());
                 float max=ConstantUtils.MAXVALUES.get(entry.getKey());
