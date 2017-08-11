@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#80ffffff">
+        android:background="#60ffffff">
         <Button
             android:layout_width="180dp"
             android:layout_height="40dp"
@@ -22,6 +22,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/alertListView"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
     </ListView>
