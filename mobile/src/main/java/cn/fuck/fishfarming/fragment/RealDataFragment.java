@@ -26,6 +26,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.activity.TabActivity;
 import cn.fuck.fishfarming.adapter.realdata.RealDataExpandAdapter;
 import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.application.MyApplication;
@@ -37,6 +38,12 @@ import cn.fuck.fishfarming.weather.WeatherViewManager;
  */
 public class RealDataFragment extends BaseFragment{
 
+    public static RealDataFragment getRealDataFragment(int index){
+        RealDataFragment fragment=new RealDataFragment();
+        fragment.index=index;
+        return fragment;
+    }
+
     private static final  String TAG="RealDataFragment";
 
     @BindView(R.id.expandRealDataListView)
@@ -46,7 +53,7 @@ public class RealDataFragment extends BaseFragment{
     @BindView(R.id.swipeRefreshLayout)
     PullRefreshLayout swipeRefreshLayout;
 
-
+    TabActivity tabActivity;
     Handler  mainHandler = new Handler(Looper.getMainLooper());
     RealDataExpandAdapter adapter;
     int selectPos=-1;
@@ -54,6 +61,7 @@ public class RealDataFragment extends BaseFragment{
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.e(TAG,"onAttach..... ");
+        tabActivity= (TabActivity) context;
         UIManager.getInstance().addObserver(this);
     }
 
@@ -117,7 +125,7 @@ public class RealDataFragment extends BaseFragment{
     @Override
     public void onStart() {
         super.onStart();
-        WebSocketReqImpl.getInstance().fetchDeviceOnlineStatus();
+
     }
 
     @Override
@@ -139,6 +147,10 @@ public class RealDataFragment extends BaseFragment{
         Log.e(TAG,"onHiddenChanged "+hidden);
         if(hidden){
             collapseGroupAll();
+        }else{
+            if(tabActivity.currentPos==index){
+                WebSocketReqImpl.getInstance().fetchDeviceOnlineStatus();
+            }
 
         }
     }

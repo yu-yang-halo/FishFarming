@@ -41,7 +41,7 @@ public class TabActivity extends StatusBarActivity {
     private View mDecorView;
     private CommonTabLayout mTabLayout_1;
     public RelativeLayout mainRelativeLayout;
-    private int currentPos;
+    public int currentPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +61,8 @@ public class TabActivity extends StatusBarActivity {
 
 
 
-        mFragments.add(new RealDataFragment());
-        mFragments.add(new RemoteControlFragment());
+        mFragments.add(RealDataFragment.getRealDataFragment(0));
+        mFragments.add(RemoteControlFragment.getRemoteControlFragment(1));
         mFragments.add(new AlertFragment());
         mFragments.add(new MoreFragment());
 

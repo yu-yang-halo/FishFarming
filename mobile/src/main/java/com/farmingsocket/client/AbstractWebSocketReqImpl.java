@@ -114,6 +114,74 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 
 		reqWebSocketData(reqJSON);
 	}
+
+
+	/**
+	 * 设置阈值
+	 * 	command 110
+	 */
+	public void configThreshold(String mac,String gprsmac,int min,int max){
+		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
+				+ ",\"command\":110 ,\"min\":" + min+",\"max\":"+max
+				+ "}";
+		reqWebSocketData(reqJSON);
+	}
+
+	/**
+	 * 获取阈值
+	 * command 111
+	 */
+	public void fetchThreshold(String mac,String gprsmac){
+		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
+				+ ",\"command\":111 "
+				+ "}";
+		reqWebSocketData(reqJSON);
+	}
+
+	/**
+	 * 设置模式： 自动，手动，时间
+	 * 1：自动、2：手动、3：时段控制模式
+	 * command 113
+	 */
+	public void configMode(String mac,String gprsmac,int mode){
+		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
+				+ ",\"command\":113 "+",\"model\":"+mode
+				+ "}";
+		reqWebSocketData(reqJSON);
+	}
+
+	/**
+	 * 获取模式
+	 * command 114
+	 */
+	public void fetchMode(String mac,String gprsmac){
+		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
+				+ ",\"command\":114 "
+				+ "}";
+		reqWebSocketData(reqJSON);
+	}
+
+	/**
+	 * 设置增氧机自动开启间隔
+	 * command 119
+	 */
+	public void configPeriod(String mac,int min){
+		String reqJSON = "{\"mac\": " + mac + " , \"errcode\": " + 0
+				+ ",\"command\":119 "+",\"minute\":"+min
+				+ "}";
+		reqWebSocketData(reqJSON);
+	}
+
+	/**
+	 * 获取增氧机自动开启间隔
+	 * command 120
+	 */
+	public void fetchPeriod(String mac){
+		String reqJSON = "{\"mac\": " + mac + " , \"errcode\": " + 0
+				+ ",\"command\":120 "
+				+ "}";
+		reqWebSocketData(reqJSON);
+	}
 	
 	
 

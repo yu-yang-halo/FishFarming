@@ -26,6 +26,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.activity.TabActivity;
 import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
 import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.application.MyApplication;
@@ -37,7 +38,11 @@ import cn.fuck.fishfarming.weather.WeatherViewManager;
  */
 
 public class RemoteControlFragment extends BaseFragment {
-
+    public static RemoteControlFragment getRemoteControlFragment(int index){
+        RemoteControlFragment fragment=new RemoteControlFragment();
+        fragment.index=index;
+        return fragment;
+    }
     private static final  String TAG="RemoteControlFragment";
 
     @BindView(R.id.weatherView)
@@ -48,13 +53,14 @@ public class RemoteControlFragment extends BaseFragment {
 
     @BindView(R.id.swipeRefreshLayout)
     PullRefreshLayout swipeRefreshLayout;
-
+    TabActivity tabActivity;
     RemoteControlExpandAdapter adapter;
     int selectPos=-1;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.e(TAG,"onAttach..............");
+        tabActivity= (TabActivity) context;
         UIManager.getInstance().addObserver(this);
     }
 
@@ -121,7 +127,7 @@ public class RemoteControlFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        WebSocketReqImpl.getInstance().fetchDeviceOnlineStatus();
+
     }
 
     @Override
@@ -141,6 +147,10 @@ public class RemoteControlFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if(hidden){
             collapseGroupAll();
+        }else{
+            if(tabActivity.currentPos==index){
+                WebSocketReqImpl.getInstance().fetchDeviceOnlineStatus();
+            }
         }
         Log.e(TAG,"onHiddenChanged.............."+hidden);
 

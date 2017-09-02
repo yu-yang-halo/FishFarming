@@ -20,6 +20,7 @@ import cn.fuck.fishfarming.utils.ConstantUtils;
  */
 
 public class BaseFragment extends Fragment implements ReceiveUI {
+    protected   int index;
     protected Handler mainHandler=new Handler(Looper.getMainLooper());
     protected KProgressHUD hud;
     @Override

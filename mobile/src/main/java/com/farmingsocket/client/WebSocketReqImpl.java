@@ -4,6 +4,10 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import com.farmingsocket.client.bean.BaseCommand;
 import com.farmingsocket.helper.JSONParseHelper;
 import com.farmingsocket.helper.YYLogger;
@@ -18,6 +22,9 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
     private YYWebSocketCore yySocketCore = YYWebSocketCore.getInstance();
     private WebSocket mWebSocket;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ScheduledExecutorService scheduledExecutor=Executors.newSingleThreadScheduledExecutor();
+    private  ScheduledFuture scheduledFuture;
+    private static final int HEART_TIME_PERIOD=6;//6s
 
 
     private WebSocketReqImpl() {
@@ -81,6 +88,14 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
         YYLogger.debug(TAG, "onOpen ....");
         mWebSocket = webSocket;
 
+        scheduledFuture=scheduledExecutor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                YYLogger.debug(TAG, "send heart ....");
+                sendHeart();
+            }
+        }, 1,HEART_TIME_PERIOD, TimeUnit.SECONDS);
+
     }
 
     @Override
@@ -102,9 +117,25 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 
     }
 
+    private void release(){
+        /**
+         * 取消定时心跳发送
+         */
+        if(scheduledFuture!=null){
+            scheduledFuture.cancel(false);
+        }
+        /**
+         * 断开所有实时数据推送
+         */
+        stopAllRealTimeData();
+    }
+
     @Override
     public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
         super.onFailure(webSocket, t, response);
+
+        release();
+
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -126,6 +157,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
     @Override
     public void onClosing(WebSocket webSocket, int code, final String reason) {
         super.onClosing(webSocket, code, reason);
+        release();
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -140,6 +172,7 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
     @Override
     public void onClosed(WebSocket webSocket, int code, final String reason) {
         super.onClosed(webSocket, code, reason);
+        release();
         executorService.execute(new Runnable() {
             @Override
             public void run() {
