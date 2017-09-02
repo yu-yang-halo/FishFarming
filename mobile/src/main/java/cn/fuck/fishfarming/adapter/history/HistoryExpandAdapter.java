@@ -149,7 +149,7 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
                 Log.v("onTabSelect","onTabSelect "+position);
                 DataHelper.getMyApp().showDialogNoTips("数据加载中...");
                 DataHelper.setDay(mac,2-position);
-                WeatherViewManager.initViewData(ctx, finalHolder.weatherView,2-position);
+               // WeatherViewManager.initViewData(ctx, finalHolder.weatherView,2-position);
                 WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,2-position);
             }
 
@@ -177,7 +177,7 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
 
         }
 
-        WeatherViewManager.initViewData(ctx, finalHolder.weatherView,DataHelper.getDay(mac));
+        // WeatherViewManager.initViewData(ctx, finalHolder.weatherView,DataHelper.getDay(mac));
         return view;
     }
 

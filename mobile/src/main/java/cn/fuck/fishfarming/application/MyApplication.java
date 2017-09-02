@@ -30,6 +30,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import cn.fuck.fishfarming.cache.ContentBox;
 
+import static android.os.Process.*;
+
 
 /**
  * Created by Administrator on 2016/3/20.
@@ -207,6 +209,17 @@ public class MyApplication extends Application {
         });
 
         DataHelper.init(getApplicationContext());
+
+
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Log.e("Crashs","Thread "+t+" error:"+e.getMessage());
+                killProcess(myPid());
+                System.exit(0);
+            }
+        });
 
 
 

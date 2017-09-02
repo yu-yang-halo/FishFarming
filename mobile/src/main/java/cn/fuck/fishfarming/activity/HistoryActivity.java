@@ -89,6 +89,11 @@ public class HistoryActivity extends StatusBarActivity{
                    if(arg!=null){
                        DataHelper.getMyApp().hideDialogNoMessage();
                        BaseHistData baseHistData= (BaseHistData) arg;
+                       if(baseHistData==null
+                               ||baseHistData.getHistDatas()==null
+                               ||baseHistData.getHistDatas().size()<=0){
+                           showToast("很抱歉,暂无历史数据");
+                       }
                        DataHelper.getMyApp().setHistDatas(baseHistData);
 
                        adapter.notifyDataSetChanged();
