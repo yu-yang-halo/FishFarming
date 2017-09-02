@@ -14,9 +14,7 @@
             android:id="@+id/titleView"
             android:layout_marginLeft="35dp"
             android:textSize="@dimen/font_size_medium"
-            android:gravity="left|center"
-            android:layout_toLeftOf="@+id/textView16"
-            android:layout_toStartOf="@+id/textView16" />
+            android:gravity="left|center" />
 
         <TextView
             android:text=""
