@@ -14,6 +14,7 @@
             android:layout_height="50dp"
             android:background="#60ffffff">
                 <Button
+                    android:id="@+id/btnThresholdConfig"
                     android:layout_width="180dp"
                     android:layout_height="40dp"
                     android:text="阈值设置"

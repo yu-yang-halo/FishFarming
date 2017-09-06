@@ -74,6 +74,12 @@ public class HistoryActivity extends StatusBarActivity{
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        UIManager.getInstance().setCurrentObject(this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 

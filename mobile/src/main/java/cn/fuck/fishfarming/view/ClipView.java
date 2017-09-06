@@ -14,7 +14,7 @@ import android.widget.ImageView;
  * Created by Administrator on 2016/12/8.
  */
 
-public class ClipView extends ImageView {
+public class ClipView extends android.support.v7.widget.AppCompatImageView {
 
     private float percentage;
 
@@ -36,11 +36,6 @@ public class ClipView extends ImageView {
 
     public ClipView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ClipView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override

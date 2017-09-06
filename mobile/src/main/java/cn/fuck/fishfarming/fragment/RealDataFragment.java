@@ -121,11 +121,10 @@ public class RealDataFragment extends BaseFragment{
 
         return view;
     }
-
     @Override
     public void onStart() {
         super.onStart();
-
+        UIManager.getInstance().setCurrentObject(this);
     }
 
     @Override

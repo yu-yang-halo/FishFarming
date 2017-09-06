@@ -38,6 +38,9 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 
     @Override
     public void reqWebSocketData(final String json) {
+        if (mWebSocket == null) {
+            YYLogger.debug(TAG, "mWebSocket is null ");
+        }
         YYLogger.debug(TAG, "req ::: " + json);
         executorService.execute(new Runnable() {
 
@@ -45,8 +48,6 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
             public void run() {
                 if (mWebSocket != null) {
                     mWebSocket.send(json);
-                } else {
-                    YYLogger.debug(TAG, "mWebSocket is null ");
                 }
             }
         });

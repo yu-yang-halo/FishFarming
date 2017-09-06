@@ -3,9 +3,12 @@ package com.farmingsocket.helper;
 import com.farmingsocket.client.bean.BaseCommand;
 import com.farmingsocket.client.bean.BaseHistData;
 import com.farmingsocket.client.bean.BaseInfo;
+import com.farmingsocket.client.bean.BaseMode;
 import com.farmingsocket.client.bean.BaseOnlineData;
 import com.farmingsocket.client.bean.BaseRealTimeData;
 import com.farmingsocket.client.bean.BaseSwitchInfo;
+import com.farmingsocket.client.bean.BaseThreshold;
+import com.farmingsocket.client.bean.BaseTimePeriod;
 import com.farmingsocket.client.bean.UCollWantData;
 import com.farmingsocket.client.bean.UControlItem;
 import com.farmingsocket.client.bean.URealtem;
@@ -39,6 +42,10 @@ public class JSONParseHelper {
         classMap.put(ConstantsPool.COMMAND_HISTORY_DATA,BaseHistData.class);
         classMap.put(ConstantsPool.COMMAND_RISKINDEX_NS,BaseInfo.class);
         classMap.put(ConstantsPool.COMMAND_ONLINE_STATUS,BaseOnlineData.class);
+        classMap.put(ConstantsPool.COMMAND_THRESHOLD,BaseThreshold.class);
+        classMap.put(ConstantsPool.COMMAND_MODE,BaseMode.class);
+        classMap.put(ConstantsPool.COMMAND_PERIOD,BaseTimePeriod.class);
+
     }
 
     public static float objectToFloat(Object object){

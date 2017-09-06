@@ -15,8 +15,6 @@ public class ConstantsPool {
 	public static final int ERROR_CODE_CONNECT_CLOSING=0x1005;
 	public static final int ERROR_CODE_CONNECT_CLOSED=0x1006;
 
-
-
 	public static final int COMMAND_ERROR=-1;
 	public static final int COMMAND_HEART=0;
 	public static final int COMMAND_LOGIN_INFO=100;
@@ -25,15 +23,16 @@ public class ConstantsPool {
 	public static final int COMMAND_HISTORY_DATA=104;
 	public static final int COMMAND_RISKINDEX_NS=106;
 	public static final int COMMAND_ONLINE_STATUS=109;
+	public static final int COMMAND_THRESHOLD=111;
+	public static final int COMMAND_MODE=114;
+	public static final int COMMAND_PERIOD=120;
 
-
-	
 	
 	public static enum  MethodType{
 		GET,POST
 	}
-
-	public static final  byte AUTO_MODE= (byte) 0xAC;
-	public static final  byte MANUAL_MODE= (byte) 0xDC;
-
+    //1：自动、2：手动、3：时段控制模式
+	public static final  int MODE_AUTO= 1;
+	public static final  int MODE_MANUAL=2;
+	public static final  int MODE_TIME_CONTROL=3;
 }

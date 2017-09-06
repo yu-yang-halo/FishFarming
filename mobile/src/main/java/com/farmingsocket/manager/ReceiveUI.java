@@ -5,5 +5,5 @@ package com.farmingsocket.manager;
  */
 public interface ReceiveUI extends IDataObserver {
 
-	
+
 }

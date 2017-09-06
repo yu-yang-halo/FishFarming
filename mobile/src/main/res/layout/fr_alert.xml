@@ -6,8 +6,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:visibility="gone"
         android:background="#60ffffff">
         <Button
+            android:id="@+id/btnAlertConfig"
             android:layout_width="180dp"
             android:layout_height="40dp"
             android:text="预警设置"

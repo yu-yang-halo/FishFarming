@@ -28,25 +28,31 @@
             android:layout_marginLeft="13dp"
             android:id="@+id/textView14" />
 
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <cn.fuck.fishfarming.view.KeyboardDigitalEdit
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/min_edit"
             android:layout_marginLeft="-120dp"
+            android:textAlignment="center"
+            android:text="0"
+            android:background="@drawable/selector_edit_bk"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <cn.fuck.fishfarming.view.KeyboardDigitalEdit
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:inputType="numberDecimal"
             android:ems="10"
+            android:text="0"
             android:id="@+id/max_edit"
             android:layout_marginLeft="41dp"
             android:layout_marginStart="41dp"
             android:layout_centerVertical="true"
+            android:textAlignment="center"
+            android:background="@drawable/selector_edit_bk"
             android:layout_toRightOf="@+id/min_edit"
             android:layout_toEndOf="@+id/min_edit" />
 
@@ -91,6 +97,7 @@
             android:id="@+id/textView18"
             android:layout_alignBaseline="@+id/timeEdit"
             android:layout_alignBottom="@+id/timeEdit"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/timeEdit"
             android:layout_toStartOf="@+id/timeEdit" />
 
@@ -103,18 +110,21 @@
             android:layout_alignBottom="@+id/timeEdit"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="67dp"
-            android:layout_marginEnd="67dp" />
+            android:layout_marginRight="37dp"
+            android:layout_marginEnd="37dp" />
 
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <cn.fuck.fishfarming.view.KeyboardDigitalEdit
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:inputType="numberDecimal"
             android:ems="10"
+            android:text="0"
             android:id="@+id/timeEdit"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/textView19"
             android:layout_toStartOf="@+id/textView19"
+            android:textAlignment="center"
+            android:background="@drawable/selector_edit_bk"
             android:layout_marginRight="16dp"
             android:layout_marginEnd="16dp" />
     </RelativeLayout>

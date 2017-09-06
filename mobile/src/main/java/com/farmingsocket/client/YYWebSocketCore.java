@@ -18,11 +18,8 @@ import okhttp3.WebSocketListener;
 public class YYWebSocketCore {
 	private static final YYWebSocketCore instance=new YYWebSocketCore();
 	private static final String TAG = "YYWebSocketClient";
-//	private static final String HOSTNAME = "127.0.0.1";
-//	private static  int PORT = 54929;
-	//private static final String HEAD_REQ="";
-	private static final String HOSTNAME = "118.89.182.250";
-	private static final int PORT = 8080;
+	private static final String HOSTNAME = "socket.tldwlw.com";
+	private static final int PORT = 80;
     private static final String HEAD_REQ="tldservice/appwebsocket/";
 	private WebSocketListener listenser;
 	public void setListenser(WebSocketListener listenser) {
@@ -82,11 +79,8 @@ public class YYWebSocketCore {
 				.sslSocketFactory(createSSLSocketFactory())
 				.build();
 
-
-		//PORT=	DataHelper.getMyApp().getPort();
-		//Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/").build();
-		//Request request = new Request.Builder().url("ws://" + HOSTNAME + ":" + PORT + "/"+HEAD_REQ+username+"/"+password).build();
-		Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
+		Request request = new Request.Builder().url("wss://" + HOSTNAME  + "/"+HEAD_REQ+username+"/"+password).build();
+		//Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
 		client.newWebSocket(request, listenser);
 
 	}

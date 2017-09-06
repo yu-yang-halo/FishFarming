@@ -1,60 +1,51 @@
-package cn.fuck.fishfarming.fragment;
+package cn.fuck.fishfarming.activity.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
 import com.farmingsocket.client.bean.BaseDevice;
+import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
+
 import java.util.List;
+
 import butterknife.ButterKnife;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.activity.StatusBarActivity;
 import cn.fuck.fishfarming.adapter.setting.SettingExpandAdapter;
 import cn.fuck.fishfarming.application.MyApplication;
 
 /**
- * Created by Administrator on 2017/2/23 0023.
+ * Created by Administrator on 2017/9/6.
+ * 预警设置
  */
 
-public class AlertSettingFragment extends Fragment {
+public class AlertConfigUi extends StatusBarActivity{
     ExpandableListView expandSettingListView;
     MyApplication myApp;
     SettingExpandAdapter adapter;
     List<BaseDevice> collectorInfos;
-    Handler nettyHandler = new Handler(Looper.getMainLooper());
-
+    Handler mainHandler = new Handler(Looper.getMainLooper());
     int selectParentPos=-1;
     KProgressHUD hud;
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View convertView=inflater.inflate(R.layout.fr_alertsetting,null);
-        expandSettingListView=ButterKnife.findById(convertView,R.id.expandSettingListView);
-
-        myApp= (MyApplication)getActivity().getApplicationContext();
+        setContentView(R.layout.fr_alertsetting);
+        UIManager.getInstance().addObserver(this);
+        initCustomActionBar();
+        tvTitle.setText("预警设置");
+        expandSettingListView= ButterKnife.findById(this,R.id.expandSettingListView);
+        myApp= (MyApplication)getApplicationContext();
         collectorInfos=myApp.getBaseInfo().getDevice();
-        adapter=new SettingExpandAdapter(collectorInfos,getActivity());
+        adapter=new SettingExpandAdapter(collectorInfos,this);
         expandSettingListView.setAdapter(adapter);
 
         hud=KProgressHUD
-                .create(getActivity()).setLabel("数据加载中...");
+                .create(this).setLabel("数据加载中...");
 
         expandSettingListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
@@ -67,16 +58,19 @@ public class AlertSettingFragment extends Fragment {
 
                 hud.show();
 
-
             }
         });
-
-
-        return convertView;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        UIManager.getInstance().setCurrentObject(this);
+    }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UIManager.getInstance().deleteObserver(this);
+    }
 }

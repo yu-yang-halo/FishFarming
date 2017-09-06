@@ -1,6 +1,7 @@
 package cn.fuck.fishfarming.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,8 +26,11 @@ import java.util.List;
 import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.activity.TabActivity;
+import cn.fuck.fishfarming.activity.ui.AlertConfigUi;
+import cn.fuck.fishfarming.activity.ui.ThresholdConfigUi;
 import cn.fuck.fishfarming.adapter.control.RemoteControlExpandAdapter;
 import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.application.MyApplication;
@@ -53,6 +57,10 @@ public class RemoteControlFragment extends BaseFragment {
 
     @BindView(R.id.swipeRefreshLayout)
     PullRefreshLayout swipeRefreshLayout;
+    @OnClick(R.id.btnThresholdConfig) void toThresholdConfigUi(){
+        Intent intent=new Intent(getActivity(), ThresholdConfigUi.class);
+        getActivity().startActivity(intent);
+    }
     TabActivity tabActivity;
     RemoteControlExpandAdapter adapter;
     int selectPos=-1;
@@ -127,7 +135,7 @@ public class RemoteControlFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        UIManager.getInstance().setCurrentObject(this);
     }
 
     @Override

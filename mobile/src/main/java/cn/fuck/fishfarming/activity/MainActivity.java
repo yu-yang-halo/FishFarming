@@ -34,18 +34,7 @@ public class MainActivity extends StatusBarActivity {
         ButterKnife.bind(this);
         initCustomActionBar();
         tvTitle.setText("主页");
-        rightBtn.setVisibility(View.VISIBLE);
-        rightBtn.setText("个人中心");
-        rightBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(checkDataLoadCompleted()){
-                    Intent intent=new Intent(MainActivity.this,SettingActivity.class);
-                    startActivity(intent);
-                }
-
-            }
-        });
+        rightBtn.setVisibility(View.GONE);
 
         myApp= (MyApplication) getApplicationContext();
 

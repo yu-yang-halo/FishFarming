@@ -14,4 +14,5 @@
     <color name="headerColor1">#2F89FF</color>
     <color name="colorTheme">#33a5fe</color>
     <color name="colorBackground">#80eeeeee</color>
+    <color name="fontColor">#000000</color>
 </resources>

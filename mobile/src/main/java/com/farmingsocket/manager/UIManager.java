@@ -14,6 +14,14 @@ public class UIManager {
 		}
 		return instance;
 	}
+	private IDataObserver currentObject;
+	public void setCurrentObject(IDataObserver currentObject){
+		this.currentObject=currentObject;
+	}
+
+	public boolean isCurrentPage(IDataObserver destObject){
+		return currentObject==destObject;
+	}
 
 
 	private UIManager() {

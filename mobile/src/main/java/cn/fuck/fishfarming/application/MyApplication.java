@@ -20,6 +20,7 @@ import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.client.bean.BaseOnlineData;
 import com.farmingsocket.client.bean.BaseRealTimeData;
 import com.farmingsocket.client.bean.BaseSwitchInfo;
+import com.farmingsocket.client.bean.UThresholdItem;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.videogo.openapi.EZOpenSDK;
 
@@ -30,7 +31,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import cn.fuck.fishfarming.cache.ContentBox;
 
-import static android.os.Process.*;
 
 
 /**
@@ -60,6 +60,7 @@ public class MyApplication extends Application {
     private Map<String,Integer> onlineCache=new HashMap<>();
     private Map<String,BaseSwitchInfo> switchInfoCache=new HashMap<>();
     private Map<String,BaseHistData> histDatasCache=new HashMap<>();
+    private Map<String,UThresholdItem> thresholdCache=new HashMap<>();
 
     public void setHistDatas(BaseHistData baseHistData){
         if(baseHistData!=null){
@@ -93,6 +94,18 @@ public class MyApplication extends Application {
             return switchInfoCache.get(mac);
         }
         return null;
+    }
+
+    public UThresholdItem getUThresholdItem(String mac){
+        if(mac!=null){
+            return thresholdCache.get(mac);
+        }
+        return null;
+    }
+    public void setUThresholdItem(String mac,UThresholdItem item){
+        if(mac!=null&&item!=null) {
+            thresholdCache.put(mac, item);
+        }
     }
 
 
@@ -167,8 +180,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        enableFIR();
         locationInit();
         initSDK();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -216,7 +227,7 @@ public class MyApplication extends Application {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 Log.e("Crashs","Thread "+t+" error:"+e.getMessage());
-                killProcess(myPid());
+                android.os.Process.killProcess(android.os.Process.myPid()) ;
                 System.exit(0);
             }
         });
