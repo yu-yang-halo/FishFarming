@@ -43,6 +43,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.ac_login);
+        UIManager.getInstance().addObserver(this);
 
         ButterKnife.bind(this);
 
@@ -73,8 +74,12 @@ public class LoginActivity extends BaseActivity {
 
         FirManagerService.checkUpdate(this);
 
-        UIManager.getInstance().addObserver(this);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -86,8 +91,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         UIManager.getInstance().deleteObserver(this);
+        WebSocketReqImpl.getInstance().logout();
     }
 
     @OnClick(R.id.button) void checkYN(){
@@ -143,11 +148,11 @@ public class LoginActivity extends BaseActivity {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-
+//                if(hud!=null){
+//                    hud.dismiss();
+//                }
                 if(command== ConstantsPool.COMMAND_LOGIN_INFO){
-                    if(hud!=null){
-                        hud.dismiss();
-                    }
+
                     if (arg!=null){
                         BaseInfo baseInfo= (BaseInfo) arg;
                         setBaseInfo(baseInfo);

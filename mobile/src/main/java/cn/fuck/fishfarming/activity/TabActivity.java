@@ -8,7 +8,8 @@ package cn.fuck.fishfarming.activity;
 import android.content.Context;
         import android.os.Bundle;
 import android.support.v4.app.Fragment;
-        import android.view.View;
+import android.util.Log;
+import android.view.View;
 
         import android.widget.RelativeLayout;
 
@@ -118,9 +119,13 @@ public class TabActivity extends StatusBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        Log.e("WebSocketReqImpl","onDestroy");
     }
 
-
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Log.e("WebSocketReqImpl","onLowMemory");
+    }
 }
 

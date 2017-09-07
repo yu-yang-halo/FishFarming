@@ -40,6 +40,14 @@ public class BaseActivity extends FragmentActivity implements ReceiveUI {
         if(delegate!=null){
             delegate.update(o,arg,command);
         }
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(hud!=null){
+                    hud.dismiss();
+                }
+            }
+        });
     }
 
 

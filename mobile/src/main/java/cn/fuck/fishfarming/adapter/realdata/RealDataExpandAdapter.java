@@ -98,10 +98,10 @@ public class RealDataExpandAdapter extends BaseExpandableListAdapter {
 
         if(status==1){
             onlineView.setText("在线");
-            onlineView.setTextColor(Color.parseColor("#8000ff00"));
+            onlineView.setTextColor(Color.parseColor("#00ff00"));
         }else{
             onlineView.setText("离线");
-            onlineView.setTextColor(Color.parseColor("#80ff0000"));
+            onlineView.setTextColor(Color.parseColor("#ff0000"));
         }
 
 

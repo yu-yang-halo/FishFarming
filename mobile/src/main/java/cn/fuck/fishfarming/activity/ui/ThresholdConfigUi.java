@@ -122,6 +122,7 @@ public class ThresholdConfigUi extends StatusBarActivity {
                             }
                             uThresholdItem.baseTimePeriod = baseTimePeriod;
                             DataHelper.getMyApp().setUThresholdItem(baseTimePeriod.getMac(), uThresholdItem);
+                            adapter.notifyDataSetChanged();
                         }
                         break;
                     case ConstantsPool.COMMAND_MODE:
@@ -133,6 +134,7 @@ public class ThresholdConfigUi extends StatusBarActivity {
                             }
                             uThresholdItem.baseMode = baseMode;
                             DataHelper.getMyApp().setUThresholdItem(baseMode.getMac(), uThresholdItem);
+                            adapter.notifyDataSetChanged();
                         }
                         break;
                 }

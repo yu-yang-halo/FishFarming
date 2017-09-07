@@ -54,10 +54,11 @@ public class HistoryActivity extends StatusBarActivity{
                 if(DataHelper.getMyApp().getHistDatas(mac)==null){
                     DataHelper.getMyApp().showDialogNoTips("数据加载中...");
                 }
-                WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,0);
                 if(DataHelper.getDay(mac)<0){
                     DataHelper.setDay(mac,0);
                 }
+                WebSocketReqImpl.getInstance().fetchHistoryData(mac,gprsMac,DataHelper.getDay(mac));
+
 
             }
         });

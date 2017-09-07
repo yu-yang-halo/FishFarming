@@ -17,13 +17,12 @@ import cn.fuck.fishfarming.activity.LoginActivity;
 public final class BaseUIDelegate implements ReceiveUI{
     private Context ctx;
     private ReceiveUI receiveUI;
+    protected Handler mainHandler=new Handler(Looper.getMainLooper());
+
     public BaseUIDelegate(Context ctx,ReceiveUI receiveUI){
         this.ctx=ctx;
         this.receiveUI=receiveUI;
     }
-    protected   int index;
-    protected Handler mainHandler=new Handler(Looper.getMainLooper());
-    protected KProgressHUD hud;
 
     @Override
     public void update(UIManager o, final Object arg, final int command) {
@@ -31,9 +30,6 @@ public final class BaseUIDelegate implements ReceiveUI{
             @Override
             public void run() {
 
-                if(hud!=null){
-                    hud.dismiss();
-                }
                 switch (command){
                     case ConstantsPool.ERROR_CODE_READ_TIMEOUT:
                         showToast("数据读取超时");
@@ -42,7 +38,7 @@ public final class BaseUIDelegate implements ReceiveUI{
                         showToast("网络连接已关闭");
                         break;
                     case ConstantsPool.ERROR_CODE_CONNECT_CLOSING:
-                        showToast("网络连接即将关闭");
+                        showToast("网络连接关闭");
                         break;
                     case ConstantsPool.ERROR_CODE_CONNECT_FAILURE:
                         showToast("网络连接失败");
@@ -54,16 +50,16 @@ public final class BaseUIDelegate implements ReceiveUI{
                         showToast("网络连接超时");
                         break;
                     case ConstantsPool.COMMAND_ERROR:
-                        if(UIManager.getInstance().isCurrentPage(receiveUI)){
-                            if(arg!=null){
-                                BaseCommand baseCommand= (BaseCommand) arg;
-                                showToast(baseCommand.getErrmsg());
-                            }
+                        if(arg!=null){
+                            BaseCommand baseCommand= (BaseCommand) arg;
+                            showToast(baseCommand.getErrmsg());
                         }
-
                         break;
                 }
                 if(command>0x1000){
+                    if(receiveUI.getClass()==LoginActivity.class){
+                        return;
+                    }
                     Intent intent=new Intent();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.setClass(ctx,LoginActivity.class);

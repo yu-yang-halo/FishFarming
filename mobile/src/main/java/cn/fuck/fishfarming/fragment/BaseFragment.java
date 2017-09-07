@@ -13,11 +13,6 @@ import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.ReceiveUI;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
-
-import cn.fuck.fishfarming.activity.BaseActivity;
-import cn.fuck.fishfarming.activity.LoginActivity;
-import cn.fuck.fishfarming.utils.ConstantUtils;
-
 /**
  * Created by Administrator on 2017/5/19 0019.
  */
@@ -37,9 +32,18 @@ public class BaseFragment extends Fragment implements ReceiveUI {
 
     @Override
     public void update(UIManager o, Object arg, int command) {
+
         if(delegate!=null){
             delegate.update(o,arg,command);
         }
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(hud!=null){
+                    hud.dismiss();
+                }
+            }
+        });
     }
 
 }

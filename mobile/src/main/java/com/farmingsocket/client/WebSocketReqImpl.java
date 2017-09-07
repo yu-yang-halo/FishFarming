@@ -66,18 +66,22 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
 
     }
 
+    private void closeWebSocket(){
+        if(mWebSocket!=null){
+            mWebSocket.close(1000,"主动关闭");
+            YYLogger.debug(TAG, "主动关闭成功 ");
+        }
+    }
 
     @Override
     public void logout() {
+
         executorService.execute(new Runnable() {
 
             @Override
             public void run() {
-                if (mWebSocket != null) {
-                    mWebSocket.cancel();
-                } else {
-                    YYLogger.debug(TAG, "mWebSocket is null ");
-                }
+                release();
+                closeWebSocket();
             }
         });
     }
@@ -88,14 +92,16 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
         super.onOpen(webSocket, response);
         YYLogger.debug(TAG, "onOpen ....");
         mWebSocket = webSocket;
-
+        if(scheduledFuture!=null){
+            scheduledFuture.cancel(false);
+        }
         scheduledFuture=scheduledExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 YYLogger.debug(TAG, "send heart ....");
                 sendHeart();
             }
-        }, 1,HEART_TIME_PERIOD, TimeUnit.SECONDS);
+        }, 0,HEART_TIME_PERIOD, TimeUnit.SECONDS);
 
     }
 

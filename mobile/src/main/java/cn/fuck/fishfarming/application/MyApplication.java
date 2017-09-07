@@ -143,13 +143,7 @@ public class MyApplication extends Application {
         this.baseInfo = baseInfo;
     }
 
-    public void onLowMemory() {
-        super.onLowMemory();
-    }
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
+
 
 
     //开发者需要填入自己申请的appkey
@@ -226,7 +220,7 @@ public class MyApplication extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
-                Log.e("Crashs","Thread "+t+" error:"+e.getMessage());
+                Log.e("WebSocketReqImpl Crashs","Thread "+t+" error:"+e.getMessage());
                 android.os.Process.killProcess(android.os.Process.myPid()) ;
                 System.exit(0);
             }
@@ -353,4 +347,22 @@ public class MyApplication extends Application {
             timer.cancel();
         }
     }
+
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+    }
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
+
+
+
+
+
 }
