@@ -162,7 +162,7 @@ public class AutoWifiNetConfigActivity extends RootActivity implements OnClickLi
         }
         tvSSID.setText(BaseUtil.getWifiSSID(this));
 
-        WifiManager mWifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager mWifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         // 取得WifiInfo对象
         WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
         // 路由器的mac地址

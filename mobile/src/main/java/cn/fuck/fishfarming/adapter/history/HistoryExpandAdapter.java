@@ -131,7 +131,7 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
                 mTabEntities.add(new TabEntity(mTitles[k], mIconSelectIds[k], mIconUnselectIds[k]));
             }
             holder.mTabLayout_1.setTabData(mTabEntities);
-            holder.hisListView.setAdapter(new HisItemAdapter(ctx,null));
+
             view.setTag(holder);
         }
         if(collectorInfos.get(i)==null){
@@ -140,8 +140,6 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
         final String mac=collectorInfos.get(i).getMac();
         final String gprsMac=collectorInfos.get(i).getGprsmac();
         holder= (ViewHolder) view.getTag();
-        final ViewHolder finalHolder = holder;
-        WeatherViewManager.initViewData(ctx, finalHolder.weatherView,0);
         holder.mTabLayout_1.setCurrentTab(2-DataHelper.getDay(mac));
         holder.mTabLayout_1.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -158,8 +156,8 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
                 Log.v("onTabReselect","onTabReselect "+position);
             }
         });
-        final HisItemAdapter hisItemAdapter= (HisItemAdapter) holder.hisListView.getAdapter();
-
+        final HisItemAdapter hisItemAdapter= new HisItemAdapter(ctx,null);
+        holder.hisListView.setAdapter(hisItemAdapter);
         hisItemAdapter.setDicts(JSONParseHelper.convertWantData(getChild(i,i1)));
         hisItemAdapter.notifyDataSetChanged();
 

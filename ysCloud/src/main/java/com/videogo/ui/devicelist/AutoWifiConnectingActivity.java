@@ -399,7 +399,7 @@ public class AutoWifiConnectingActivity extends RootActivity implements OnClickL
         mMsgHandler = new MessageHandler();
         mLocalInfo = LocalInfo.getInstance();
 
-        WifiManager mWifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager mWifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
         // 取得WifiInfo对象
         mWifiInfo = mWifiManager.getConnectionInfo();
         // 路由器的mac地址
