@@ -15,6 +15,7 @@ import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.UIManager;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.pgyersdk.update.PgyUpdateManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +73,8 @@ public class LoginActivity extends BaseActivity {
 
 
 
-        FirManagerService.checkUpdate(this);
+        PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
+        PgyUpdateManager.register(this, "fishprovide");
 
 
     }

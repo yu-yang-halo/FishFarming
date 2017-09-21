@@ -169,8 +169,18 @@
             android:name="com.videogo.devicemgt.EZUpgradeDeviceActivity"
             android:label="@string/title_activity_ezupgrade_device">
         </activity>
-
-
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="9d6404b36d8771a939ac1ebd0051e051" >
+        </meta-data>
+        <provider android:name="android.support.v4.content.FileProvider"
+            android:authorities="fishprovide"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

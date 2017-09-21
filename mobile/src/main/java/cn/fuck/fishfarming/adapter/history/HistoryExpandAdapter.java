@@ -173,6 +173,10 @@ public class HistoryExpandAdapter extends BaseExpandableListAdapter {
             params.height=totalHeight;
             holder.hisListView.setLayoutParams(params);
 
+        }else{
+            ViewGroup.LayoutParams params=holder.hisListView.getLayoutParams();
+            params.height=0;
+            holder.hisListView.setLayoutParams(params);
         }
 
         // WeatherViewManager.initViewData(ctx, finalHolder.weatherView,DataHelper.getDay(mac));

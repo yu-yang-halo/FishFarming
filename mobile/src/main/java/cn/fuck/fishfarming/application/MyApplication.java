@@ -22,6 +22,7 @@ import com.farmingsocket.client.bean.BaseRealTimeData;
 import com.farmingsocket.client.bean.BaseSwitchInfo;
 import com.farmingsocket.client.bean.UThresholdItem;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.videogo.openapi.EZOpenSDK;
 
 import java.util.HashMap;
@@ -226,9 +227,12 @@ public class MyApplication extends Application {
             }
         });
 
-
+        PgyCrashManager.register(this);
 
     }
+
+
+
     private  int port;
     public  void setPort(int port){
         this.port=port;

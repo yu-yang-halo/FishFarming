@@ -23,8 +23,9 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 */
 	public void controlDevice(String mac, String gprsmac, String no, int val) {
 
-		String reqJSON = "{\"mac\": " + mac + " ,\"gprsmac\":" + gprsmac + " ,\"command\":101,\"switchs\":{\"no\": " + no
-				+ " ,\"val\":" + val + " }}";
+		String reqJSON = "{\"mac\": \"" + mac + "\" ,\"gprsmac\":\"" + gprsmac
+				+ "\" ,\"command\":101,\"switchs\":{\"no\":\"" + no
+				+ "\" ,\"val\":" + val + " }}";
 
 		reqWebSocketData(reqJSON);
 
@@ -35,7 +36,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 */
 	public void fetchRealTimeData(String mac) {
 
-		String reqJSON = "{\"mac\":" + mac + " , \"command\": 102 }";
+		String reqJSON = "{\"mac\":\"" + mac + "\" , \"command\": 102 }";
 
 		reqWebSocketData(reqJSON);
 
@@ -45,7 +46,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * 断开实时数据推送 command 103 {"mac": , "command": 103 }
 	 */
 	public void stopRealTimeData(String mac) {
-		String reqJSON = "{\"mac\":" + mac + " , \"command\": 103 }";
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"command\": 103 }";
 
 		reqWebSocketData(reqJSON);
 	}
@@ -56,7 +57,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 */
 	public void fetchHistoryData(String mac, String gprsmac, int day) {
 
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac + ",\"command\":104 ,\"day\": " + day + "}";
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac + "\",\"command\":104 ,\"day\": " + day + "}";
 
 		reqWebSocketData(reqJSON);
 
@@ -67,7 +68,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 *
 	 */
 	public void fetchDeviceStatus(String mac, String gprsmac) {
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac + ",\"command\":105 }";
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac + "\",\"command\":105 }";
 
 		reqWebSocketData(reqJSON);
 	}
@@ -77,7 +78,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 */
 
 	public void fetchRiskIndexAndNitriteStatus(String mac, String gprsmac) {
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac + ",\"command\":106 }";
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac + "\",\"command\":106 }";
 
 		reqWebSocketData(reqJSON);
 	}
@@ -89,7 +90,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 */
 
 	public void mesureRiskOrNitrite(String mac, String gprsmac, int which) {
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac + ",\"command\":107 ,\"which\":" + which
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac + "\" ,\"command\":107 ,\"which\":" + which
 				+ "}";
 
 		reqWebSocketData(reqJSON);
@@ -121,8 +122,8 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * 	command 110
 	 */
 	public void configThreshold(String mac,String gprsmac,int min,int max){
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
-				+ ",\"command\":110 ,\"min\":" + min+",\"max\":"+max
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac
+				+ "\",\"command\":110 ,\"min\":" + min+",\"max\":"+max
 				+ "}";
 		reqWebSocketData(reqJSON);
 	}
@@ -132,9 +133,8 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * command 111
 	 */
 	public void fetchThreshold(String mac,String gprsmac){
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
-				+ ",\"command\":111 "
-				+ "}";
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac
+				+ "\",\"command\":111 }";
 		reqWebSocketData(reqJSON);
 	}
 
@@ -144,8 +144,8 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * command 113
 	 */
 	public void configMode(String mac,String gprsmac,int mode){
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
-				+ ",\"command\":113 "+",\"model\":"+mode
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac
+				+ "\" ,\"command\":113 "+",\"model\":"+mode
 				+ "}";
 		reqWebSocketData(reqJSON);
 	}
@@ -155,8 +155,8 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * command 114
 	 */
 	public void fetchMode(String mac,String gprsmac){
-		String reqJSON = "{\"mac\": " + mac + " , \"gprsmac\": " + gprsmac
-				+ ",\"command\":114 "
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"gprsmac\": \"" + gprsmac
+				+ "\",\"command\":114 "
 				+ "}";
 		reqWebSocketData(reqJSON);
 	}
@@ -166,7 +166,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * command 119
 	 */
 	public void configPeriod(String mac,int min){
-		String reqJSON = "{\"mac\": " + mac + " , \"errcode\": " + 0
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"errcode\": " + 0
 				+ ",\"command\":119 "+",\"minute\":"+min
 				+ "}";
 		reqWebSocketData(reqJSON);
@@ -177,7 +177,7 @@ public abstract class AbstractWebSocketReqImpl  extends WebSocketListener implem
 	 * command 120
 	 */
 	public void fetchPeriod(String mac){
-		String reqJSON = "{\"mac\": " + mac + " , \"errcode\": " + 0
+		String reqJSON = "{\"mac\": \"" + mac + "\" , \"errcode\": " + 0
 				+ ",\"command\":120 "
 				+ "}";
 		reqWebSocketData(reqJSON);
