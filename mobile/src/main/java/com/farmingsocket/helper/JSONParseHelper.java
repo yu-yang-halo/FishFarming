@@ -1,6 +1,7 @@
 package com.farmingsocket.helper;
 
 import com.farmingsocket.client.bean.BaseCommand;
+import com.farmingsocket.client.bean.BaseDevice;
 import com.farmingsocket.client.bean.BaseHistData;
 import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.client.bean.BaseMode;
@@ -24,7 +25,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import cn.fuck.fishfarming.BuildConfig;
+import cn.fuck.fishfarming.application.DataHelper;
 import cn.fuck.fishfarming.utils.ConstantUtils;
 
 /**
@@ -47,7 +51,12 @@ public class JSONParseHelper {
         classMap.put(ConstantsPool.COMMAND_PERIOD,BaseTimePeriod.class);
 
     }
-
+    public static Map<String,Double> objectToMap(Object object){
+        if(object instanceof Map){
+            return (Map)object;
+        }
+        return null;
+    }
     public static float objectToFloat(Object object){
         if(object==null){
             return 0;
@@ -210,20 +219,19 @@ public class JSONParseHelper {
     }
 
 
-    public static List<URealtem> convertRealTimeData(BaseRealTimeData baseRealTimeData){
 
+    private static List<URealtem> convertRealTimeDataM1(BaseRealTimeData baseRealTimeData){
         if(baseRealTimeData==null){
             return null;
         }
-
         List<URealtem> uRealtems=new ArrayList<>();
 
-        Map<String,String> data=baseRealTimeData.getRealData();
+        Map<String,Object> data=baseRealTimeData.getRealData();
 
-        Iterator<Map.Entry<String,String>> entryIterator= data.entrySet().iterator();
+        Iterator<Map.Entry<String,Object>> entryIterator= data.entrySet().iterator();
 
         while (entryIterator.hasNext()){
-            Map.Entry<String,String> entry=entryIterator.next();
+            Map.Entry<String,Object> entry=entryIterator.next();
             if(!entry.getKey().equals("time")){
                 float value=objectToFloat(entry.getValue());
                 if(value<=0){
@@ -238,9 +246,48 @@ public class JSONParseHelper {
             }
 
         }
-
-
         return uRealtems;
+    }
+
+    private static List<URealtem> convertRealTimeDataM2(BaseRealTimeData baseRealTimeData){
+        if(baseRealTimeData==null){
+            return null;
+        }
+
+        List<URealtem> uRealtems=new ArrayList<>();
+
+        Map<String,Object> data=baseRealTimeData.getRealData();
+
+        Iterator<Map.Entry<String,Object>> entryIterator= data.entrySet().iterator();
+
+        while (entryIterator.hasNext()){
+            Map.Entry<String,Object> entry=entryIterator.next();
+            if(!entry.getKey().equals("time")){
+                Map<String,Double> dict=objectToMap(entry.getValue());
+                if(dict==null||dict.size()<=0){
+                    continue;
+                }
+                Set<Map.Entry<String,Double>> mSet=  dict.entrySet();
+
+                for (Map.Entry<String,Double> et:mSet){
+                    BaseDevice.Sense sense=DataHelper.getMyApp().getSensor(et.getKey());
+                    URealtem uRealtem=new URealtem(et.getValue().floatValue(),sense.getMax(),sense.getName(),sense.getDanwei());
+                    uRealtems.add(uRealtem);
+                }
+            }
+
+        }
+        return uRealtems;
+    }
+
+
+    public static List<URealtem> convertRealTimeData(BaseRealTimeData baseRealTimeData){
+
+        if(BuildConfig.APP_TYPE==1){
+            return convertRealTimeDataM1(baseRealTimeData);
+        }else{
+            return convertRealTimeDataM2(baseRealTimeData);
+        }
 
     }
 

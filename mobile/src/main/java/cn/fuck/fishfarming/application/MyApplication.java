@@ -63,6 +63,8 @@ public class MyApplication extends Application {
     private Map<String,BaseHistData> histDatasCache=new HashMap<>();
     private Map<String,UThresholdItem> thresholdCache=new HashMap<>();
 
+    private Map<String,BaseDevice.Sense> sensorMap=new HashMap<>();
+
     public void setHistDatas(BaseHistData baseHistData){
         if(baseHistData!=null){
             histDatasCache.put(baseHistData.getMac(),baseHistData);
@@ -138,10 +140,31 @@ public class MyApplication extends Application {
         return null;
     }
 
+    public BaseDevice.Sense getSensor(String no){
+        return sensorMap.get(no);
+    }
 
 
     public void setBaseInfo(BaseInfo baseInfo) {
         this.baseInfo = baseInfo;
+        if (baseInfo!=null&&baseInfo.getDevice()!=null){
+
+            List<BaseDevice> baseDevices=baseInfo.getDevice();
+
+            for (BaseDevice baseDevice:baseDevices){
+
+                List<BaseDevice.Sense> senses=baseDevice.getSensors();
+
+                if(senses==null||senses.size()<=0){
+                    continue;
+                }
+
+                for(BaseDevice.Sense sense:senses){
+                    sensorMap.put(sense.getNo(),sense);
+                }
+            }
+
+        }
     }
 
 
@@ -218,14 +241,14 @@ public class MyApplication extends Application {
 
 
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                Log.e("WebSocketReqImpl Crashs","Thread "+t+" error:"+e.getMessage());
-                android.os.Process.killProcess(android.os.Process.myPid()) ;
-                System.exit(0);
-            }
-        });
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//            @Override
+//            public void uncaughtException(Thread t, Throwable e) {
+//                Log.e("WebSocketReqImpl Crashs","Thread "+t+" error:"+e.getMessage());
+//                android.os.Process.killProcess(android.os.Process.myPid()) ;
+//                System.exit(0);
+//            }
+//        });
 
         PgyCrashManager.register(this);
 

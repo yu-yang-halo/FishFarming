@@ -16,6 +16,7 @@ public class BaseDevice {
 	private List<Map<String, String>> switchs;
 	private String mac;
 	private int online;
+	private List<Sense> sensors;
 
 	private Map<String,String> stringSwitchgMap;
 
@@ -90,4 +91,79 @@ public class BaseDevice {
 	public void setOnline(int online) {
 		this.online = online;
 	}
+
+	public List<Sense> getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(List<Sense> sensors) {
+		this.sensors = sensors;
+	}
+
+	public static class Sense{
+		private float min;
+		private float max;
+		private String no;
+		private String danwei;
+		private String name;
+		private float   y;
+		private String lx;
+
+		public float getMin() {
+			return min;
+		}
+
+		public void setMin(float min) {
+			this.min = min;
+		}
+
+		public float getMax() {
+			return max;
+		}
+
+		public void setMax(float max) {
+			this.max = max;
+		}
+
+		public String getNo() {
+			return no;
+		}
+
+		public void setNo(String no) {
+			this.no = no;
+		}
+
+		public String getDanwei() {
+			return danwei;
+		}
+
+		public void setDanwei(String danwei) {
+			this.danwei = danwei;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public float getY() {
+			return y;
+		}
+
+		public void setY(float y) {
+			this.y = y;
+		}
+
+		public String getLx() {
+			return lx;
+		}
+
+		public void setLx(String lx) {
+			this.lx = lx;
+		}
+	}
+
 }

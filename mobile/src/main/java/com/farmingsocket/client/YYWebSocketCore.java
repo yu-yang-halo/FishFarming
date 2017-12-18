@@ -11,6 +11,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import cn.fuck.fishfarming.BuildConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocketListener;
@@ -20,7 +22,7 @@ public class YYWebSocketCore {
 	private static final String TAG = "YYWebSocketClient";
 	private static final String HOSTNAME = "socket.tldwlw.com";
 	private static final int PORT = 80;
-    private static final String HEAD_REQ="tldservice/appwebsocket/";
+    private static final String HEAD_REQ= BuildConfig.APP_API;
 	private WebSocketListener listenser;
 	public void setListenser(WebSocketListener listenser) {
 		this.listenser = listenser;

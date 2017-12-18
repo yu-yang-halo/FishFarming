@@ -5,11 +5,10 @@ android {
     buildToolsVersion '26.0.1'
 
     defaultConfig {
-        applicationId "cn.fuck.fishfarming.cicle"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 12
-        versionName "1.0.18"
+        versionCode 13
+        versionName "1.1.1"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a"
@@ -19,6 +18,27 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+    productFlavors {
+        shuichan {
+            applicationId "cn.fuck.fishfarming.cicle"
+            manifestPlaceholders = [APP_NAME: "@string/appName_shuichan",
+                                    APP_PROVIDER:"fishprovide",
+                                    PGYER_APPID_DATA:"9d6404b36d8771a939ac1ebd0051e051"]
+            buildConfigField "String", "APP_PROVIDER_FIELD", '"fishprovide"'
+            buildConfigField "Integer", "APP_TYPE",'1'
+            buildConfigField "String", "APP_API", '"tldservice/appwebsocket/"'
+        }
+        dapeng {
+            applicationId "cn.fuck.fishfarming.greenhouse"
+            manifestPlaceholders = [APP_NAME: "@string/appName_dapeng",
+                                    APP_PROVIDER:"pengprovide",
+                                    PGYER_APPID_DATA:"22450e02f7126984bbdb27341baa215d"]
+            buildConfigField "String", "APP_PROVIDER_FIELD", '"pengprovide"'
+            buildConfigField "Integer", "APP_TYPE",'2'
+            buildConfigField "String", "APP_API", '"tldservice/appWebSocketNew/2/"'
         }
     }
     sourceSets {

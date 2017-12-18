@@ -54,6 +54,10 @@ public class BaseActivity extends FragmentActivity implements ReceiveUI {
     protected void setBaseInfo(BaseInfo baseInfo){
         MyApplication myApp= (MyApplication) getApplicationContext();
         myApp.setBaseInfo(baseInfo);
+
+
+
+
     }
     protected BaseInfo getBaseInfo(){
         MyApplication myApp= (MyApplication) getApplicationContext();

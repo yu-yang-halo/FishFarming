@@ -20,6 +20,7 @@ import com.pgyersdk.update.PgyUpdateManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.fuck.fishfarming.BuildConfig;
 import cn.fuck.fishfarming.R;
 import cn.fuck.fishfarming.cache.ContentBox;
 import cn.fuck.fishfarming.fir.FirManagerService;
@@ -37,6 +38,9 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.textView3)
     TextView versionLabel;
+
+    @BindView(R.id.textView)
+    TextView appNameLabel;
 
 
     @Override
@@ -74,7 +78,15 @@ public class LoginActivity extends BaseActivity {
 
 
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
-        PgyUpdateManager.register(this, "fishprovide");
+        PgyUpdateManager.register(this, BuildConfig.APP_PROVIDER_FIELD);
+
+
+        if(BuildConfig.APP_TYPE==1){
+            appNameLabel.setText(getResources().getString(R.string.appName_shuichan));
+        }else if(BuildConfig.APP_TYPE==2){
+            appNameLabel.setText(getResources().getString(R.string.appName_dapeng));
+        }
+
 
 
     }

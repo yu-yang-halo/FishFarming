@@ -7,7 +7,6 @@ package com.farmingsocket.client.bean;
 public class URealtem {
     private float value;
     private float max;
-
     private String itemName;
     private String itemCell;
     public URealtem(){

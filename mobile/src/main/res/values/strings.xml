@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">拓立德循环流水物联网系统</string>
+    <string name="appName_shuichan">拓立德循环流水物联网系统</string>
+
+    <string name="appName_dapeng">农业大棚物联网</string>
 </resources>
