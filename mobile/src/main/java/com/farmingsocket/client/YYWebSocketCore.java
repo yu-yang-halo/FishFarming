@@ -1,5 +1,7 @@
 package com.farmingsocket.client;
 
+import android.util.Log;
+
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -20,9 +22,12 @@ import okhttp3.WebSocketListener;
 public class YYWebSocketCore {
 	private static final YYWebSocketCore instance=new YYWebSocketCore();
 	private static final String TAG = "YYWebSocketClient";
-	private static final String HOSTNAME = "socket.tldwlw.com";
-	private static final int PORT = 80;
+	private static final String HOSTNAME_WSS = "socket.tldwlw.com";
+	private static final String HOSTNAME = "118.89.182.250";
+	private static final int PORT = 8080;
     private static final String HEAD_REQ= BuildConfig.APP_API;
+    private static final boolean WSS_MODE = false;
+
 	private WebSocketListener listenser;
 	public void setListenser(WebSocketListener listenser) {
 		this.listenser = listenser;
@@ -81,9 +86,13 @@ public class YYWebSocketCore {
 				.sslSocketFactory(createSSLSocketFactory())
 				.build();
 
-		Request request = new Request.Builder().url("wss://" + HOSTNAME  + "/"+HEAD_REQ+username+"/"+password).build();
+		String webSocketUrl = "wss://" + HOSTNAME  + "/"+HEAD_REQ+username+"/"+password;
+
+		Request request = new Request.Builder().url(webSocketUrl).build();
 		//Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
 		client.newWebSocket(request, listenser);
+
+		Log.v("webSocketUrl",webSocketUrl);
 
 	}
 }
