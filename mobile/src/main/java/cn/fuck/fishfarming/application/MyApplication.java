@@ -168,8 +168,6 @@ public class MyApplication extends Application {
     }
 
 
-
-
     //开发者需要填入自己申请的appkey
     public static String AppKey = "08202da424924e5ea45e88b1b8a61c91";
 

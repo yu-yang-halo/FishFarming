@@ -23,7 +23,7 @@ public class YYWebSocketCore {
 	private static final YYWebSocketCore instance=new YYWebSocketCore();
 	private static final String TAG = "YYWebSocketClient";
 	private static final String HOSTNAME_WSS = "socket.tldwlw.com";
-	private static final String HOSTNAME = "118.89.182.250";
+	private static final String HOSTNAME = BuildConfig.APP_IP_ADDRESS;
 	private static final int PORT = 8080;
     private static final String HEAD_REQ= BuildConfig.APP_API;
     private static final boolean WSS_MODE = false;

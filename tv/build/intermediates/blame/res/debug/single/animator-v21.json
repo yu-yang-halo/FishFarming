@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\animator-v21\\lb_playback_description_fade_out.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\animator-v21\\lb_playback_description_fade_out.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\animator-v21\\lb_playback_bg_fade_in.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\animator-v21\\lb_playback_bg_fade_in.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\animator-v21\\lb_playback_bg_fade_out.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\animator-v21\\lb_playback_bg_fade_out.xml"
+    }
+]

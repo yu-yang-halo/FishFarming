@@ -1,0 +1,222 @@
+[
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\shadow7.9.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\shadow7.9.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_textfield_search_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_dark.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_dark.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_edit_text_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_control_button_secondary.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_control_button_secondary.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_onboarding_start_button_background.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_onboarding_start_button_background.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_switch_thumb_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_playback_now_playing_bar.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_playback_now_playing_bar.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_voice_search_api_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\movie.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\movie.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_headers_right_fading.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_headers_right_fading.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_colored_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\videos_by_google_icon.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\videos_by_google_icon.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\app_icon_your_company.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\app_icon_your_company.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\details_img.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\details_img.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_title.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\ic_title.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_text_cursor_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_internal_bg.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_ab_back_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_playback_progress_bar.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_playback_progress_bar.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_speech_orb.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_speech_orb.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_borderless_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ratingbar_small_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_control_button_primary.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_control_button_primary.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_check_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_background.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_background.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_vector_test.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\player_bg_gradient_dark.xml",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\player_bg_gradient_dark.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_action_a.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\ic_action_a.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_search_orb.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_search_orb.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\app_icon_quantum_card.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\app_icon_quantum_card.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\app_icon_quantum.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\app_icon_quantum.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\videos_by_google_banner.png",
+        "source": "D:\\server\\FishFarming\\tv\\src\\main\\res\\drawable\\videos_by_google_banner.png"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_clear_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\lb_card_foreground.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\drawable\\lb_card_foreground.xml"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_btn_radio_material.xml"
+    }
+]

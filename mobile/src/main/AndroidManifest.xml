@@ -51,7 +51,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="SBz7W2O9pZqNkovrdyI9CFSxdi9vDYGa"/>
 
-        <activity android:name=".activity.LaunchActivity"
+        <activity android:name="cn.fuck.fishfarming.activity.LaunchActivity"
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -59,22 +59,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.LoginActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MainActivity" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.MainActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.TabActivity" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.TabActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.NewsActivity" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.NewsActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".web.WebActivity" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.web.WebActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.HistoryActivity" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.HistoryActivity" android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activity.ui.AlertConfigUi" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.ui.AlertConfigUi" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ui.ThresholdConfigUi" android:screenOrientation="portrait">
+        <activity android:name="cn.fuck.fishfarming.activity.ui.ThresholdConfigUi" android:screenOrientation="portrait">
         </activity>
 
         <meta-data android:value="0a4e5381e816e73c2b68eebaa83dfa8e" android:name="BUG_HD_SDK_GENERAL_KEY" />

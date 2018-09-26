@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 13
-        versionName "1.1.1"
+        minSdkVersion 18
+        targetSdkVersion 25
+        versionCode 15
+        versionName "1.1.2"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a"
@@ -22,6 +22,36 @@ android {
 
     }
     productFlavors {
+//        shuichan {
+//            applicationId "cn.fuck.fishfarming.cicle"
+//            manifestPlaceholders = [APP_NAME: "@string/appName_shuichan",
+//                                    APP_PROVIDER:"fishprovide",
+//                                    PGYER_APPID_DATA:"9d6404b36d8771a939ac1ebd0051e051"]
+//            buildConfigField "String", "APP_PROVIDER_FIELD", '"fishprovide"'
+//            buildConfigField "Integer", "APP_TYPE",'1'
+//            buildConfigField "String", "APP_API", '"tldservice/appwebsocket/"'
+//            buildConfigField "String", "APP_IP_ADDRESS", '"socket.tldwlw.com"'
+//        }
+//        dapeng {
+//            applicationId "cn.fuck.fishfarming.greenhouse"
+//            manifestPlaceholders = [APP_NAME: "@string/appName_dapeng",
+//                                    APP_PROVIDER:"pengprovide",
+//                                    PGYER_APPID_DATA:"22450e02f7126984bbdb27341baa215d"]
+//            buildConfigField "String", "APP_PROVIDER_FIELD", '"pengprovide"'
+//            buildConfigField "Integer", "APP_TYPE",'2'
+//            buildConfigField "String", "APP_API", '"tldservice/appWebSocketNew/2/"'
+//            buildConfigField "String", "APP_IP_ADDRESS", '"socket.tldwlw.com"'
+//        }
+//        shuichan_hebei {
+//            applicationId "cn.fuck.fishfarming.cicle.hebei"
+//            manifestPlaceholders = [APP_NAME: "@string/appName_shuichan",
+//                                    APP_PROVIDER:"fishprovidehebei",
+//                                    PGYER_APPID_DATA:"9d6404b36d8771a939ac1ebd0051e051"]
+//            buildConfigField "String", "APP_PROVIDER_FIELD", '"fishprovidehebei"'
+//            buildConfigField "Integer", "APP_TYPE",'1'
+//            buildConfigField "String", "APP_API", '"tldservice/appwebsocket/"'
+//            buildConfigField "String", "APP_IP_ADDRESS", '"cdymj-service.tldwlw.com"'
+//        }
         shuichan {
             applicationId "cn.fuck.fishfarming.cicle"
             manifestPlaceholders = [APP_NAME: "@string/appName_shuichan",
@@ -30,16 +60,18 @@ android {
             buildConfigField "String", "APP_PROVIDER_FIELD", '"fishprovide"'
             buildConfigField "Integer", "APP_TYPE",'1'
             buildConfigField "String", "APP_API", '"tldservice/appwebsocket/"'
+            buildConfigField "String", "APP_IP_ADDRESS", '"socket.tldwlw.com"'
         }
-        dapeng {
-            applicationId "cn.fuck.fishfarming.greenhouse"
-            manifestPlaceholders = [APP_NAME: "@string/appName_dapeng",
-                                    APP_PROVIDER:"pengprovide",
-                                    PGYER_APPID_DATA:"22450e02f7126984bbdb27341baa215d"]
-            buildConfigField "String", "APP_PROVIDER_FIELD", '"pengprovide"'
-            buildConfigField "Integer", "APP_TYPE",'2'
-            buildConfigField "String", "APP_API", '"tldservice/appWebSocketNew/2/"'
-        }
+//        dapeng_hebei {
+//            applicationId "cn.fuck.fishfarming.greenhouse_hebei"
+//            manifestPlaceholders = [APP_NAME: "@string/appName_dapeng",
+//                                    APP_PROVIDER:"pengprovide_hebei",
+//                                    PGYER_APPID_DATA:"22450e02f7126984bbdb27341baa215d"]
+//            buildConfigField "String", "APP_PROVIDER_FIELD", '"pengprovide_hebei"'
+//            buildConfigField "Integer", "APP_TYPE",'2'
+//            buildConfigField "String", "APP_API", '"tldservice/appWebSocketNew/2/"'
+//            buildConfigField "String", "APP_IP_ADDRESS", '"cdymj-service.tldwlw.com"'
+//        }
     }
     sourceSets {
         main {
@@ -54,7 +86,8 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.kaopiz:kprogresshud:1.0.5'
@@ -64,7 +97,6 @@ dependencies {
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.kyleduo.switchbutton:library:1.4.4'
     compile project(path: ':ysCloud')
-    compile 'com.android.support:design:25.1.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     compile 'com.appyvet:materialrangebar:1.3'
     compile files('libs/gson-2.8.1.jar')

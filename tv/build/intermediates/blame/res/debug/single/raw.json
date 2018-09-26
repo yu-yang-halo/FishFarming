@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\raw\\lb_voice_open.ogg",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\raw\\lb_voice_open.ogg"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\raw\\lb_voice_failure.ogg",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\raw\\lb_voice_failure.ogg"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\raw\\lb_voice_no_input.ogg",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\raw\\lb_voice_no_input.ogg"
+    },
+    {
+        "merged": "D:\\server\\FishFarming\\tv\\build\\intermediates\\res\\merged\\debug\\raw\\lb_voice_success.ogg",
+        "source": "D:\\server\\FishFarming\\tv\\build\\intermediates\\exploded-aar\\com.android.support\\leanback-v17\\24.2.1\\res\\raw\\lb_voice_success.ogg"
+    }
+]
