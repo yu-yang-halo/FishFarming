@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 18
         targetSdkVersion 22
         versionCode 101
         versionName "2.0.2"
@@ -13,7 +13,12 @@ android {
         ndk {
             abiFilters "armeabi-v7a"
         }
+
+        /**
+         * 必须要保证所有的flavor 都属于同一个维度
+         */
         flavorDimensions "default"
+
     }
     buildTypes {
         release {
