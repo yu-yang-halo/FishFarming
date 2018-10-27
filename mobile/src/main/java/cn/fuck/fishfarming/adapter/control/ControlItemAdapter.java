@@ -49,7 +49,7 @@ public class ControlItemAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(uControlItems==null){
+        if(uControlItems==null || uControlItems.size()<=0){
             return 0;
         }
         return uControlItems.size();
@@ -57,7 +57,7 @@ public class ControlItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        if(uControlItems==null){
+        if(uControlItems==null || uControlItems.size()<=0){
             return null;
         }
         return uControlItems.get(i);
@@ -79,7 +79,13 @@ public class ControlItemAdapter extends BaseAdapter {
 
         final Button switch1=ButterKnife.findById(view,R.id.switch1);
 
+        if(uControlItems == null || uControlItems.size()<=0)
+        {
+            return view;
+        }
+
         final UControlItem uControlItem=uControlItems.get(i);
+
         uControlItem.setName(stringSwitchNameMap.get(uControlItem.getNumber()));
 
         nameLabel.setText(uControlItem.getName());

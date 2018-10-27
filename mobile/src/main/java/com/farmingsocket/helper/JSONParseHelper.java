@@ -239,7 +239,20 @@ public class JSONParseHelper {
                 }
                 String itemName=ConstantUtils.CONTENTS.get(entry.getKey());
                 String itemCell=ConstantUtils.UNITS.get(entry.getKey());
-                float max=ConstantUtils.MAXVALUES.get(entry.getKey());
+                Integer itemValue=ConstantUtils.MAXVALUES.get(entry.getKey());
+                float max =0.0f;
+                if(itemValue != null)
+                {
+                    max = itemValue.floatValue();
+                }
+                if(itemName == null)
+                {
+                    itemName = "...";
+                }
+                if(itemCell == null)
+                {
+                    itemCell = "...";
+                }
 
                 URealtem uRealtem=new URealtem(value,max,itemName,itemCell);
                 uRealtems.add(uRealtem);
@@ -271,6 +284,10 @@ public class JSONParseHelper {
 
                 for (Map.Entry<String,Double> et:mSet){
                     BaseDevice.Sense sense=DataHelper.getMyApp().getSensor(et.getKey());
+                    if(sense == null)
+                    {
+                        continue;
+                    }
                     URealtem uRealtem=new URealtem(et.getValue().floatValue(),sense.getMax(),sense.getName(),sense.getDanwei());
                     uRealtems.add(uRealtem);
                 }

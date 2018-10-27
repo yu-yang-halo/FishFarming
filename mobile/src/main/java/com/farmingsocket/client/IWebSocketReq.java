@@ -7,6 +7,9 @@ public interface IWebSocketReq {
 	
 	public void login(String username,String password);
 
+	public void login(String username,String password,String serverAddress);
+
+
 	/**
 	 * 登出
 	 */

@@ -23,7 +23,7 @@ public class YYWebSocketCore {
 	private static final YYWebSocketCore instance=new YYWebSocketCore();
 	private static final String TAG = "YYWebSocketClient";
 	private static final String HOSTNAME_WSS = "socket.tldwlw.com";
-	private static final String HOSTNAME = BuildConfig.APP_IP_ADDRESS;
+	private static final String HOSTNAME = "socket.tldwlw.com";
 	private static final int PORT = 8080;
     private static final String HEAD_REQ= BuildConfig.APP_API;
     private static final boolean WSS_MODE = false;
@@ -73,6 +73,30 @@ public class YYWebSocketCore {
 		}
 	}
 
+	public void connect(String username,String password,String serverAddress) {
+
+		OkHttpClient client = new OkHttpClient
+				.Builder()
+//				.connectTimeout(1, TimeUnit.SECONDS)
+//				.readTimeout(1, TimeUnit.SECONDS)
+//				.writeTimeout(1, TimeUnit.SECONDS)
+				.pingInterval(5, TimeUnit.SECONDS)
+				.followSslRedirects(true)
+				.hostnameVerifier(new TrustAllHostnameVerifier())
+				.sslSocketFactory(createSSLSocketFactory())
+				.build();
+
+
+		String webSocketUrl = "wss://" + serverAddress  + "/"+HEAD_REQ+username+"/"+password;
+
+		Request request = new Request.Builder().url(webSocketUrl).build();
+		//Request request = new Request.Builder().url("wss://socket.tldwlw.com/tldservice/appwebsocket/guest/123456").build();
+		client.newWebSocket(request, listenser);
+
+		Log.v("webSocketUrl",webSocketUrl);
+
+	}
+
 	public void connect(String username,String password) {
 
 		OkHttpClient client = new OkHttpClient
@@ -85,6 +109,7 @@ public class YYWebSocketCore {
 				.hostnameVerifier(new TrustAllHostnameVerifier())
 				.sslSocketFactory(createSSLSocketFactory())
 				.build();
+
 
 		String webSocketUrl = "wss://" + HOSTNAME  + "/"+HEAD_REQ+username+"/"+password;
 

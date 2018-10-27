@@ -1,7 +1,11 @@
 package cn.fuck.fishfarming.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import cn.fuck.fishfarming.activity.ui.ServerListUi;
 
 /**
  * Created by Administrator on 2016/12/7.
@@ -14,6 +18,17 @@ public class ConstantUtils {
     public static Map<String,String> UNITS   =new HashMap<>();
     public static Map<String,Integer> ORDERS  =new HashMap<>();//排序使用
     public static Map<String,Integer> MAXVALUES=new HashMap<>();
+
+    public static List<ServerItem> SERVERS = new ArrayList<>();
+
+    public static class ServerItem
+    {
+        public String itemName;
+        public String itemServer;
+        public int    itemId;
+
+    }
+
 
     static {
 
@@ -29,6 +44,9 @@ public class ConstantUtils {
         CONTENTS.put("a10","盐度");
         CONTENTS.put("a11","电导率");
         CONTENTS.put("a12","化学需量");
+        CONTENTS.put("a0A","盐度");
+        CONTENTS.put("a0B","电导率");
+        CONTENTS.put("a0C","化学需量");
 
 
         MAXVALUES.put("a1",50);
@@ -43,6 +61,9 @@ public class ConstantUtils {
         MAXVALUES.put("a10",50);
         MAXVALUES.put("a11",50);
         MAXVALUES.put("a12",50);
+        MAXVALUES.put("a0A",50);
+        MAXVALUES.put("a0B",50);
+        MAXVALUES.put("a0C",50);
 
 
         CONTENTS2.put("1","溶氧");
@@ -87,6 +108,24 @@ public class ConstantUtils {
         ORDERS.put("a11",11);
         ORDERS.put("a12",12);
 
+
+
+
+
+        ServerItem item0 = new ServerItem();
+        item0.itemName = "合肥云服务中心";
+        item0.itemServer = "socket.tldwlw.com";
+        item0.itemId   = 0;
+
+        ServerItem item1 = new ServerItem();
+        item1.itemName = "河北云服务中心";
+        item1.itemServer = "cdymj-service.tldwlw.com";
+        item1.itemId   = 1;
+
+
+
+        SERVERS.add(item0);
+        SERVERS.add(item1);
 
     }
 

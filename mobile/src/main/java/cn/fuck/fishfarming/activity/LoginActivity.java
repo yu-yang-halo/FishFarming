@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 
 import com.farmingsocket.client.WebSocketReqImpl;
-import com.farmingsocket.client.bean.BaseCommand;
 import com.farmingsocket.client.bean.BaseInfo;
 import com.farmingsocket.manager.ConstantsPool;
 import com.farmingsocket.manager.UIManager;
@@ -22,8 +21,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fuck.fishfarming.BuildConfig;
 import cn.fuck.fishfarming.R;
+import cn.fuck.fishfarming.activity.ui.ServerListUi;
 import cn.fuck.fishfarming.cache.ContentBox;
 import cn.fuck.fishfarming.fir.FirManagerService;
+import cn.fuck.fishfarming.permission.PermissionUtils;
 import cn.fuck.fishfarming.weather.WeatherHelper;
 
 /**
@@ -89,6 +90,13 @@ public class LoginActivity extends BaseActivity {
 
 
 
+        PermissionUtils.requestMultiPermissions(this, new PermissionUtils.PermissionGrant() {
+            @Override
+            public void onPermissionGranted(int requestCode) {
+
+            }
+        });
+
     }
 
     @Override
@@ -122,6 +130,11 @@ public class LoginActivity extends BaseActivity {
         cacheUserPass();
 
     }
+    @OnClick(R.id.btnOption) void toOptionServer()
+    {
+        Intent intent=new Intent(LoginActivity.this,ServerListUi.class);
+        startActivity(intent);
+    }
     private void cacheUserPass(){
         String username=usernamEdit.getText().toString();
         String password=passwordEdit.getText().toString();
@@ -148,8 +161,9 @@ public class LoginActivity extends BaseActivity {
                     .create(this).setLabel("登录中...")
                     .show();
 
-            WebSocketReqImpl.getInstance().login(username,password);
 
+            String serverAddress = ContentBox.getValueString(LoginActivity.this,ContentBox.KEY_SERVER,"socket.tldwlw.com");
+            WebSocketReqImpl.getInstance().login(username,password,serverAddress);
 
         }
 

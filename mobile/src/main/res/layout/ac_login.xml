@@ -160,4 +160,16 @@
         android:layout_marginBottom="5dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnOption"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@null"
+        android:textColor="@color/blue"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:text="服务中心" />
 </RelativeLayout>

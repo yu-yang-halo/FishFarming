@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
@@ -17,23 +16,14 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
     <!-- zxing -->
     <uses-permission android:name="android.permission.CAMERA"/>
-
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
-
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
-
-
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!-- Keeps the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -46,7 +36,8 @@
         android:label="${APP_NAME}"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <meta-data android:name="android.max_aspect"
+            android:value="2.1"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="SBz7W2O9pZqNkovrdyI9CFSxdi9vDYGa"/>
@@ -75,6 +66,8 @@
         <activity android:name="cn.fuck.fishfarming.activity.ui.AlertConfigUi" android:screenOrientation="portrait">
         </activity>
         <activity android:name="cn.fuck.fishfarming.activity.ui.ThresholdConfigUi" android:screenOrientation="portrait">
+        </activity>
+        <activity android:name="cn.fuck.fishfarming.activity.ui.ServerListUi" android:screenOrientation="portrait">
         </activity>
 
         <meta-data android:value="0a4e5381e816e73c2b68eebaa83dfa8e" android:name="BUG_HD_SDK_GENERAL_KEY" />
