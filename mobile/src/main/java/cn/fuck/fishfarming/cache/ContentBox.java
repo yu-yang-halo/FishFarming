@@ -17,7 +17,7 @@ public class ContentBox {
 	public static final String KEY_CITYNAME="key_cityname";
 
 	public static final String KEY_SERVER = "key_server";
-	public static final String DEFAULT_SERVER = "socket.tldwlw.com";
+	public static final String DEFAULT_SERVER = "socket.tldwlw.com:8443";
 	
 	public static void loadString(Context ctx, String key, String value) {
          sp=ctx.getSharedPreferences(SharePreference_name, Context.MODE_PRIVATE);

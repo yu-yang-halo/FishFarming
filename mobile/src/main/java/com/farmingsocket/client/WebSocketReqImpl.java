@@ -55,18 +55,6 @@ public class WebSocketReqImpl extends AbstractWebSocketReqImpl {
     }
 
     @Override
-    public void login(final String username, final String password) {
-        executorService.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                yySocketCore.connect(username, password);
-            }
-        });
-
-    }
-
-    @Override
     public void login(final String username, final String password, final String serverAddress) {
         executorService.execute(new Runnable() {
 

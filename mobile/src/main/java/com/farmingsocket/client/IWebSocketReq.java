@@ -4,8 +4,6 @@ public interface IWebSocketReq {
 	/**
 	 * 登录
 	 */
-	
-	public void login(String username,String password);
 
 	public void login(String username,String password,String serverAddress);
 

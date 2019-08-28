@@ -2,18 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 101
-        versionName "2.0.2"
+        versionName "2.1.0"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a"
         }
-
         /**
          * 必须要保证所有的flavor 都属于同一个维度
          */
@@ -53,29 +51,36 @@ android {
         }
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
 }
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
+    api project(path: ':ysCloud')
+    api  fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation  'junit:junit:4.12'
+    api  'com.android.support:appcompat-v7:25.2.0'
+    api  'com.android.support:design:25.2.0'
+    api  'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.kaopiz:kprogresshud:1.0.5'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.0.0@aar'
-    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    compile 'com.kyleduo.switchbutton:library:1.4.4'
-    compile project(path: ':ysCloud')
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
-    compile 'com.appyvet:materialrangebar:1.3'
-    compile files('libs/junit-4.12.jar')
-    compile files('libs/okhttp-3.8.1.jar')
-    compile files('libs/okio-1.13.0.jar')
-    compile files('libs/mockwebserver-3.8.1.jar')
-    compile 'com.pgyersdk:sdk:2.7.3'
+    api  'com.kaopiz:kprogresshud:1.0.5'
+    api  'com.nineoldandroids:library:2.4.0'
+    api  'com.flyco.tablayout:FlycoTabLayout_Lib:2.0.0@aar'
+    api  'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    api  'com.baoyz.pullrefreshlayout:library:1.2.0'
+    api  'com.kyleduo.switchbutton:library:1.4.4'
+    api  'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    api  'com.appyvet:materialrangebar:1.3'
+    api  files('libs/junit-4.12.jar')
+    api  files('libs/okhttp-3.8.1.jar')
+    api  files('libs/okio-1.13.0.jar')
+    api  files('libs/mockwebserver-3.8.1.jar')
+    api  'com.pgyersdk:sdk:2.7.3'
 }

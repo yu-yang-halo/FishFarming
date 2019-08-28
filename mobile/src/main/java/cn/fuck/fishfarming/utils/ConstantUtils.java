@@ -114,7 +114,7 @@ public class ConstantUtils {
 
         ServerItem item0 = new ServerItem();
         item0.itemName = "合肥云服务中心";
-        item0.itemServer = "socket.tldwlw.com";
+        item0.itemServer = "socket.tldwlw.com:8443";
         item0.itemId   = 0;
 
         ServerItem item1 = new ServerItem();

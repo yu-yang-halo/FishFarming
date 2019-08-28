@@ -162,7 +162,7 @@ public class LoginActivity extends BaseActivity {
                     .show();
 
 
-            String serverAddress = ContentBox.getValueString(LoginActivity.this,ContentBox.KEY_SERVER,"socket.tldwlw.com");
+            String serverAddress = ContentBox.getValueString(LoginActivity.this,ContentBox.KEY_SERVER,"socket.tldwlw.com:8443");
             WebSocketReqImpl.getInstance().login(username,password,serverAddress);
 
         }
