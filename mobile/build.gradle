@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 101
-        versionName "2.1.0"
+        versionCode 201
+        versionName "3.0.0"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a"
@@ -82,5 +82,5 @@ dependencies {
     api  files('libs/okhttp-3.8.1.jar')
     api  files('libs/okio-1.13.0.jar')
     api  files('libs/mockwebserver-3.8.1.jar')
-    api  'com.pgyersdk:sdk:2.7.3'
+    api   'com.pgyersdk:sdk:2.8.1'
 }

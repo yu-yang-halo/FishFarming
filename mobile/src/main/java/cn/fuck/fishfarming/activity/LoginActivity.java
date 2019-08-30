@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity {
 
 
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
-        PgyUpdateManager.register(this, BuildConfig.APP_PROVIDER_FIELD);
+        PgyUpdateManager.register(this);
 
 
         if(BuildConfig.APP_TYPE==1){
