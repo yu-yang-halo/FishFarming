@@ -40,7 +40,7 @@
             android:value="2.1"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="SBz7W2O9pZqNkovrdyI9CFSxdi9vDYGa"/>
+            android:value="${BAIDUAPIKEY}"/>
 
         <activity android:name="cn.fuck.fishfarming.activity.LaunchActivity"
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen"

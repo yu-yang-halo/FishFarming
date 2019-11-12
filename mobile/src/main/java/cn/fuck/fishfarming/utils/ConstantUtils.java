@@ -119,7 +119,7 @@ public class ConstantUtils {
 
         ServerItem item1 = new ServerItem();
         item1.itemName = "河北云服务中心";
-        item1.itemServer = "cdymj-service.tldwlw.com";
+        item1.itemServer = "cdymj-service.tldwlw.com:8888";
         item1.itemId   = 1;
 
 

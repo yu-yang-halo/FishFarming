@@ -59,10 +59,12 @@ public class MainActivity extends StatusBarActivity {
                         if(position==1){
                             if(!NetworkHelper.isWifi(MainActivity.this)){
                                 showToast("建议在wifi网络下观看视频");
+                            }else {
+                                showToast("暂不支持观看视频");
                             }
 
-                            Intent intent=new Intent(MainActivity.this,EzvizWebViewActivity.class);
-                            startActivity(intent);
+//                            Intent intent=new Intent(MainActivity.this,EzvizWebViewActivity.class);
+//                            startActivity(intent);
                         }else {
                             Intent intent=new Intent(MainActivity.this,TabActivity.class);
                             intent.putExtra(KEY_POSITION,position);

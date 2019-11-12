@@ -197,7 +197,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         locationInit();
-        initSDK();
+        //initSDK();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
