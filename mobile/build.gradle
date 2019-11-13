@@ -7,7 +7,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 25
         versionCode 201
-        versionName "3.0.1"
+        versionName "3.2.0"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a"
@@ -30,7 +30,7 @@ android {
             applicationId "cn.fuck.fishfarming.cicle"
             manifestPlaceholders = [APP_NAME: "@string/appName_shuichan",
                                     APP_PROVIDER:"fishprovide",
-                                    PGYER_APPID_DATA:"9d6404b36d8771a939ac1ebd0051e051",
+                                    PGYER_APPID_DATA:"6c0e3cba6fbec355afded5f65a539536",
                                     BAIDUAPIKEY:"SBz7W2O9pZqNkovrdyI9CFSxdi9vDYGa"]
             buildConfigField "String", "APP_PROVIDER_FIELD", '"fishprovide"'
             buildConfigField "Integer", "APP_TYPE",'1'
@@ -40,7 +40,7 @@ android {
             applicationId "cn.fuck.fishfarming.greenhouse"
             manifestPlaceholders = [APP_NAME: "@string/appName_dapeng",
                                     APP_PROVIDER:"pengprovide",
-                                    PGYER_APPID_DATA:"22450e02f7126984bbdb27341baa215d",
+                                    PGYER_APPID_DATA:"baf10949723f15a5e041410531da3b1f",
                                     BAIDUAPIKEY:"FZ63D4sMaP0OyFFGqe4RyRlv4du4NAEh"]
             buildConfigField "String", "APP_PROVIDER_FIELD", '"pengprovide"'
             buildConfigField "Integer", "APP_TYPE",'2'
